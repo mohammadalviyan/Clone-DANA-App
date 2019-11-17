@@ -1,8 +1,6 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/database';
 
-import Task from './Task';
-
 const Examples = sequelize.define('examples', {
   id: {
     type: Sequelize.INTEGER,
@@ -20,8 +18,5 @@ const Examples = sequelize.define('examples', {
 }, {
   timestamps: false
 });
-
-Examples.hasMany(Task, { foreignKey: 'examplesId', sourceKey: 'id' });
-Task.belongsTo(Examples, { foreignKey: 'examplesId', sourceKey: 'id'});
 
 export default Examples;
