@@ -15,7 +15,7 @@ import {
 router.get('/', getExample);
 router.post('/', createExample);
 
-// /api/examples/id
+// /api/examples/id coba
 router.get('/:id', getOneExample);
 router.delete('/:id', deleteExample);
 router.put('/:id', updateExample);
