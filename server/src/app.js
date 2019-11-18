@@ -4,7 +4,7 @@ import express, {
 import morgan from 'morgan';
 
 // Importing routes
-import exampleRoutes from './routes/examples';
+import Routes from './routes/index';
 
 // Initialization
 const app = express();
@@ -14,6 +14,6 @@ app.use(morgan('dev'));
 app.use(json());
 
 // Routes
-app.use('/api/examples', exampleRoutes);
+app.use('/api', Routes);
 
 export default app;
