@@ -1,11 +1,11 @@
 import Sequelize from 'sequelize';
 
 export const sequelize = new Sequelize(
-  'postgres',
-  'postgres',
-  'password',
+  'clonedana',
+  'clonedana',
+  'Sekolahku25*',
   {
-    host: 'localhost',
+    host: 'clonedana.cziqdpn1fufp.us-east-1.rds.amazonaws.com',
     dialect: 'postgres',
     pool: {
       max: 5,
