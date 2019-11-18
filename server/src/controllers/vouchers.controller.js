@@ -1,7 +1,7 @@
-import Vouchers from '../models/Vouchers';
+const Vouchers = require('../models/Vouchers');
 
 // Get all vouchers
-export const getVouchers = async (req, res) => {
+exports.getVouchers = async (req, res) => {
   try {
     const vouchers = await Vouchers.findAll();
     res.json({
@@ -16,17 +16,17 @@ export const getVouchers = async (req, res) => {
 };
 
 // Create vouchers
-export const createVouchers = async (req, res) => {
-  const { name, nominal, expired_at, image } = req.body;
+exports.createVouchers = async (req, res) => {
+  const { name, amount, expired_at, image } = req.body;
 
   try {
     let newVouchers = await Vouchers.create({
       name,
-      nominal,
+      amount,
       expired_at,
       image
     }, {
-      fields: ['name', 'nominal', 'expired_at', 'image']
+      fields: ['name', 'amount', 'expired_at', 'image']
     });
 
     if (newVouchers) {
@@ -44,7 +44,7 @@ export const createVouchers = async (req, res) => {
 };
 
 // Get one vouchers
-export const getOneVouchers = async (req, res) => {
+exports.getOneVouchers = async (req, res) => {
   const { id } = req.params;
   const vouchers = await Vouchers.findOne({
     where: {
@@ -57,7 +57,7 @@ export const getOneVouchers = async (req, res) => {
 };
 
 // Delete voucher
-export const deleteVouchers = async (req, res) => {
+exports.deleteVouchers = async (req, res) => {
   const { id } = req.params;
   const deleteRowCount = await Vouchers.destroy({
     where: {
@@ -71,12 +71,12 @@ export const deleteVouchers = async (req, res) => {
 };
 
 // Update voucher
-export const updateVouchers = async (req, res) => {
+exports.updateVouchers = async (req, res) => {
   const { id } = req.params;
-  const { name, nominal, expired_at, image } = req.body;
+  const { name, amount, expired_at, image } = req.body;
 
   const vouchers = await Vouchers.findAll({
-    attributes: ['id', 'name', 'nominal', 'created_at', 'expired_at', 'image'],
+    attributes: ['id', 'name', 'amount', 'created_at', 'expired_at', 'image'],
     where: {
       id
     }
@@ -85,7 +85,7 @@ export const updateVouchers = async (req, res) => {
   if (vouchers.length > 0) {
     vouchers.forEach(async voucher => {
       await voucher.update({
-        name, nominal, expired_at, image
+        name, amount, expired_at, image
       });
     });
   }

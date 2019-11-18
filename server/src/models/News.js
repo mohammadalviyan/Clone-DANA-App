@@ -1,7 +1,5 @@
-import Sequelize from 'sequelize';
-import {
-  sequelize
-} from '../database/database';
+const Sequelize = require("sequelize");
+const sequelize = require('../database/database');
 
 const News = sequelize.define('news', {
   id: {
@@ -12,10 +10,10 @@ const News = sequelize.define('news', {
     type: Sequelize.TEXT
   },
   title: {
-    type: Sequelize.TEXT
+    type: Sequelize.STRING
   },
   name: {
-    type: Sequelize.DATE
+    type: Sequelize.STRING
   },
   image: {
     type: Sequelize.TEXT
@@ -27,4 +25,4 @@ const News = sequelize.define('news', {
   timestamps: false
 });
 
-export default News;
+module.exports = News;

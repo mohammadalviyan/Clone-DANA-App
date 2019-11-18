@@ -1,15 +1,13 @@
-import {
-  Router
-} from 'express';
+const Router = require('express');
 const router = Router();
 
-import {
+const {
   getVouchers,
   createVouchers,
   getOneVouchers,
   deleteVouchers,
   updateVouchers
-} from '../controllers/vouchers.controller';
+} = require ('../controllers/vouchers.controller');
 
 // /api/vouchers/
 router.get('/', getVouchers);
@@ -20,4 +18,4 @@ router.get('/:id', getOneVouchers);
 router.delete('/:id', deleteVouchers);
 router.put('/:id', updateVouchers);
 
-export default router;
+module.exports = router;

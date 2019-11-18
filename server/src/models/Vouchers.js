@@ -1,7 +1,5 @@
-import Sequelize from 'sequelize';
-import {
-  sequelize
-} from '../database/database';
+const Sequelize = require("sequelize");
+const sequelize = require('../database/database');
 
 const Vouchers = sequelize.define('vouchers', {
   id: {
@@ -9,9 +7,9 @@ const Vouchers = sequelize.define('vouchers', {
     primaryKey: true
   },
   name: {
-    type: Sequelize.TEXT
+    type: Sequelize.STRING
   },
-  nominal: {
+  amount: {
     type: Sequelize.INTEGER
   },
   created_at: {
@@ -27,4 +25,4 @@ const Vouchers = sequelize.define('vouchers', {
   timestamps: false
 });
 
-export default Vouchers;
+module.exports = Vouchers;

@@ -5,11 +5,9 @@
     "node": "10.16.3" 
   },
   "description": "clone dana server",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/index.js --exec babel-node",
-    "build": "babel src --out-dir dist",
-    "start": "node dist/index.js"
+    "start": "nodemon app.js"
   },
   "keywords": [
     "clone",
@@ -19,22 +17,19 @@
   "author": "arkais teams",
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.7.0",
-    "bcrypt": "^3.0.0",
     "express": "^4.17.1",
     "json-web-token": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "nexmo": "^2.5.1",
-    "pg": "^7.12.1",
-    "pg-hstore": "^2.3.3",
-    "sequelize": "^5.21.2"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
-    "@babel/preset-env": "^7.7.1",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "sequelize": "^5.21.2",
+    "bcrypt": "^3.0.7",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.17.1",
+    "mysql2": "^2.0.0",
+    "sequelize-cli": "^5.5.1"
   }
 }

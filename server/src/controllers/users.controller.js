@@ -1,12 +1,13 @@
-import Users from '../models/Users';
-import Nexmo from  'nexmo';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+const Users = require('../models/Users');
+const Nexmo = require('nexmo');
+const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
+
 const secretKey = process.env.SECRET_KEY || '270400';
 const salt = bcrypt.genSaltSync(10);
 
 //Check New User/ Old User
-export const checkNumber=async(req,res)=>{
+exports.checkNumber=async(req,res)=>{
   const phone=req.body.phone
 
   try {
@@ -36,7 +37,7 @@ export const checkNumber=async(req,res)=>{
 
 
 // Register Users
-export const createUsers = async (req, res) => {
+exports.createUsers = async (req, res) => {
   //Hash password
   const pin = bcrypt.hashSync(req.body.pin, salt)
 
@@ -101,7 +102,7 @@ export const createUsers = async (req, res) => {
 };
 
 //Signin Users
-export const usersLogin=async(req,res)=>{
+exports.usersLogin=async(req,res)=>{
   const phone=req.body.phone
   const pin=req.body.pin
 
@@ -146,9 +147,9 @@ export const usersLogin=async(req,res)=>{
 
 
 //OTP REGISTER
-export const otpSignup=async (req,res) =>{
+exports.otpSignup=async (req,res) =>{
   // phone=req.body.phone;
-  
+
   //API
   const nexmo = new Nexmo({
     apiKey: "0aa0e459",

@@ -1,37 +1,31 @@
 const Sequelize = require("sequelize");
 const sequelize = require('../database/database');
 
-const Users = sequelize.define('users', {
+const CategoryTransactions = sequelize.define('category_transactions', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true
   },
   name: {
+    type: Sequelize.STRING
+  },
+  address: {
     type: Sequelize.TEXT
   },
-  image: {
+  description: {
     type: Sequelize.TEXT
   },
-  refferal: {
+  code: {
+    type: Sequelize.STRING
+  },
+  latitude: {
     type: Sequelize.TEXT
   },
-  pin: {
-    type: Sequelize.TEXT
-  },
-  phone: {
-    type: Sequelize.TEXT
-  },
-  balance: {
-    type: Sequelize.INTEGER
-  },
-  email: {
-    type: Sequelize.TEXT
-  },
-  type_user: {
+  longitude: {
     type: Sequelize.TEXT
   }
-},{
+}, {
   timestamps: false
 });
 
-module.exports = Users;
+module.exports = CategoryTransactions;
