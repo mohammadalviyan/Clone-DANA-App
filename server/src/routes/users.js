@@ -7,4 +7,6 @@ router
   .post("/login", usersController.usersLogin)
   .post("/checkusers", usersController.checkNumber)
 
-module.exports = router;
+  .post("/otp/signup", usersController.otpSignup)
+
+module.exports = router; 
