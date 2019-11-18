@@ -1,11 +1,14 @@
-import express from 'express';
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 
 // Routes all
-const userRouter = require("./users");
+import userRouter from './users';
 import newsRouter from './news';
+import vouchersRouter from './vouchers';
 
+// use route
 router.use('/user', userRouter);
 router.use('/news', newsRouter);
+router.use('/vouchers', vouchersRouter);
 
 export default router;
