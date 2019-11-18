@@ -5,7 +5,6 @@ import morgan from 'morgan';
 
 // Importing routes
 import Routes from './routes/index';
-import newsRoutes from './routes/news';
 
 // Initialization
 const app = express();
@@ -16,6 +15,5 @@ app.use(json());
 
 // Routes
 app.use('/api', Routes);
-app.use('/api/news', newsRoutes);
 
 export default app;
