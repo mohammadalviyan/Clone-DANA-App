@@ -273,8 +273,6 @@ class ProfileScreen extends Component {
             rightTitleStyle={{ fontSize: 15 }}
             onPress={() => this.onPressOptions()}
             containerStyle={styles.listItemContainer}
-            // leftIcon={
-            //   <Icon source={require(l.icon)} size={10}/>}
             leftIcon={
               <BaseIcon
                 containerStyle={{ backgroundColor: '#FEA8A1' }}
