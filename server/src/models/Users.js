@@ -19,7 +19,7 @@ const Users = sequelize.define('users', {
     type: Sequelize.TEXT
   },
   phone: {
-    type: Sequelize.INTEGER
+    type: Sequelize.TEXT
   },
   balance: {
     type: Sequelize.INTEGER

@@ -1,8 +1,9 @@
-import express from 'express';
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
+import  verify from '../middleware/verifyToken';
 
 // Routes all
-const userRouter = require("./users");
+import userRouter from './users';
 import newsRouter from './news';
 
 router.use('/user', userRouter);
