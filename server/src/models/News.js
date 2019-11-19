@@ -10,10 +10,10 @@ const News = sequelize.define('news', {
     type: Sequelize.TEXT
   },
   title: {
-    type: Sequelize.TEXT
+    type: Sequelize.STRING
   },
   name: {
-    type: Sequelize.DATE
+    type: Sequelize.STRING
   },
   image: {
     type: Sequelize.TEXT

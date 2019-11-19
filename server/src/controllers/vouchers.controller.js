@@ -17,16 +17,16 @@ exports.getVouchers = async (req, res) => {
 
 // Create vouchers
 exports.createVouchers = async (req, res) => {
-  const { name, nominal, expired_at, image } = req.body;
+  const { name, amount, expired_at, image } = req.body;
 
   try {
     let newVouchers = await Vouchers.create({
       name,
-      nominal,
+      amount,
       expired_at,
       image
     }, {
-      fields: ['name', 'nominal', 'expired_at', 'image']
+      fields: ['name', 'amount', 'expired_at', 'image']
     });
 
     if (newVouchers) {
@@ -73,10 +73,10 @@ exports.deleteVouchers = async (req, res) => {
 // Update voucher
 exports.updateVouchers = async (req, res) => {
   const { id } = req.params;
-  const { name, nominal, expired_at, image } = req.body;
+  const { name, amount, expired_at, image } = req.body;
 
   const vouchers = await Vouchers.findAll({
-    attributes: ['id', 'name', 'nominal', 'created_at', 'expired_at', 'image'],
+    attributes: ['id', 'name', 'amount', 'created_at', 'expired_at', 'image'],
     where: {
       id
     }
@@ -85,7 +85,7 @@ exports.updateVouchers = async (req, res) => {
   if (vouchers.length > 0) {
     vouchers.forEach(async voucher => {
       await voucher.update({
-        name, nominal, expired_at, image
+        name, amount, expired_at, image
       });
     });
   }

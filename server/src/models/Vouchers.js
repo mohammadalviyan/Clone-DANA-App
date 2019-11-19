@@ -7,9 +7,9 @@ const Vouchers = sequelize.define('vouchers', {
     primaryKey: true
   },
   name: {
-    type: Sequelize.TEXT
+    type: Sequelize.STRING
   },
-  nominal: {
+  amount: {
     type: Sequelize.INTEGER
   },
   created_at: {

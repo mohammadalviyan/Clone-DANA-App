@@ -16,7 +16,7 @@ Router.get('/',(req,res)=> {
 
 // use route
 Router.use('/api/users', userRouter);
-Router.use('/api/news', verify, newsRouter);
-Router.use('/api/vouchers', verify, vouchersRouter);
+Router.use('/api/news', newsRouter);
+Router.use('/api/vouchers', vouchersRouter);
 
 module.exports = Router;
