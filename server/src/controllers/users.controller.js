@@ -1,6 +1,6 @@
 import Users from '../models/Users';
 import Nexmo from  'nexmo';
-const bcrypt = require('bcrypt-nodejs')
+const bcrypt = require('bcrypt')
 import jwt from 'jsonwebtoken';
 const secretKey = process.env.SECRET_KEY || '270400';
 const salt = bcrypt.genSaltSync(10);
