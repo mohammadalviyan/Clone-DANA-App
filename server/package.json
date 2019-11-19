@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt": "3.0.6",
     "express": "^4.17.1",
     "json-web-token": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
