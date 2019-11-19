@@ -8,8 +8,11 @@ router
   .post("/register",upload.single("image"), usersController.createUsers)
   .post("/login", usersController.usersLogin)
   .post("/checkusers", usersController.checkNumber)
-  .post("/otp/signup", usersController.otpSignup)
-  // .get("/",verify,usersController.getAllUsers)
-  // .patch("/:number",usersController.updateProfile)
+  .post("/otp", usersController.otpUsers)
+  .post("/otpverify", usersController.otpVerify)
+  .post("/resetpin", usersController.resetPin)
+
+  .get("/",verify,usersController.getAllUsers)
+  .patch("/:number",usersController.updateProfile)
 
 module.exports = router;
