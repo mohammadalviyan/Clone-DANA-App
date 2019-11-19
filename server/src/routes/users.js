@@ -6,7 +6,6 @@ router
   .post("/register", usersController.createUsers)
   .post("/login", usersController.usersLogin)
   .post("/checkusers", usersController.checkNumber)
-
   .post("/otp/signup", usersController.otpSignup)
 
 module.exports = router; 

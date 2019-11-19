@@ -3,28 +3,28 @@ import {
   sequelize
 } from '../database/database';
 
-const News = sequelize.define('news', {
+const Vouchers = sequelize.define('vouchers', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true
   },
-  icon: {
-    type: Sequelize.TEXT
-  },
-  title: {
-    type: Sequelize.TEXT
-  },
   name: {
+    type: Sequelize.TEXT
+  },
+  nominal: {
+    type: Sequelize.INTEGER
+  },
+  created_at: {
+    type: Sequelize.DATE
+  },
+  expired_at: {
     type: Sequelize.DATE
   },
   image: {
-    type: Sequelize.TEXT
-  },
-  description: {
     type: Sequelize.TEXT
   }
 }, {
   timestamps: false
 });
 
-export default News;
+export default Vouchers;
