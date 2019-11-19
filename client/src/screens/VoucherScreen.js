@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, Dimensions } from 'react-native'
+// import { Card} from 'react-native-elements'
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 const promo = [
@@ -31,32 +32,29 @@ const promo = [
     }
 ]
 
-class PromoScreen extends React.Component {
+class VoucherScreen extends React.Component {
     renderRow = ({item}) => {
         const {image, title, dateExpire} = item
         return(
-
-                <View
-                style={styles.cardContainer}
-                >        
+            <View
+            style={styles.cardContainer}
+            > 
+                <View >
                     <Image
                     style={styles.imgStyle}
                     source={{uri: image}}
-                  />
-                    <Text style={styles.title}>{title}</Text>
-                    <View style={styles.infoContainer}>
-                        <View style={styles.iconContainer}>
-                            <Icon name="clock" color='#f18d0c' size={15} />
-                            <Text style={styles.info}>
-                                Valid until {dateExpire}
-                            </Text>
-                        </View>
-                        <TouchableOpacity style={styles.touchDetail}>
-                            <Text style={styles.button}>DETAIL</Text>
-                        </TouchableOpacity>
-                    </View>
-        
+                    />
                 </View>
+                <View style={styles.infoContainer}>
+                        <Text style={styles.info}>
+                            VALID
+                        </Text>
+                        <Text style={styles.info2}>
+                            {dateExpire}
+                        </Text>
+                </View>
+    
+            </View>
         )
     }
 
@@ -64,7 +62,7 @@ class PromoScreen extends React.Component {
         return(
             <SafeAreaView>
                 <FlatList
-                    style={{padding:5}}
+                    style={{padding:10}}
                     data={promo} 
                     renderItem={this.renderRow}
                     keyExtractor={(item, index)=>index.toString()}/>
@@ -79,46 +77,46 @@ class PromoScreen extends React.Component {
 
 
 
-export default PromoScreen;
+export default VoucherScreen;
 
 const styles = StyleSheet.create({
     cardContainer: {
         borderRadius: 10,
+        backgroundColor: 'red',
         margin: 10,
         flexDirection: "column",
         shadowColor: 'transparent',
-        shadowOpacity: 1,
-        borderColor: "#9f9f9f",
-        borderWidth: 1,
+        shadowOpacity: 0,
         
     },
     imgStyle: {
         borderTopLeftRadius:10,
         borderTopRightRadius: 10,
+        backgroundColor: 'green',
         height: 90, 
         margin: 0,
     },
     infoContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 70,
-        borderBottomLeftRadius:10,
-        borderBottomRightRadius: 10,
+        // alignItems: 'center',
+        height: 50,
+        marginRight: 8,
     },
     iconContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        // alignItems: 'center',
         width:125,
         marginHorizontal: 5,
-
+        marginTop: 18
 
     },
     title: {
         color: '#585858',
         fontSize: 15,
         fontWeight: 'bold',
-        marginVertical: 10,
+        marginBottom: 10
 
     },
     info: {
@@ -139,6 +137,6 @@ const styles = StyleSheet.create({
         height: 33,
         borderColor: "#52a6d8",
         borderWidth: 1,
-        marginRight: 20
+        marginTop: 10
     }
 })
