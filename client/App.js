@@ -3,7 +3,7 @@ import {
   View,
   StatusBar,
 } from 'react-native';
-import ProfileScreen from './src/screens/PofileScreen/ProfileScreen'
+import ProfileScreen from './src/screens/ProfileScreen'
 import PromoScreen from './src/screens/PromoScreen'
 import contactData from './src/mocks/profile.json'
 import MainNavigation from './src/navigations/MainNavigation'

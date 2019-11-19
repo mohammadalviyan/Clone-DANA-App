@@ -103,22 +103,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 70,
-        borderBottomLeftRadius:10,
-        borderBottomRightRadius: 10,
     },
     iconContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width:125,
-        marginHorizontal: 5,
-
-
+        marginHorizontal: 25,
     },
     title: {
         color: '#585858',
         fontSize: 15,
         fontWeight: 'bold',
-        marginVertical: 10,
+        marginHorizontal: 15,
+        marginVertical: 10
 
     },
     info: {

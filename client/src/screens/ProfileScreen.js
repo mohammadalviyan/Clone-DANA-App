@@ -26,35 +26,35 @@ class ProfileScreen extends Component {
   list = [
     {
       title: 'Balance',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: 'Rp.1840'
     },
     {
       title: 'Saved Card',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: '0 Cards'
     },
     {
       title: 'My Bills',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: null
     },]
     list2 = [
     {
       title: 'Apply DANAIN Bisnis Now!',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
       subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers'
     },
     {
       title: 'Referral Code',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
       subtitle: null
     },
     {
       title: 'Promo Quest',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
       subtitle: null
     },]
