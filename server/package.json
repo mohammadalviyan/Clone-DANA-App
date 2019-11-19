@@ -21,7 +21,7 @@
     "nexmo": "^2.5.1",
     "nodemon": "^1.19.4",
     "sequelize": "^5.21.2",
-    "bcrypt-nodejs": "^0.0.3",
+    "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
