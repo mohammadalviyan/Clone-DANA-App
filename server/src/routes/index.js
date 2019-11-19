@@ -10,7 +10,7 @@ import vouchersRouter from './vouchers';
 
 // use route
 router.use('/user', userRouter);
-router.use('/news', newsRouter);
-router.use('/vouchers', vouchersRouter);
+router.use('/news', verify, newsRouter);
+router.use('/vouchers', verify, vouchersRouter);
 
 export default router;
