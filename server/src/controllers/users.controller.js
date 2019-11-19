@@ -1,5 +1,5 @@
 const Users = require('../models/Users');
-const modelOtp = require('../models/Otp');
+const modelOtp=require('../models/Otp');
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -155,68 +155,68 @@ exports.otpUsers=async (req,res) =>{
 
     //API
     const nexmo = new Nexmo({
-      apiKey: "834f12cf",
-      apiSecret: "GliRLNgD3hK5BQKa",
+      apiKey: "f477fda7",
+      apiSecret: "O28vfatvtLvhCh7o",
     })
 
-    //Find Users With Number Register
-    const oldOTP = await Users.findOne({
+    //Find Users With OTP
+    const oldOTP = await modelOtp.findOne({
       where: {
         phone
       }
     });
 
-    //Delete Old OTP Users If Number Found
+    //Delete Old OTP Users If OTP Found
     if (oldOTP) {
-      await Users.update(
-        {
-          otp: ' '
-        },
+      await modelOtp.destroy(
         { where: { phone } }
       );
+    }
 
-      //Make Random OTP 
-      const newOtp = Math.floor(100000 + Math.random() * 900000);
-      const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
-
+    //Make Random OTP 
+    const newOtp = Math.floor(100000 + Math.random() * 900000);
+    const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
+    const otp=newOtpEncrypt
       
-      //Update New OTP
-      const insertNewOtp = await Users.update(
-        {
-          otp: newOtpEncrypt
-        },
-        { where: { phone } }
-      );
-
-      //Check Update Success And Send Message
-      if(insertNewOtp){
-        const from = "DANAIN";
-        const number=req.body.phone
-        const to = "62"+number+"";
-        const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
-        nexmo.message.sendSms(from, to, text);
-
-        //Set Time Out Destroy Database
-        setTimeout(async () => {
-          await Users.update(
-            {
-              otp: ' '
-            },
-            { where: { phone } }
-          );
-        }, 180000);
+    //Update New OTP
+    const insertNewOtp = await modelOtp.create(
+      {
+        otp,
+        phone
+      },
+      { 
+        fields: ['otp', 'phone']
       }
+    );
+
+    //Check Update Success And Send Message
+    if(insertNewOtp){
+      const from = "DANAIN";
+      const number=req.body.phone
+      const to = "62"+number+"";
+      const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
+      nexmo.message.sendSms(from, to, text);
+
+      //Set Time Out Destroy Database
+      setTimeout(async () => {
+        await Users.update(
+          { where: { phone } }
+        );
+      }, 180000);
 
       //Set Response
       res.status(200).json({
         message: 'Succes Send Message '
       })
-
     }else{
-      res.status(400).json({
-        status: "Users Not Found",
-      });
+      //Set Response
+      res.status(200).json({
+        message: 'Failed Send Message '
+      })
     }
+
+      
+
 
   } catch (error) {
     return res.status(400).json({
@@ -229,26 +229,23 @@ exports.otpUsers=async (req,res) =>{
 
 //Verify OTP
 exports.otpVerify=async(req,res)=>{
-  try {
+  // try {
     phone=req.body.phone
     otp=req.body.otp
 
     //Find Users With Number Register
-    const findUsers = await Users.findOne({
+    const findOtp = await modelOtp.findOne({
       where: {
         phone
       }
     });
 
-    if(findUsers){
+    if(findOtp){
       //Compare OTP 
-      if(bcrypt.compareSync(otp, findUsers.dataValues.otp)) {
+      if(bcrypt.compareSync(otp, findOtp.dataValues.otp)) {
 
         //Delete OTP
-        await Users.update(
-          {
-            otp: ' '
-          },
+        await modelOtp.destroy(
           { where: { phone } }
         );
 
@@ -271,12 +268,12 @@ exports.otpVerify=async(req,res)=>{
         response: "Your OTP is expired, please request OTP again"
       });
     }
-  } catch (error) {
-    res.status(500).json({
-      message: 'Something goes wrong',
-      data: {error}
-    })
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     message: 'Something goes wrong',
+  //     data: {error}
+  //   })
+  // }
 }
 
 //GET ALL USERS
