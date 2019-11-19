@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize';
-import { sequelize } from '../database/database';
+const Sequelize = require("sequelize");
+const sequelize = require('../database/database');
 
 const Users = sequelize.define('users', {
   id: {
@@ -34,4 +34,4 @@ const Users = sequelize.define('users', {
   timestamps: false
 });
 
-export default Users;
+module.exports = Users;

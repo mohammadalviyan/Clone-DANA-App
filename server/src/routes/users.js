@@ -1,4 +1,4 @@
-import { Router } from 'express';
+const Router = require('express');
 const router = Router();
 const usersController = require("../controllers/users.controller");
 
@@ -11,4 +11,4 @@ router
     (req, res) => res.send('Hello World!')
   )
 
-module.exports = router; 
+module.exports = router;

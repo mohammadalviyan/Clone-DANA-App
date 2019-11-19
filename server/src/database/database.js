@@ -1,18 +1,15 @@
-import Sequelize from 'sequelize';
+"use-strict";
 
-export const sequelize = new Sequelize(
-  'clonedana',
-  'clonedana',
-  'Sekolahku25*',
+const Sequelize = require("sequelize");
+
+module.exports = new Sequelize(
+  `mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@remotemysql.com/${process.env.DB_DATABASE}`,
   {
-    host: 'clonedana.cziqdpn1fufp.us-east-1.rds.amazonaws.com',
-    dialect: 'postgres',
     pool: {
       max: 5,
       min: 0,
-      require: 3000,
-      idle: 1000
-    },
-    logging: false
+      acquire: 30000,
+      idle: 10000
+    }
   }
-)
+);

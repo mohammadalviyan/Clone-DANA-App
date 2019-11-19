@@ -1,16 +1,22 @@
-import { Router } from 'express';
-const router = Router();
+const express = require('express');
+const Router = express.Router();
 
-import  verify from '../middleware/verifyToken';
+const verify = require('../middleware/verifyToken');
 
 // Routes all
-import userRouter from './users';
-import newsRouter from './news';
-import vouchersRouter from './vouchers';
+const userRouter = require('./users');
+// const newsRouter = require('./news');
+// const vouchersRouter = require('./vouchers');
+
+Router.get('/',(req,res)=> {
+  res.json({
+      message: "Welcome to Danain",
+  });
+})
 
 // use route
-router.use('/user', userRouter);
-router.use('/news', verify, newsRouter);
-router.use('/vouchers', verify, vouchersRouter);
+Router.use('/api/users', userRouter);
+// router.use('/api/news', verify, newsRouter);
+// router.use('/api/vouchers', verify, vouchersRouter);
 
-export default router;
+module.exports = Router;
