@@ -1,7 +1,13 @@
 const Router = require('express');
 const router = Router();
 
-const { getNews, createNews, getOneNews, deleteNews, updateNews } = require ('../controllers/news.controller');
+const {
+  getNews,
+  createNews,
+  getOneNews,
+  deleteNews,
+  updateNews
+} = require('../controllers/news.controller');
 
 // /api/news/
 router.get('/', getNews);

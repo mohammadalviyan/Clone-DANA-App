@@ -7,6 +7,7 @@ const verify = require('../middleware/verifyToken');
 const userRouter = require('./users');
 const newsRouter = require('./news');
 const vouchersRouter = require('./vouchers');
+const categoryRouter = require('./category');
 
 Router.get('/',(req,res)=> {
   res.json({
@@ -18,5 +19,6 @@ Router.get('/',(req,res)=> {
 Router.use('/api/users', userRouter);
 Router.use('/api/news', newsRouter);
 Router.use('/api/vouchers', vouchersRouter);
+Router.use('/api/categories', categoryRouter);
 
 module.exports = Router;
