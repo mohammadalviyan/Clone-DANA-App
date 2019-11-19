@@ -12,14 +12,18 @@ import {
   StatusBar,
 } from 'react-native';
 import ProfileScreen from './src/screens/PofileScreen'
+import PromoScreen from './src/screens/PromoScreen'
 import contactData from './src/mocks/profile.json'
+
+
 
 const App: () => React$Node = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#0E8EE7"/>
       <View>
-        <ProfileScreen {...contactData}/>
+        {/* <ProfileScreen {...contactData}/> */}
+        <PromoScreen />
       </View>
     </>
   );
