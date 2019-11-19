@@ -1,6 +1,8 @@
 import { Router } from 'express';
 const router = Router();
 
+import  verify from '../middleware/verifyToken';
+
 // Routes all
 import userRouter from './users';
 import newsRouter from './news';
