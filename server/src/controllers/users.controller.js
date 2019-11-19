@@ -1,6 +1,6 @@
 const Users = require('../models/Users');
 const Nexmo = require('nexmo');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
 const secretKey = process.env.SECRET_KEY || '270400';

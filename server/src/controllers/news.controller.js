@@ -1,7 +1,7 @@
-import News from '../models/News';
+const News = require('../models/News');
 
 // Get all news
-export const getNews = async (req, res) => {
+exports.getNews = async (req, res) => {
   try {
     const news = await News.findAll();
     res.json({
@@ -16,7 +16,7 @@ export const getNews = async (req, res) => {
 };
 
 // Create news
-export const createNews = async (req, res) => {
+exports.createNews = async (req, res) => {
   const {
     icon,
     title,
@@ -50,7 +50,7 @@ export const createNews = async (req, res) => {
 };
 
 // Get one news
-export const getOneNews = async (req, res) => {
+exports.getOneNews = async (req, res) => {
   const {
     id
   } = req.params;
@@ -65,7 +65,7 @@ export const getOneNews = async (req, res) => {
 };
 
 // Delete news
-export const deleteNews = async (req, res) => {
+exports.deleteNews = async (req, res) => {
   const {
     id
   } = req.params;
@@ -81,7 +81,7 @@ export const deleteNews = async (req, res) => {
 };
 
 // Update news
-export const updateNews = async (req, res) => {
+exports.updateNews = async (req, res) => {
   const {
     id
   } = req.params;

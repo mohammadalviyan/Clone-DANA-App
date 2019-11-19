@@ -1,7 +1,7 @@
-import { Router } from 'express';
+const Router = require('express');
 const router = Router();
 
-import { getNews, createNews, getOneNews, deleteNews, updateNews } from '../controllers/news.controller';
+const { getNews, createNews, getOneNews, deleteNews, updateNews } = require ('../controllers/news.controller');
 
 // /api/news/
 router.get('/', getNews);
@@ -12,4 +12,4 @@ router.get('/:id', getOneNews);
 router.delete('/:id', deleteNews);
 router.put('/:id', updateNews);
 
-export default router;
+module.exports = router;

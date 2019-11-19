@@ -1,7 +1,7 @@
-import Vouchers from '../models/Vouchers';
+const Vouchers = require('../models/Vouchers');
 
 // Get all vouchers
-export const getVouchers = async (req, res) => {
+exports.getVouchers = async (req, res) => {
   try {
     const vouchers = await Vouchers.findAll();
     res.json({
@@ -16,7 +16,7 @@ export const getVouchers = async (req, res) => {
 };
 
 // Create vouchers
-export const createVouchers = async (req, res) => {
+exports.createVouchers = async (req, res) => {
   const { name, nominal, expired_at, image } = req.body;
 
   try {
@@ -44,7 +44,7 @@ export const createVouchers = async (req, res) => {
 };
 
 // Get one vouchers
-export const getOneVouchers = async (req, res) => {
+exports.getOneVouchers = async (req, res) => {
   const { id } = req.params;
   const vouchers = await Vouchers.findOne({
     where: {
@@ -57,7 +57,7 @@ export const getOneVouchers = async (req, res) => {
 };
 
 // Delete voucher
-export const deleteVouchers = async (req, res) => {
+exports.deleteVouchers = async (req, res) => {
   const { id } = req.params;
   const deleteRowCount = await Vouchers.destroy({
     where: {
@@ -71,7 +71,7 @@ export const deleteVouchers = async (req, res) => {
 };
 
 // Update voucher
-export const updateVouchers = async (req, res) => {
+exports.updateVouchers = async (req, res) => {
   const { id } = req.params;
   const { name, nominal, expired_at, image } = req.body;
 
