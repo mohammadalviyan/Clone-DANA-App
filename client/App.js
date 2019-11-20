@@ -24,8 +24,8 @@ const App = () => {
       <MainNavigation /> */}
       <StatusBar barStyle="dark-content" backgroundColor="#0E8EE7"/>
       <View>
-        {/* <ProfileScreen {...contactData}/> */}
-         <SettingScreen {...contactData}/>
+        <ProfileScreen {...contactData}/>
+         {/* <SettingScreen {...contactData}/> */}
         {/* <PromoScreen /> */}
         {/* <VoucherScreen/> */}
       </View>

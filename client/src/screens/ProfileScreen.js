@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   Image,
   ScrollView,
@@ -7,22 +7,13 @@ import {
   View, TouchableOpacity, Dimensions
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
-import PropTypes from 'prop-types'
 
 
 
-class ProfileScreen extends Component {
 
+const ProfileScreen = (props) => {
 
-
-  static propTypes = {
-    avatar: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    phoneNum: PropTypes.number.isRequired,
-    navigation: PropTypes.object.isRequired,
-  }
-
-  list = [
+  let list = [
     {
       title: 'Balance',
       icon: require('../../asset/icons/dana-icon-set.png'),
@@ -38,7 +29,7 @@ class ProfileScreen extends Component {
       icon: require('../../asset/icons/dana-icon-set.png'),
       rightTitle: null
     },]
-    list2 = [
+    let list2 = [
     {
       title: 'Apply DANAIN Bisnis Now!',
       icon: require('../../asset/icons/dana-icon-set.png'),
@@ -57,7 +48,7 @@ class ProfileScreen extends Component {
       rightTitle: null,
       subtitle: null
     },]
-    list3 = [
+    let list3 = [
     {
       title: 'Tutorial',
       rightTitle: null
@@ -89,13 +80,13 @@ class ProfileScreen extends Component {
     },
   ]
 
-  onPressOptions = () => {
+  const onPressOptions = (e) => {
     //navigate
     console.log('option is pressed')
   }
 
   renderContactHeader = () => {
-    const { avatar, name, phoneNum } = this.props
+    const { avatar, name, phoneNum } = props
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
@@ -118,7 +109,7 @@ class ProfileScreen extends Component {
     )
   }
 
-  render() {
+
     return (
       <View>
       <View style={styles.mainHeader}>
@@ -127,7 +118,7 @@ class ProfileScreen extends Component {
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.cardContainer}>
-            {this.renderContactHeader()}
+            {renderContactHeader()}
           </View>
           <View style ={styles.verifyContainer}>
             <TouchableOpacity style={styles.buttonContainer}>
@@ -141,14 +132,14 @@ class ProfileScreen extends Component {
          {/* ---------- */}
         <View >
         {
-          this.list.map((l) => (
+          list.map((l) => (
             <ListItem
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
               rightTitleStyle={{ fontSize: 15 }}
               chevron={{size:24}}
-              onPress={() => this.onPressOptions()}
+              onPress={(e) => onPressOptions(e)}
               containerStyle={styles.listItemContainer}
               leftIcon={
                 <Image
@@ -161,13 +152,13 @@ class ProfileScreen extends Component {
         }
         <InfoText text="FEATURE" />
         {
-          this.list2.map((l) => (
+          list2.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -182,28 +173,28 @@ class ProfileScreen extends Component {
         }
         <InfoText text="GENERAL INFO" />
         {
-          this.list3.map((l) => (
+          list3.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             chevron={{size:24}}
             rightTitleStyle={{ fontSize: 15 }}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e)}
             containerStyle={styles.listItemContainer}
             />
           ))
         }
         <InfoText text="ACCOUNT" />
         {
-          this.list4.map((l) => (
+          list4.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             rightTitleStyle={{ fontSize: 15 }}
             chevron={{size:24}}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e)}
             containerStyle={styles.listItemContainer}
             />
           ))
@@ -215,7 +206,7 @@ class ProfileScreen extends Component {
       </ScrollView>
       </View>
     )
-  }
+
 }
 
 export default ProfileScreen
