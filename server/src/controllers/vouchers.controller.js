@@ -82,9 +82,15 @@ exports.getOneVouchers = async (req, res) => {
       id
     }
   });
-  res.json({
-    data: vouchers
-  });
+  if (vouchers) {
+    res.json({
+      data: vouchers
+    });
+  } else {
+    res.json({
+      message: "Vouchers id not found"
+    });
+  }
 };
 
 // Delete voucher
@@ -97,10 +103,16 @@ exports.deleteVouchers = async (req, res) => {
       id
     }
   });
-  res.json({
-    message: 'Vouchers deleted succesfully',
-    data: deleteRowCount
-  });
+  if (deleteRowCount) {
+    res.json({
+      message: 'Vouchers deleted succesully',
+      count: deleteRowCount
+    });
+  } else {
+    res.json({
+      message: "Vouchers id not found"
+    });
+  }
 };
 
 // Update voucher

@@ -79,9 +79,15 @@ exports.getOneNews = async (req, res) => {
       id
     }
   });
-  res.json({
-    data: news
-  });
+  if (news) {
+    res.json({
+      data: news
+    });
+  } else {
+    res.json({
+      message: "News id not found"
+    });
+  }
 };
 
 // Delete news
@@ -94,10 +100,16 @@ exports.deleteNews = async (req, res) => {
       id
     }
   });
-  res.json({
-    message: 'News deleted succesully',
-    count: deleteRowCount
-  });
+  if (deleteRowCount) {
+    res.json({
+      message: 'News deleted succesully',
+      count: deleteRowCount
+    });
+  } else {
+    res.json({
+      message: "News id not found"
+    });
+  }
 };
 
 // Update news
