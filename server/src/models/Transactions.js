@@ -18,10 +18,10 @@ const Transactions = sequelize.define('transaction', {
   amount: {
     type: Sequelize.INTEGER
   },
-  id_type: {
+  id_services: {
     type: Sequelize.INTEGER
   },
-  id_voucher: {
+  id_vouchers: {
     type: Sequelize.INTEGER
   },
   date_added: {

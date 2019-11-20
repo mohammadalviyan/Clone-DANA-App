@@ -2,6 +2,7 @@ const Router = require('express');
 const router = Router();
 const { upload } = require('../middleware/uploadImage');
 
+const { checkStatus } = require('../middleware/handleStatus');
 const {
   getNews,
   createNews,

@@ -30,7 +30,7 @@ exports.createNews = async (req, res) => {
     "images/uploads/" + req.file.filename :
     "/images/image.png";
 
-  try {
+  // try {
     //check and handle null
     if (title === "" || title === null) {
       return res.json({
@@ -61,12 +61,12 @@ exports.createNews = async (req, res) => {
         data: newNews
       });
     }
-  } catch (error) {
+  // } catch (error) {
     res.status(500).json({
       message: 'Something goes wrong',
       data: {}
     });
-  }
+  // }
 };
 
 // Get one news
