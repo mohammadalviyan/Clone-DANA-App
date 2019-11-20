@@ -12,7 +12,7 @@ router
   .post("/otpverify", usersController.otpVerify)
   .post("/resetpin", usersController.resetPin)
 
-  .get("/",verify,usersController.getAllUsers)
+  .get("/",usersController.getAllUsers)
   .patch("/:number",usersController.updateProfile)
 
 module.exports = router;
