@@ -1,57 +1,65 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, Dimensions, ImageBackground } from 'react-native'
 // import { Card} from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
-const promo = [
+const voucher = [
     {
-        "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
-        "title": "Simpan Kartu Debit BTN, Bonus Voucher Rp25rb",
-        "dateExpire": "31 Jan 2020"
+        "image": "https://lh3.googleusercontent.com/WnDx3fK6U4A9vmXo-aX6lzKWDiRKmy3bytWLBfFV665ONgc3G-eNlc6WJR-2XwBV7A",
+        "dateStart": "16 Nov 2019",
+        "dateExpire": "23 Nov 2019",
+        "timeExpire": "15:32",
+        "supriseType": "DANA Surprize Pulsa Voucher",
+        "amount": 5000,
+        "minAmount": 24000
      },
      {
-       "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
-       "title": "Simpan Kartu Debit BTN, Bonus Voucher Rp25rb",
-       "dateExpire": "31 Jan 2020"
-    },
-    {
-       "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
-       "title": "Simpan Kartu Debit BTN, Bonus Voucher Rp25rb",
-       "dateExpire": "31 Jan 2020"
-    },
-    {
-       "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
-       "title": "Simpan Kartu Debit BTN, Bonus Voucher Rp25rb",
-       "dateExpire": "31 Jan 2020"
-    },
-    {
-       "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
-       "title": "Simpan Kartu Debit BTN, Bonus Voucher Rp25rb",
-       "dateExpire": "31 Jan 2020"
-    }
+        "image": "https://lh3.googleusercontent.com/WnDx3fK6U4A9vmXo-aX6lzKWDiRKmy3bytWLBfFV665ONgc3G-eNlc6WJR-2XwBV7A",
+        "dateStart": "16 Nov 2019",
+        "dateExpire": "30 Nov 2019",
+        "timeExpire": "15:32",
+        "supriseType": "DANA Surprize Biller Voucher",
+        "amount": 5000,
+        "minAmount": 21500
+     },
+     {
+        "image": "https://lh3.googleusercontent.com/WnDx3fK6U4A9vmXo-aX6lzKWDiRKmy3bytWLBfFV665ONgc3G-eNlc6WJR-2XwBV7A",
+        "dateStart": "16 Nov 2019",
+        "dateExpire": "23 Nov 2019",
+        "timeExpire": "15:32",
+        "supriseType": "DANA Surprize Pulsa Voucher",
+        "amount": 5000,
+        "minAmount": 24000
+     }
 ]
 
 class VoucherScreen extends React.Component {
     renderRow = ({item}) => {
-        const {image, title, dateExpire} = item
+        const {image, dateStart, dateExpire, timeExpire, supriseType, amount, minAmount} = item
         return(
             <View
             style={styles.cardContainer}
             > 
                 <View >
-                    <Image
-                    style={styles.imgStyle}
+                    <ImageBackground 
+                    style={styles.imgBackground}
                     source={{uri: image}}
-                    />
+                    imageStyle={{opacity:0.4}}>
+                        <View style={styles.imgContent}>
+                            <Text style={styles.imgText}>{supriseType}</Text>
+                            <Text style={styles.imgText}>Rp {amount}</Text>
+                            <Text style={styles.imgText}>Minimum transaction Rp{minAmount}</Text>
+                        </View>
+                    </ImageBackground>
                 </View>
                 <View style={styles.infoContainer}>
-                        <Text style={styles.info}>
-                            VALID
-                        </Text>
-                        <Text style={styles.info2}>
-                            {dateExpire}
-                        </Text>
+                    <Text style={styles.info}>
+                        VALID
+                    </Text>
+                    <Text style={styles.info2}>
+                        {dateStart} {timeExpire} - {dateExpire} {timeExpire}
+                    </Text>
                 </View>
     
             </View>
@@ -60,13 +68,17 @@ class VoucherScreen extends React.Component {
 
     render() {       
         return(
+            <View style={styles.mainContainer}>
             <SafeAreaView>
                 <FlatList
                     style={{padding:10}}
-                    data={promo} 
+                    data={voucher} 
                     renderItem={this.renderRow}
                     keyExtractor={(item, index)=>index.toString()}/>
+            <View style={{height:10}}></View>
             </SafeAreaView>
+            </View>
+
         )
     }
 
@@ -75,33 +87,50 @@ class VoucherScreen extends React.Component {
 
 
 
-
-
 export default VoucherScreen;
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        backgroundColor: "#fafafa"
+    },
     cardContainer: {
         borderRadius: 10,
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         margin: 10,
         flexDirection: "column",
         shadowColor: 'transparent',
         shadowOpacity: 0,
         
     },
-    imgStyle: {
+    imgBackground: {
         borderTopLeftRadius:10,
         borderTopRightRadius: 10,
-        backgroundColor: 'green',
-        height: 90, 
+        backgroundColor: '#34aae8',
+        height: 180, 
         margin: 0,
+    },
+    imgContent: {
+        marginLeft: 90,
+        justifyContent: 'center',
+        paddingVertical: 20,
+        height: 180,
+        
+
+        
+    },
+    imgText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        marginBottom:10
     },
     infoContainer: {
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        // alignItems: 'center',
-        height: 50,
-        marginRight: 8,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        height: 90,
+        paddingRight: 8,
+        borderWidth:1,
+        borderColor: "#9f9f9f"
     },
     iconContainer: {
         flexDirection: 'row',
@@ -120,8 +149,10 @@ const styles = StyleSheet.create({
 
     },
     info: {
-        color: '#9f9f9f',
-        fontSize: 10,
+        color: '#afafaf',
+        fontWeight:"bold",
+        fontSize: 14,
+        marginBottom:10
     }, 
     button: {
         fontSize: 12, 
