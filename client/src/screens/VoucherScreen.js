@@ -34,8 +34,8 @@ const voucher = [
      }
 ]
 
-class VoucherScreen extends React.Component {
-    renderRow = ({item}) => {
+const VoucherScreen = (props) => {
+    const renderRow = ({item}) => {
         const {image, dateStart, dateExpire, timeExpire, supriseType, amount, minAmount} = item
         return(
             <View
@@ -66,22 +66,19 @@ class VoucherScreen extends React.Component {
         )
     }
 
-    render() {       
         return(
             <View style={styles.mainContainer}>
             <SafeAreaView>
                 <FlatList
                     style={{padding:10}}
                     data={voucher} 
-                    renderItem={this.renderRow}
+                    renderItem={renderRow}
                     keyExtractor={(item, index)=>index.toString()}/>
             <View style={{height:10}}></View>
             </SafeAreaView>
             </View>
 
         )
-    }
-
 
 }
 

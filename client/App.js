@@ -25,9 +25,9 @@ const App = () => {
       <StatusBar barStyle="dark-content" backgroundColor="#0E8EE7"/>
       <View>
         {/* <ProfileScreen {...contactData}/> */}
-         <SettingScreen {...contactData}/>
+         {/* <SettingScreen {...contactData}/> */}
         {/* <PromoScreen /> */}
-        {/* <VoucherScreen/> */}
+        <VoucherScreen/>
       </View>
 
       {/* <Provider store={store}>
