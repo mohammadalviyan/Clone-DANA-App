@@ -8,23 +8,26 @@ import {
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker'
 import {TextMask} from 'react-native-masked-text'
-  
+import {useSelector, useDispatch} from 'react-redux';
+import {user} from '../Redux/Actions/user';
 
 
 const SettingScreen = (props) => {
+  const user =  useSelector (state => state.user)
+  const dispatch = useDispatch()
   const [state, setState] = useState({
     type: '',
     image: null,
     name: '',
     phone: null,
     email: null,
-    security: "Off"
+    security: 'OFF'
 
 })
 
-  const selectImage = async () => {
+  const selectImage = async (e) => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
         console.log('Response = ', response);
       
@@ -36,6 +39,7 @@ const SettingScreen = (props) => {
           console.log('User tapped custom button: ', response.customButton);
         } else {   
           setState({
+            ...state,
             image: response.uri,
           });
         }
@@ -45,6 +49,7 @@ const SettingScreen = (props) => {
   useEffect( () => {
     const { avatar, name, phoneNum, type, email } = props
     setState({
+        ...state,
         name,
         phone: phoneNum,
         image: avatar,
@@ -62,8 +67,9 @@ const SettingScreen = (props) => {
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: state.image ? <Image source ={state.image} style={{height:10}}/> : <Icon name="user" style={{color: "0E8EE7"}}/>,
-      command: "picture"
+      rightTitle: state.image ?
+      <Image source ={{uri: state.image}} style={styles.profileImage}/>  : <Icon name="user" style={{color: "0E8EE7"}}/>,
+    command: "picture"
     },
     {
       title: 'Change Name',
@@ -110,7 +116,7 @@ const SettingScreen = (props) => {
             };
         case 'picture':
             console.log('picture is pressed')
-            selectImage()
+            selectImage(e)
             return {
                 
             };
@@ -205,15 +211,11 @@ const InfoText = ({ text }) => (
 )
 
 const styles = StyleSheet.create({
-  imgconContainer:{
-      alignItems: 'center',
-      backgroundColor: '#0E8EE7',
-      borderColor: 'transparent',
-      height: 30,
-      justifyContent: 'center',
-      marginLeft: 10,
-      marginRight: 18,
-      width: 30,
+  profileImage:{
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+
   },
   cardContainer: {
     flex: 1,
