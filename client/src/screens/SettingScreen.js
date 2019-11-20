@@ -8,23 +8,17 @@ import {
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker'
 import {TextMask} from 'react-native-masked-text'
-  
+import {useSelector, useDispatch} from 'react-redux';
+import {getUser} from '../Redux/Actions/user';
 
 
 const SettingScreen = (props) => {
-  const [state, setState] = useState({
-    type: '',
-    image: null,
-    name: '',
-    phone: null,
-    email: null,
-    security: "Off"
+  const user =  useSelector (state => state.user)
+  const dispatch = useDispatch()
 
-})
-
-  const selectImage = async () => {
+  const selectImage = async (e) => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
         console.log('Response = ', response);
       
@@ -35,57 +29,61 @@ const SettingScreen = (props) => {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {   
-          setState({
-            image: response.uri,
-          });
+         // call update user from global axios
+        //   setState({
+        //     ...state,
+        //     image: response.uri,
+        //   });
         }
       });
   }
 
   useEffect( () => {
-    const { avatar, name, phoneNum, type, email } = props
-    setState({
-        name,
-        phone: phoneNum,
-        image: avatar,
-        type,
-        email
-    })
+    const getData = async () => {
+        await dispatch( getUser())
+        // console.log(user.resultUser.image)
+        // console.log(user.resultUser, "typeapp")
+
+    }
+    getData();
   }, [])
 
 
   let list = [
     {
       title: 'Account Type',
-      rightTitle: state.type,
+      rightTitle: user.isFulfilled ? user.resultUser.type_user : null,
       command: "acc-type"
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: state.image ? <Image source ={state.image} style={{height:10}}/> : <Icon name="user" style={{color: "0E8EE7"}}/>,
-      command: "picture"
+      rightTitle: user.isFulfilled ?
+      <Image source ={{uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`}} style={styles.profileImage}/>  : <Icon name="user"/>,
+    command: "picture"
     },
     {
       title: 'Change Name',
-      rightTitle: state.name ? state.name : state.phone,
+      rightTitle: user.isFulfilled ? user.resultUser.name : null,
       command: "name"
     },]
 
     let list2 = [
     {
       title: 'Mobile No.',
-      rightTitle: <TextMask value={state.phone}
+      rightTitle: user.isFulfilled ? <TextMask value={user.resultUser.phone}
                     type={'cel-phone'}
-                    options= {{obfuscated: true}}
-      />,
+                    options= {{withDDD: true, dddMask: "(+62)"}}
+      /> : null,
       command: "phone"
     },
     {
       title: 'Email Address',
-      rightTitle: state.email ? <TextMask value={state.email}
-                   type={'zip-code'}
-                   options= {{obfuscated: true}}
-                   /> : "Unset",
+      rightTitle: user.isFulfilled ? 
+                //    <TextMask value={user.resultUser.email}
+                //          type={''}
+                //          options= {{obfuscated: true}}/> 
+                    <Text>{user.resultUser.email}</Text>
+                   : "Unset",
       command: "email"
     },
     {
@@ -95,7 +93,7 @@ const SettingScreen = (props) => {
     },
     {
         title: 'Security Questions',
-        rightTitle: state.security,
+        rightTitle: "OFF",
         command: "security"
       },
 ]
@@ -110,7 +108,7 @@ const SettingScreen = (props) => {
             };
         case 'picture':
             console.log('picture is pressed')
-            selectImage()
+            selectImage(e)
             return {
                 
             };
@@ -186,8 +184,7 @@ const SettingScreen = (props) => {
         </View>
         {/* ---------- */}
 
-        <View style={{height: 400}}>
-          <Image source={state.image} style={{width:'80%', height:20, resizeMode:'contain'}}/>
+        <View style={{height: 200}}>
         </View>
 
       </ScrollView>
@@ -205,15 +202,11 @@ const InfoText = ({ text }) => (
 )
 
 const styles = StyleSheet.create({
-  imgconContainer:{
-      alignItems: 'center',
-      backgroundColor: '#0E8EE7',
-      borderColor: 'transparent',
-      height: 30,
-      justifyContent: 'center',
-      marginLeft: 10,
-      marginRight: 18,
-      width: 30,
+  profileImage:{
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+
   },
   cardContainer: {
     flex: 1,

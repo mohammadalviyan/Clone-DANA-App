@@ -1,8 +1,10 @@
 import auth from './auth';
 import coupon from './coupon';
+import user from './user';
 import {combineReducers} from 'redux';
 
 export default combineReducers({
   auth,
-  coupon
+  coupon,
+  user
 });
