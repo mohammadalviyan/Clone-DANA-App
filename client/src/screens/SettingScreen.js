@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Image,
   ScrollView,
@@ -13,31 +13,19 @@ import {TextMask} from 'react-native-masked-text'
 import PropTypes from 'prop-types'  
 
 
-class SettingScreen extends Component {
-  static propTypes = {
-    avatar: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    phoneNum: PropTypes.number.isRequired,
-    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-    navigation: PropTypes.object.isRequired,
-  }
+const SettingScreen = (props) => {
 
-  static defaultProps = {
-    containerStyle: {},
-  }
+  const [state, setState] = useState({
+    type: '',
+    image: null,
+    name: '',
+    phone: null,
+    email: null,
+    security: "Off"
 
-  state = {
-      type: '',
-      image: null,
-      name: '',
-      phone: null,
-      email: null,
-      security: "Off"
+})
 
-  }
-
-
-  selectImage = async () => {
+  const selectImage = async () => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
         console.log('Response = ', response);
       
@@ -48,45 +36,46 @@ class SettingScreen extends Component {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {   
-          this.setState({
+          setState({
             image: response.uri,
           });
         }
       });
   }
 
-  componentDidMount(){
-    const { avatar, name, phoneNum, type, email } = this.props
-    this.setState({
+  useEffect( () => {
+    const { avatar, name, phoneNum, type, email } = props
+    setState({
         name,
         phone: phoneNum,
         image: avatar,
         type,
         email
     })
-  }
+  }, [])
 
-  list = [
+
+  let list = [
     {
       title: 'Account Type',
-      rightTitle: this.state.type,
+      rightTitle: state.type,
       command: "acc-type"
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: this.state.image ? <Image source ={this.state.image} style={{height:10}}/> : <Icon name="user" style={{color: "0E8EE7"}}/>,
+      rightTitle: state.image ? <Image source ={state.image} style={{height:10}}/> : <Icon name="user" style={{color: "0E8EE7"}}/>,
       command: "picture"
     },
     {
       title: 'Change Name',
-      rightTitle: this.state.name ? this.state.name : this.state.phone,
+      rightTitle: state.name ? state.name : state.phone,
       command: "name"
     },]
 
-    list2 = [
+    let list2 = [
     {
       title: 'Mobile No.',
-      rightTitle: <TextMask value={this.state.phone}
+      rightTitle: <TextMask value={state.phone}
                     type={'cel-phone'}
                     options= {{obfuscated: true}}
       />,
@@ -94,8 +83,8 @@ class SettingScreen extends Component {
     },
     {
       title: 'Email Address',
-      rightTitle: this.state.email ? <TextMask value={this.state.phone}
-                   type={'custom'}
+      rightTitle: state.email ? <TextMask value={state.email}
+                   type={'zip-code'}
                    options= {{obfuscated: true}}
                    /> : "Unset",
       command: "email"
@@ -107,13 +96,13 @@ class SettingScreen extends Component {
     },
     {
         title: 'Security Questions',
-        rightTitle: this.state.security,
+        rightTitle: state.security,
         command: "security"
       },
 ]
 
 
-  onPressOptions = (command) => {
+  const onPressOptions = (e, command) => {
     switch (command) {
         case 'acc-type':
             console.log('acc-type is pressed')
@@ -122,7 +111,7 @@ class SettingScreen extends Component {
             };
         case 'picture':
             console.log('picture is pressed')
-            this.selectImage()
+            selectImage()
             return {
                 
             };
@@ -154,27 +143,26 @@ class SettingScreen extends Component {
         }
   }
 
-  render() {
     return (
       <View>
       <View style={styles.mainHeader}>
         <Text style={styles.textHeader}>Settings</Text>
       </View>
       <ScrollView style={styles.scroll}>
-        <View style={[styles.container, this.props.containerStyle]}>
+        <View style={styles.container}>
         </View>
          {/* ---------- */}
         <View >
         <InfoText text="PROFILE SETTINGS" />
         {
-          this.list.map((l) => (
+          list.map((l) => (
             <ListItem
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
-              rightTitleStyle={{ fontSize: 15, backgroundColor:"red" }}
+              rightTitleStyle={{ fontSize: 15 }}
               chevron={{size:24}}
-              onPress={() => this.onPressOptions(l.command)}
+              onPress={(e) => onPressOptions(e,l.command)}
               containerStyle={styles.listItemContainer}
               pad={0}
               />
@@ -182,13 +170,13 @@ class SettingScreen extends Component {
         }
         <InfoText text="SECURITY SETTINGS" />
         {
-          this.list2.map((l) => (
+          list2.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={() => this.onPressOptions(l.command)}
+            onPress={(e) => onPressOptions(e,l.command)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -200,13 +188,12 @@ class SettingScreen extends Component {
         {/* ---------- */}
 
         <View style={{height: 400}}>
-          <Image source={this.state.image} style={{width:'80%', height:20, resizeMode:'contain'}}/>
+          <Image source={state.image} style={{width:'80%', height:20, resizeMode:'contain'}}/>
         </View>
 
       </ScrollView>
       </View>
     )
-  }
 }
 
 export default SettingScreen
