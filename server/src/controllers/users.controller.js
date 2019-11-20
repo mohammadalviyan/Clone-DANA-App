@@ -1,5 +1,6 @@
 const Users = require('../models/Users');
 const modelOtp=require('../models/Otp');
+
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -172,7 +173,6 @@ exports.otpUsers=async (req,res) =>{
         { where: { phone } }
       );
     }
-
     //Make Random OTP 
     const newOtp = Math.floor(100000 + Math.random() * 900000);
     const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
@@ -214,10 +214,6 @@ exports.otpUsers=async (req,res) =>{
         message: 'Failed Send Message '
       })
     }
-
-      
-
-
   } catch (error) {
     return res.status(400).json({
       status: "error",
@@ -239,7 +235,6 @@ exports.otpVerify=async(req,res)=>{
         phone
       }
     });
-
     if(findOtp){
       //Compare OTP 
       if(bcrypt.compareSync(otp, findOtp.dataValues.otp)) {
@@ -298,7 +293,7 @@ exports.resetPin=async(req,res)=>{
     const phone=req.body.phone
     const newPinEncrypt = bcrypt.hashSync(pin, salt)
 
-    //Upadate Pin 
+    //Upadate Pin
     const updatePin=await Users.update(
       {
         pin:newPinEncrypt
@@ -325,5 +320,5 @@ exports.resetPin=async(req,res)=>{
 
 //UPDATE PROFILE
 exports.updateProfile=async(re,res)=>{
-  
+
 }
