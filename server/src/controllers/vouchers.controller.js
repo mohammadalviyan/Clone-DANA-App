@@ -17,9 +17,38 @@ exports.getVouchers = async (req, res) => {
 
 // Create vouchers
 exports.createVouchers = async (req, res) => {
-  const { name, amount, expired_at, image } = req.body;
+  const {
+    name,
+    amount,
+    expired_at
+  } = req.body;
+
+  const image = req.file ?
+    "images/uploads/" + req.file.filename :
+    "/images/image.png";
 
   try {
+    if (name === "" || name === null) {
+      return res.json({
+        status: "error",
+        message: "Name cant be empty"
+      });
+    }
+
+    if (amount === "" || amount === null) {
+      return res.json({
+        status: "error",
+        message: "Amount cant be empty"
+      });
+    }
+
+    if (expired_at === "" || expired_at === null) {
+      return res.json({
+        status: "error",
+        message: "Expired cant be empty"
+      });
+    }
+
     let newVouchers = await Vouchers.create({
       name,
       amount,
@@ -45,7 +74,9 @@ exports.createVouchers = async (req, res) => {
 
 // Get one vouchers
 exports.getOneVouchers = async (req, res) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params;
   const vouchers = await Vouchers.findOne({
     where: {
       id
@@ -58,7 +89,9 @@ exports.getOneVouchers = async (req, res) => {
 
 // Delete voucher
 exports.deleteVouchers = async (req, res) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params;
   const deleteRowCount = await Vouchers.destroy({
     where: {
       id
@@ -72,8 +105,25 @@ exports.deleteVouchers = async (req, res) => {
 
 // Update voucher
 exports.updateVouchers = async (req, res) => {
-  const { id } = req.params;
-  const { name, amount, expired_at, image } = req.body;
+  const {
+    id
+  } = req.params;
+  const {
+    name,
+    amount,
+    expired_at
+  } = req.body;
+
+  const image = req.file ?
+    "images/uploads/" + req.file.filename :
+    "/images/image.png";
+
+  if (name === "" || name === null) {
+    return res.json({
+      status: "error",
+      message: "Name cant be empty"
+    });
+  }
 
   const vouchers = await Vouchers.findAll({
     attributes: ['id', 'name', 'amount', 'created_at', 'expired_at', 'image'],
@@ -85,7 +135,10 @@ exports.updateVouchers = async (req, res) => {
   if (vouchers.length > 0) {
     vouchers.forEach(async voucher => {
       await voucher.update({
-        name, amount, expired_at, image
+        name,
+        amount,
+        expired_at,
+        image
       });
     });
   }

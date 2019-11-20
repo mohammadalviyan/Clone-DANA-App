@@ -1,5 +1,6 @@
 const Router = require('express');
 const router = Router();
+const { upload } = require('../middleware/uploadImage');
 
 const {
   getVouchers,
@@ -11,11 +12,11 @@ const {
 
 // /api/vouchers/
 router.get('/', getVouchers);
-router.post('/', createVouchers);
+router.post('/', upload.single("image"), createVouchers);
 
 // /api/vouchers/id
 router.get('/:id', getOneVouchers);
 router.delete('/:id', deleteVouchers);
-router.put('/:id', updateVouchers);
+router.put('/:id', upload.single("image"), updateVouchers);
 
 module.exports = router;

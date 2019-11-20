@@ -43,13 +43,16 @@ exports.createUsers = async (req, res) => {
 
   const {
     name,
-    image,
     refferal,
     phone,
     balance,
     email,
     type_user
   } = req.body;
+
+  const image = req.file ?
+    "/images/uploads/" + req.file.filename :
+    "/images/avatar.png";
 
   try {
     let checkNumber = await Users.findOne({

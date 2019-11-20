@@ -1,9 +1,10 @@
 const Router = require('express');
 const router = Router();
 const usersController = require("../controllers/users.controller");
+const { upload } = require('../middleware/uploadImage');
 
 router
-  .post("/register", usersController.createUsers)
+  .post("/register",upload.single("image"), usersController.createUsers)
   .post("/login", usersController.usersLogin)
   .post("/checkusers", usersController.checkNumber)
   .post("/otp/signup", usersController.otpSignup)

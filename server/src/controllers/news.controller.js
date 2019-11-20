@@ -18,14 +18,34 @@ exports.getNews = async (req, res) => {
 // Create news
 exports.createNews = async (req, res) => {
   const {
-    icon,
     title,
     name,
-    image,
     description
   } = req.body;
 
+  const icon = req.file ?
+    "/images/uploads/" + req.file.filename :
+    "/images/icon.png";
+  const image = req.file ?
+    "images/uploads/" + req.file.filename :
+    "/images/image.png";
+
   try {
+    //check and handle null
+    if (title === "" || title === null) {
+      return res.json({
+        status: "error",
+        message: "Title cant be empty!"
+      });
+    }
+
+    if (name === "" || name === null) {
+      return res.json({
+        status: "error",
+        message: "Name cant be empty!"
+      });
+    }
+
     let newNews = await News.create({
       icon,
       title,
@@ -86,12 +106,32 @@ exports.updateNews = async (req, res) => {
     id
   } = req.params;
   const {
-    icon,
     title,
     name,
-    image,
     description
   } = req.body;
+
+  const icon = req.file ?
+    "/images/uploads/" + req.file.filename :
+    "/images/icon.png";
+  const image = req.file ?
+    "/images/uploads" + req.file.filename :
+    "/images/image.png"
+
+  //check and handle null
+  if (title === "" || title === null) {
+    return res.json({
+      status: "error",
+      message: "Title cant be empty!"
+    });
+  }
+
+  if (name === "" || name === null) {
+    return res.json({
+      status: "error",
+      message: "Name cant be empty!"
+    });
+  }
 
   const news = await News.findAll({
     attributes: ['id', 'icon', 'title', 'name', 'image', 'description'],
