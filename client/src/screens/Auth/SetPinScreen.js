@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     View,
@@ -7,16 +7,38 @@ import {
     TouchableOpacity,
  } from 'react-native';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {register} from '../../Redux/Actions/auth';
+
 import PinView from 'react-native-pin-view';
 
 const SetPinScreen = (props) => {
 
-    const onFailure = () => {
-        alert('FAILURE')
-     }
-    const onSuccess = () => {
-      alert('SUCCESS')
-    }
+    const {navigation} = props
+    const [input, setInput] = useState({
+      phone: navigation.state.params.phone.phone,
+      refferal: navigation.state.params.refferal.refferal,
+      name: navigation.state.params.name.name,
+      pin: ''
+    });
+
+    const [pin, setPin] = useState({pin: ''});
+    const dispatch = useDispatch();
+
+    // console.log('PIN', input);
+
+    const handleRegister = () => {
+      dispatch(register(input, pin))
+        .then(response => { console.log(response)
+          if (response.value.status === 200) {
+            setTimeout(() => {
+              props.navigation.navigate('MainScreen');
+            }, 500);
+          } 
+        })
+        .catch(error => alert(error));
+    };
+
     return (
       <View style={styles.container}>
         <View style={{flexDirection: 'row'}}>
@@ -36,7 +58,7 @@ const SetPinScreen = (props) => {
 
           <View style={{width: 80}}>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('PinScreen')}>
+              onPress={() => handleRegister()}>
               <Text style={styles.textRegister}>Next</Text>
             </TouchableOpacity>
           </View>
@@ -50,9 +72,7 @@ const SetPinScreen = (props) => {
         </View>
         <View style={{paddingTop: 60}}>
           <PinView
-            onComplete={(val, clear) => {
-              alert(val);
-            }}
+            onComplete={Pin => setInput({...input, pin: Pin})}
             pinLength={6}
             keyboardContainerStyle={{marginTop: 50}}
             buttonDeletePosition={'right'}
