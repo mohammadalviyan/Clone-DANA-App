@@ -8,6 +8,7 @@ import AuthScreen from '../screens/AuthScreen';
 import ReferalScreen from '../screens/Auth/ReferalScreen';
 import SetProfileScreen from '../screens/Auth/SetProfileScreen';
 import SetPinScreen from '../screens/Auth/SetPinScreen';
+import MainScreen from '../screens/Main/MainScreen';
 
 const StackLoading = createStackNavigator(
   {
@@ -26,9 +27,20 @@ const StackAuth = createStackNavigator(
     ReferalScreen,
     SetProfileScreen,
     SetPinScreen,
+    
   },
   {
     initialRouteName: 'AuthScreen',
+    headerMode: 'none',
+  },
+);
+
+const StackApp = createStackNavigator(
+  {
+    MainScreen,
+  },
+  {
+    initialRouteName: 'MainScreen',
     headerMode: 'none',
   },
 );
@@ -37,9 +49,10 @@ const Router = createSwitchNavigator(
   {
     StackLoading,
     StackAuth,
+    StackApp
   },
   {
-    initialRouteName: 'StackAuth',
+    initialRouteName: 'StackApp',
     headerMode: 'none',
   },
 );

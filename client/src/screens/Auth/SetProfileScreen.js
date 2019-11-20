@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -6,9 +6,31 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 const ReferalScreen = (props) => {
+
+  const [input, setInput] = useState({
+    phone: props.navigation.getParam('phone'),
+    refferal: props.navigation.getParam('refferal'),
+  });
+  const [name, setName] = useState({name: ''});
+  const [isLoading, setIsLoading] = useState(false)
+  
+  const handleNext = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      props.navigation.navigate('SetPinScreen', {
+        phone: input.phone,
+        refferal: input.refferal,
+        name: name,
+      })
+      setIsLoading(false)
+    }, 5000)
+  }
+
+  // console.log('PROFILE',name.name.length)
   return (
     <>
       <View style={styles.container}>
@@ -28,10 +50,23 @@ const ReferalScreen = (props) => {
           </View>
 
           <View style={{width: 80}}>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate('SetPinScreen')}>
+            {name.name.length >= 5 ? (
+              isLoading ? (
+                <ActivityIndicator
+                  animating={true}
+                  color="white"
+                  size="small"
+                  style={{ paddingTop: 20, paddingRight: 25, justifyContent: 'center' }}
+                />
+              ) : (
+              <TouchableOpacity
+                onPress={() => handleNext()}>
+                <Text style={styles.textRegisterOn}>Register</Text>
+              </TouchableOpacity>
+                )
+            ) : (
               <Text style={styles.textRegister}>Register</Text>
-            </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -57,6 +92,7 @@ const ReferalScreen = (props) => {
             placeholder="Your Nickname"
             placeholderTextColor="#84c8f9"
             underlineColorAndroid="transparent"
+            onChangeText={Username => setName({...name, name: Username})}
           />
         </View>
 
@@ -81,7 +117,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#118eea',
-    flex: 1
+    flex: 1,
   },
   containerText: {
     marginHorizontal: 40,
@@ -96,7 +132,7 @@ const styles = StyleSheet.create({
     color: '#84c8f9',
     paddingTop: 20,
     textAlign: 'left',
-    paddingLeft: 23
+    paddingLeft: 23,
   },
   textRegister: {
     fontSize: 18,
@@ -104,10 +140,16 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     textAlign: 'left',
   },
+  textRegisterOn: {
+    fontSize: 18,
+    color: '#FFF',
+    paddingTop: 20,
+    textAlign: 'left',
+  },
   textSet: {
     color: '#FFF',
     paddingTop: 15,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   containerInd: {
     marginTop: 45,
@@ -119,6 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#FFF',
     fontWeight: '100',
+    textAlign: 'center'
   },
   containerBorder: {
     alignSelf: 'center',
