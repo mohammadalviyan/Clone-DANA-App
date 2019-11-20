@@ -1,5 +1,5 @@
 const initialState = {
-    resultUser: [],
+    resultUser: null,
     isLoading: false,
     isRejected: false,
     isFulfilled: false,
@@ -26,7 +26,7 @@ const initialState = {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultUser: action.payload.data.Users,
+          resultUser: action.payload.data.data[5],
         };
  
       //DEFAULT STATE

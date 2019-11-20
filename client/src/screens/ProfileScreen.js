@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   Image,
   ScrollView,
@@ -7,17 +7,26 @@ import {
   View, TouchableOpacity, Dimensions
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
-
+import {useSelector, useDispatch} from 'react-redux';
+import {getUser} from '../Redux/Actions/user';
 
 
 
 const ProfileScreen = (props) => {
+  const user =  useSelector (state => state.user)
+  const dispatch = useDispatch()
+  useEffect( () => {
+    const getData = async () => {
+        await dispatch( getUser())
+    }
+    getData();
+  }, [])
 
   let list = [
     {
       title: 'Balance',
       icon: require('../../asset/icons/dana-icon-set.png'),
-      rightTitle: 'Rp.1840'
+      rightTitle: `Rp ${user.resultUser.balance}`
     },
     {
       title: 'Saved Card',
@@ -65,7 +74,7 @@ const ProfileScreen = (props) => {
       title: 'Privacy Policy',
       rightTitle: null
     },]
-    list4 = [
+    let list4 = [
     {
       title: 'Settings',
       rightTitle: null
@@ -85,8 +94,8 @@ const ProfileScreen = (props) => {
     console.log('option is pressed')
   }
 
-  renderContactHeader = () => {
-    const { avatar, name, phoneNum } = props
+  const renderContactHeader = () => {
+    // const { avatar, name, phoneNum } = props
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
@@ -94,15 +103,15 @@ const ProfileScreen = (props) => {
                 <Image
             style={styles.userImage}
             source={{
-              uri: avatar,
+              uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`,
             }}
           /></View>
 
           <View style={styles.userNameRow}>
-            <Text style={styles.userNameText}>{name}</Text>
+            <Text style={styles.userNameText}>{user.resultUser.name}</Text>
           </View>
           <View style={styles.userBioRow}>
-            <Text style={styles.userBioText}>{phoneNum}</Text>
+            <Text style={styles.userBioText}>{user.resultUser.phone}</Text>
           </View>
         </View>
       </View>

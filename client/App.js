@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  from 'react';
 import {
   View,
   StatusBar,
@@ -20,15 +20,15 @@ const App = () => {
   return (
     <>
 
-      {/* <StatusBar backgroundColor="#118eea" barStyle="light-content" />
-      <MainNavigation /> */}
+      <Provider store={store}>
       <StatusBar barStyle="dark-content" backgroundColor="#0E8EE7"/>
       <View>
-        {/* <ProfileScreen {...contactData}/> */}
-         <SettingScreen {...contactData}/>
+        <ProfileScreen {...contactData}/>
+         {/* <SettingScreen {...contactData}/> */}
         {/* <PromoScreen /> */}
         {/* <VoucherScreen/> */}
       </View>
+      </Provider>
 
       {/* <Provider store={store}>
         <StatusBar backgroundColor="#118eea" barStyle="light-content" />

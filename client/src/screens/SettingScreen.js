@@ -11,21 +11,12 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import ImagePicker from 'react-native-image-picker'
 import {TextMask} from 'react-native-masked-text'
 import {useSelector, useDispatch} from 'react-redux';
-import {user} from '../Redux/Actions/user';
+import {getUser} from '../Redux/Actions/user';
 
 
 const SettingScreen = (props) => {
   const user =  useSelector (state => state.user)
   const dispatch = useDispatch()
-  const [state, setState] = useState({
-    type: '',
-    image: null,
-    name: '',
-    phone: null,
-    email: null,
-    security: 'OFF'
-
-})
 
   const selectImage = async (e) => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
@@ -38,60 +29,61 @@ const SettingScreen = (props) => {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {   
-          setState({
-            ...state,
-            image: response.uri,
-          });
+         // call update user from global axios
+        //   setState({
+        //     ...state,
+        //     image: response.uri,
+        //   });
         }
       });
   }
 
   useEffect( () => {
-    const { avatar, name, phoneNum, type, email } = props
-    setState({
-        ...state,
-        name,
-        phone: phoneNum,
-        image: avatar,
-        type,
-        email
-    })
+    const getData = async () => {
+        await dispatch( getUser())
+        // console.log(user.resultUser.image)
+        // console.log(user.resultUser, "typeapp")
+
+    }
+    getData();
   }, [])
 
 
   let list = [
     {
       title: 'Account Type',
-      rightTitle: state.type,
+      rightTitle: user.isFulfilled ? user.resultUser.type_user : null,
       command: "acc-type"
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: state.image ?
-      <Image source ={{uri: state.image}} style={styles.profileImage}/>  : <Icon name="user" style={{color: "0E8EE7"}}/>,
+      rightTitle: user.isFulfilled ?
+      <Image source ={{uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`}} style={styles.profileImage}/>  : <Icon name="user"/>,
     command: "picture"
     },
     {
       title: 'Change Name',
-      rightTitle: state.name ? state.name : state.phone,
+      rightTitle: user.isFulfilled ? user.resultUser.name : null,
       command: "name"
     },]
 
     let list2 = [
     {
       title: 'Mobile No.',
-      rightTitle: <TextMask value={state.phone}
+      rightTitle: user.isFulfilled ? <TextMask value={user.resultUser.phone}
                     type={'cel-phone'}
-                    options= {{obfuscated: true}}
-      />,
+                    options= {{withDDD: true, dddMask: "(+62)"}}
+      /> : null,
       command: "phone"
     },
     {
       title: 'Email Address',
-      rightTitle: state.email ? <TextMask value={state.email}
-                   type={'zip-code'}
-                   options= {{obfuscated: true}}
-                   /> : "Unset",
+      rightTitle: user.isFulfilled ? 
+                //    <TextMask value={user.resultUser.email}
+                //          type={''}
+                //          options= {{obfuscated: true}}/> 
+                    <Text>{user.resultUser.email}</Text>
+                   : "Unset",
       command: "email"
     },
     {
@@ -101,7 +93,7 @@ const SettingScreen = (props) => {
     },
     {
         title: 'Security Questions',
-        rightTitle: state.security,
+        rightTitle: "OFF",
         command: "security"
       },
 ]
@@ -192,8 +184,7 @@ const SettingScreen = (props) => {
         </View>
         {/* ---------- */}
 
-        <View style={{height: 400}}>
-          <Image source={state.image} style={{width:'80%', height:20, resizeMode:'contain'}}/>
+        <View style={{height: 200}}>
         </View>
 
       </ScrollView>
