@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Text,
   View,
   Image,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 const ReferalScreen = (props) => {
+
+  const [input, setInput] = useState(props.navigation.getParam('input'))
+  const [refferal, setRefferal] = useState({refferal: ''})
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleNext = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      props.navigation.navigate('SetProfileScreen', {
+        phone: input,
+        refferal: refferal
+      })
+      setIsLoading(false)
+    }, 5000)
+  }
+
+  // console.log('LOAD',isLoading);
+
     return (
       <>
         <View style={{backgroundColor: '#118eea', flex: 1}}>
@@ -21,18 +40,42 @@ const ReferalScreen = (props) => {
             </View>
 
             <View style={{width: 60}}>
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate('SetProfileScreen')}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#84c8f9',
-                    paddingTop: 20,
-                    textAlign: 'left',
-                  }}>
-                  Skip
-                </Text>
-              </TouchableOpacity>
+              { isLoading ? (
+                <ActivityIndicator
+                  animating={true}
+                  color="white"
+                  size="small"
+                  style={{ paddingTop: 20, paddingRight: 25, justifyContent: 'center' }}
+                />
+              ) : (
+                refferal.refferal.length >= 1 ? (
+                  <TouchableOpacity
+                    onPress={() => handleNext()}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: '#FFF',
+                        paddingTop: 20,
+                        textAlign: 'left',
+                      }}>
+                      Next
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => handleNext()}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: '#FFF',
+                        paddingTop: 20,
+                        textAlign: 'left',
+                      }}>
+                      Skip
+                    </Text>
+                  </TouchableOpacity>
+                )
+                )}
             </View>
           </View>
 
@@ -56,14 +99,20 @@ const ReferalScreen = (props) => {
               placeholder="Referral Code"
               placeholderTextColor="#84c8f9"
               underlineColorAndroid="transparent"
+              autoCapitalize='characters'
+              onChangeText={Refferal =>
+                setRefferal({...refferal, refferal: Refferal})
+              }
             />
           </View>
 
           <View style={styles.containerBorder}></View>
 
           <View style={styles.containerTitle}>
-            <Text style={styles.textTitle}>Dont have a code yet? No worries,
-            just ask your friend who already join DANAIN or you can skip it</Text>
+            <Text style={styles.textTitle}>
+              Dont have a code yet? No worries, just ask your friend who already
+              join DANAIN or you can skip it
+            </Text>
           </View>
         </View>
       </>
@@ -101,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#FFF',
     fontWeight: '100',
+    textAlign: 'center'
   },
   containerBorder: {
     alignSelf: 'center',
