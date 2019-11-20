@@ -1,5 +1,4 @@
 const Users = require('../models/Users');
-const modelOtp = require('../models/Otp');
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -175,11 +174,11 @@ exports.otpUsers=async (req,res) =>{
         { where: { phone } }
       );
 
-      //Make Random OTP 
+      //Make Random OTP
       const newOtp = Math.floor(100000 + Math.random() * 900000);
       const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
 
-      
+
       //Update New OTP
       const insertNewOtp = await Users.update(
         {
@@ -241,7 +240,7 @@ exports.otpVerify=async(req,res)=>{
     });
 
     if(findUsers){
-      //Compare OTP 
+      //Compare OTP
       if(bcrypt.compareSync(otp, findUsers.dataValues.otp)) {
 
         //Delete OTP
@@ -301,7 +300,7 @@ exports.resetPin=async(req,res)=>{
     const phone=req.body.phone
     const newPinEncrypt = bcrypt.hashSync(pin, salt)
 
-    //Upadate Pin 
+    //Upadate Pin
     const updatePin=await Users.update(
       {
         pin:newPinEncrypt
@@ -328,5 +327,5 @@ exports.resetPin=async(req,res)=>{
 
 //UPDATE PROFILE
 exports.updateProfile=async(re,res)=>{
-  
+
 }

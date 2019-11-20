@@ -6,6 +6,12 @@ const Transactions = sequelize.define('transaction', {
     type: Sequelize.INTEGER,
     primaryKey: true
   },
+  invoice: {
+    type: Sequelize.TEXT
+  },
+  customer: {
+    type: Sequelize.STRING
+  },
   id_user: {
     type: Sequelize.INTEGER
   },

@@ -18,6 +18,8 @@ exports.getTransactions = async (req, res) => {
 // Create transactions
 exports.createTransactions = async (req, res) => {
   const {
+    invoice,
+    customer,
     id_user,
     amount,
     id_type,
@@ -28,10 +30,17 @@ exports.createTransactions = async (req, res) => {
 
   try {
     //check and handle null
-    if (amount === "" || amount === null || amount <= 0) {
+    if (customer === "" || customer === null) {
       return res.json({
         status: "error",
-        message: "Amount cant bellow zero or null!"
+        message: "Customer must be filled!"
+      });
+    }
+
+    if (amount === "" || amount === null || amount <= 10000) {
+      return res.json({
+        status: "error",
+        message: "Amount minimum is Rp.10000!"
       });
     }
 
@@ -42,7 +51,12 @@ exports.createTransactions = async (req, res) => {
       });
     }
 
+    //check number on user
+
+
     let newTransactions = await Transactions.create({
+      invoice,
+      customer,
       id_user,
       amount,
       id_type,
@@ -50,11 +64,11 @@ exports.createTransactions = async (req, res) => {
       status,
       description
     }, {
-      fields: ['id_user', 'amount', 'id_type', 'id_voucher', 'status', 'description']
+      fields: ['invoice', 'customer', 'id_user', 'amount', 'id_type', 'id_voucher', 'status', 'description']
     });
     if (newTransactions) {
       return res.json({
-        message: 'News was created succesfully',
+        message: 'Transactions was created succesfully',
         data: newTransactions
       });
     }

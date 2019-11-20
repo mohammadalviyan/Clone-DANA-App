@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require('../database/database');
 
-const CategoryTransactions = sequelize.define('category_transactions', {
+const Services = sequelize.define('services', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true
@@ -15,17 +15,17 @@ const CategoryTransactions = sequelize.define('category_transactions', {
   description: {
     type: Sequelize.TEXT
   },
-  code: {
-    type: Sequelize.STRING
-  },
   latitude: {
     type: Sequelize.TEXT
   },
   longitude: {
     type: Sequelize.TEXT
+  },
+  type: {
+    type: Sequelize.STRING
   }
 }, {
   timestamps: false
 });
 
-module.exports = CategoryTransactions;
+module.exports = Services;
