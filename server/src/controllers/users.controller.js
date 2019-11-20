@@ -1,4 +1,5 @@
 const Users = require('../models/Users');
+const modelOtp = require('../models/Otp');
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -34,7 +35,6 @@ exports.checkNumber=async(req,res)=>{
     })
   }
 };
-
 
 // Register Users
 exports.createUsers = async (req, res) => {
@@ -125,7 +125,7 @@ exports.usersLogin=async(req,res)=>{
         message: 'Wrong PIN!'
       })
     }else{
-      // // Create and assign token
+      // Create and assign token
       const token = jwt.sign({
         id: usersLogin.dataValues.id,
         phone: usersLogin.dataValues.phone
@@ -149,51 +149,141 @@ exports.usersLogin=async(req,res)=>{
 
 
 //OTP REGISTER
-exports.otpSignup=async (req,res) =>{
-  // phone=req.body.phone;
+exports.otpUsers=async (req,res) =>{
+  try {
+    phone=req.body.phone;
 
-  //API
-  const nexmo = new Nexmo({
-    apiKey: "0aa0e459",
-    apiSecret: "pQ24Q6CN8fRIslA7",
-  })
+    //API
+    const nexmo = new Nexmo({
+      apiKey: "834f12cf",
+      apiSecret: "GliRLNgD3hK5BQKa",
+    })
 
-  const from = "demy myxl";
-  // const to = '6281910508754';
-  // let tmpNumber = number;
-  const to = "6281331994242";
+    //Find Users With Number Register
+    const oldOTP = await Users.findOne({
+      where: {
+        phone
+      }
+    });
 
-  const text = "Hello Fucking Iyan";
+    //Delete Old OTP Users If Number Found
+    if (oldOTP) {
+      await Users.update(
+        {
+          otp: ' '
+        },
+        { where: { phone } }
+      );
 
-  nexmo.message.sendSms(from, to, text);
+      //Make Random OTP 
+      const newOtp = Math.floor(100000 + Math.random() * 900000);
+      const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
 
-  // const from = 6285643709737
-  // const to = 6281331994242
-  // const text = 'A text message sent using the Nexmo SMS API'
+      
+      //Update New OTP
+      const insertNewOtp = await Users.update(
+        {
+          otp: newOtpEncrypt
+        },
+        { where: { phone } }
+      );
 
-  // nexmo.channel.send(
-  //   { "type": "sms", "number":to },
-  //   { "type": "sms", "number": from },
-  //   {
-  //     "content": {
-  //       "type": "text",
-  //       "text": "This is an SMS sent from the Messages API"
-  //     }
-  //   },
-  //   (err, data) => { console.log(data.message_uuid); }
-  // );
+      //Check Update Success And Send Message
+      if(insertNewOtp){
+        const from = "DANAIN";
+        const number=req.body.phone
+        const to = "62"+number+"";
+        const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
+        nexmo.message.sendSms(from, to, text);
 
-  res.status(200).json({
-    message: 'Succes Send Message '
-  })
+        //Set Time Out Destroy Database
+        setTimeout(async () => {
+          await Users.update(
+            {
+              otp: ' '
+            },
+            { where: { phone } }
+          );
+        }, 180000);
+      }
 
+      //Set Response
+      res.status(200).json({
+        message: 'Succes Send Message '
+      })
+
+    }else{
+      res.status(400).json({
+        status: "Users Not Found",
+      });
+    }
+
+  } catch (error) {
+    return res.status(400).json({
+      status: "error",
+      response: error
+    });
+  }
+
+}
+
+//Verify OTP
+exports.otpVerify=async(req,res)=>{
+  try {
+    phone=req.body.phone
+    otp=req.body.otp
+
+    //Find Users With Number Register
+    const findUsers = await Users.findOne({
+      where: {
+        phone
+      }
+    });
+
+    if(findUsers){
+      //Compare OTP 
+      if(bcrypt.compareSync(otp, findUsers.dataValues.otp)) {
+
+        //Delete OTP
+        await Users.update(
+          {
+            otp: ' '
+          },
+          { where: { phone } }
+        );
+
+        //Send Response Succces
+        res.json({
+          status: "success",
+          response: "Otp code is valid"
+        });
+      }else {
+        //Send Response Otp Not Found
+        res.json({
+          status: "error",
+          response: "Otp not match"
+        });
+      }
+    }else{
+      //Send Otp Response Expired
+      res.json({
+        status: "error",
+        response: "Your OTP is expired, please request OTP again"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {error}
+    })
+  }
 }
 
 //GET ALL USERS
 exports.getAllUsers=async(req,res)=>{
   try {
     const users=await Users.findAll();
-    res.json({
+    res.status(200).json({
       data:users
     })
   } catch (error) {
@@ -204,53 +294,39 @@ exports.getAllUsers=async(req,res)=>{
   }
 }
 
+//RESET PIN
+exports.resetPin=async(req,res)=>{
+  try {
+    const pin=req.body.pin
+    const phone=req.body.phone
+    const newPinEncrypt = bcrypt.hashSync(pin, salt)
 
-// Delete example
-// export const deleteExample = async (req, res) => {
-//   const {
-//     id
-//   } = req.params;
-//   const deleteRowCount = await Examples.destroy({
-//     where: {
-//       id
-//     }
-//   });
-//   res.json({
-//     message: 'Example deleted succesfully',
-//     count: deleteRowCount
-//   });
-// };
+    //Upadate Pin 
+    const updatePin=await Users.update(
+      {
+        pin:newPinEncrypt
+      },
+      {where:{phone}}
+    );
 
-// Update example
-// export const updateExample = async (req, res) => {
-//   const {
-//     id
-//   } = req.params;
-//   const {
-//     name,
-//     description,
-//     deliverydate
-//   } = req.body;
+    if(updatePin){
+      res.status(200).json({
+        status: "Succes Reset Pin",
+      });
+    }else{
+      res.status(400).json({
+        status: "Failed Reset Pin",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      response: error
+    });
+  }
+}
 
-//   const examples = await Examples.findAll({
-//     attributes: ['id', 'name', 'description', 'deliverydate'],
-//     where: {
-//       id
-//     }
-//   });
-
-//   if (examples.length > 0) {
-//     examples.forEach(async example => {
-//       await example.update({
-//         name,
-//         description,
-//         deliverydate
-//       });
-//     });
-//   }
-
-//   return res.json({
-//     message: 'Example updated succesfully',
-//     data: examples
-//   });
-// };
+//UPDATE PROFILE
+exports.updateProfile=async(re,res)=>{
+  
+}

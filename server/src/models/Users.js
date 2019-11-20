@@ -27,6 +27,9 @@ const Users = sequelize.define('users', {
   email: {
     type: Sequelize.TEXT
   },
+  otp: {
+    type: Sequelize.TEXT
+  },
   type_user: {
     type: Sequelize.TEXT
   }
