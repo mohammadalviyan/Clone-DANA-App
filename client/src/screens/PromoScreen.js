@@ -31,8 +31,8 @@ const promo = [
     }
 ]
 
-class PromoScreen extends React.Component {
-    renderRow = ({item}) => {
+const PromoScreen = (props) => {
+    const renderRow = ({item}) => {
         const {image, title, dateExpire} = item
         return(
 
@@ -60,19 +60,16 @@ class PromoScreen extends React.Component {
         )
     }
 
-    render() {       
+    
         return(
             <SafeAreaView>
                 <FlatList
                     style={{padding:5}}
                     data={promo} 
-                    renderItem={this.renderRow}
+                    renderItem={renderRow}
                     keyExtractor={(item, index)=>index.toString()}/>
             </SafeAreaView>
         )
-    }
-
-
 }
 
 

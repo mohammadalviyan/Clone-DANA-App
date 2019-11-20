@@ -26,8 +26,8 @@ const App = () => {
       <View>
         {/* <ProfileScreen {...contactData}/> */}
          {/* <SettingScreen {...contactData}/> */}
-        {/* <PromoScreen /> */}
-        <VoucherScreen/>
+        <PromoScreen />
+        {/* <VoucherScreen/> */}
       </View>
 
       {/* <Provider store={store}>
