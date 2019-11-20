@@ -10,17 +10,16 @@ import {ListItem} from 'react-native-elements'
 import PropTypes from 'prop-types'
 
 
+
 class ProfileScreen extends Component {
+
+
+
   static propTypes = {
     avatar: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     phoneNum: PropTypes.number.isRequired,
-    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     navigation: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    containerStyle: {},
   }
 
   list = [
@@ -126,7 +125,7 @@ class ProfileScreen extends Component {
         <Text style={styles.textHeader}>My Account</Text>
       </View>
       <ScrollView style={styles.scroll}>
-        <View style={[styles.container, this.props.containerStyle]}>
+        <View style={styles.container}>
           <View style={styles.cardContainer}>
             {this.renderContactHeader()}
           </View>

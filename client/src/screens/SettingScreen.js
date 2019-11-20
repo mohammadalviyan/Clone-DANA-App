@@ -8,6 +8,8 @@ import {
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ImagePicker from 'react-native-image-picker';
+import {TextMask} from 'react-native-masked-text'
 import PropTypes from 'prop-types'  
 
 
@@ -25,80 +27,131 @@ class SettingScreen extends Component {
   }
 
   state = {
+      type: '',
+      image: null,
       name: '',
-      phone: '',
-      image: ''
+      phone: null,
+      email: null,
+      security: "Off"
+
+  }
+
+
+  selectImage = async () => {
+    ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
+        console.log('Response = ', response);
+      
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {   
+          this.setState({
+            image: response.uri,
+          });
+        }
+      });
   }
 
   componentDidMount(){
-    const { avatar, name, phoneNum } = this.props
+    const { avatar, name, phoneNum, type, email } = this.props
     this.setState({
         name,
         phone: phoneNum,
-        image: avatar
+        image: avatar,
+        type,
+        email
     })
   }
 
   list = [
     {
       title: 'Account Type',
-      rightTitle: 'Dana User'
+      rightTitle: this.state.type,
+      command: "acc-type"
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: <Icon name="user"/>
+      rightTitle: this.state.image ? <Image source ={this.state.image} style={{height:10}}/> : <Icon name="user" style={{color: "0E8EE7"}}/>,
+      command: "picture"
     },
     {
       title: 'Change Name',
-      rightTitle: this.state.name
+      rightTitle: this.state.name ? this.state.name : this.state.phone,
+      command: "name"
     },]
 
     list2 = [
     {
       title: 'Mobile No.',
-      rightTitle: this.state.phone,
+      rightTitle: <TextMask value={this.state.phone}
+                    type={'cel-phone'}
+                    options= {{obfuscated: true}}
+      />,
+      command: "phone"
     },
     {
       title: 'Email Address',
-      rightTitle: "Unset",
+      rightTitle: this.state.email ? <TextMask value={this.state.phone}
+                   type={'custom'}
+                   options= {{obfuscated: true}}
+                   /> : "Unset",
+      command: "email"
     },
     {
       title: 'Change Pin',
       rightTitle: null,
+      command: "pin"
     },
     {
         title: 'Security Questions',
-        rightTitle: "off",
+        rightTitle: this.state.security,
+        command: "security"
       },
 ]
 
 
-  onPressOptions = () => {
-    //navigate
-    console.log('option is pressed')
-  }
+  onPressOptions = (command) => {
+    switch (command) {
+        case 'acc-type':
+            console.log('acc-type is pressed')
+            return {
 
-  renderContactHeader = () => {
-    return (
-      <View style={styles.headerContainer}>
-        <View style={styles.userRow}>
-            <View style={styles.avatarContainer}>          
-                <Image
-            style={styles.userImage}
-            source={{
-              uri: avatar,
-            }}
-          /></View>
+            };
+        case 'picture':
+            console.log('picture is pressed')
+            this.selectImage()
+            return {
+                
+            };
+        case 'name':
+            console.log('name is pressed')
+            return {
 
-          <View style={styles.userNameRow}>
-            <Text style={styles.userNameText}>{name}</Text>
-          </View>
-          <View style={styles.userBioRow}>
-            <Text style={styles.userBioText}>{phoneNum}</Text>
-          </View>
-        </View>
-      </View>
-    )
+            };
+        case 'phone':
+            console.log('phone is pressed')
+            return {
+    
+            };
+        case 'email':
+            console.log('email is pressed')
+            return {
+
+            };
+        case 'pin':
+            console.log('pin is pressed')
+            return {
+
+            };
+        case 'security':
+            console.log('security is pressed')
+            return {
+
+            };
+        }
   }
 
   render() {
@@ -119,9 +172,9 @@ class SettingScreen extends Component {
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
-              rightTitleStyle={{ fontSize: 15 }}
+              rightTitleStyle={{ fontSize: 15, backgroundColor:"red" }}
               chevron={{size:24}}
-              onPress={() => this.onPressOptions()}
+              onPress={() => this.onPressOptions(l.command)}
               containerStyle={styles.listItemContainer}
               pad={0}
               />
@@ -135,7 +188,7 @@ class SettingScreen extends Component {
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={() => this.onPressOptions()}
+            onPress={() => this.onPressOptions(l.command)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -146,7 +199,10 @@ class SettingScreen extends Component {
         </View>
         {/* ---------- */}
 
-        <View style={{height: 250}}></View>
+        <View style={{height: 400}}>
+          <Image source={this.state.image} style={{width:'80%', height:20, resizeMode:'contain'}}/>
+        </View>
+
       </ScrollView>
       </View>
     )
@@ -161,9 +217,6 @@ const InfoText = ({ text }) => (
     <Text style={styles.infoText}>{text}</Text>
   </View>
 )
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
 
 const styles = StyleSheet.create({
   imgconContainer:{
