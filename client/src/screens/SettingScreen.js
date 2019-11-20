@@ -4,17 +4,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View, TouchableOpacity, Dimensions
+  View, 
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ImagePicker from 'react-native-image-picker';
 import {TextMask} from 'react-native-masked-text'
-import PropTypes from 'prop-types'  
+  
 
 
 const SettingScreen = (props) => {
-
   const [state, setState] = useState({
     type: '',
     image: null,
