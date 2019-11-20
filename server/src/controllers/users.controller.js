@@ -19,12 +19,12 @@ exports.checkNumber=async(req,res)=>{
 
     //Status Check
     if(usersStatus){
-      return res.json({
-        Users:'new',
+      return res.status(200).json({
+        Users:'old',
       });
     }else{
-      return res.json({
-        Users:'old',
+      return res.status(200).json({
+        Users:'new',
       });
     }
   } catch (error) {
@@ -80,19 +80,19 @@ exports.createUsers = async (req, res) => {
 
       //Success Insert Users
       if (newUsers) {
-        return res.json({
+        return res.status(200).json({
           message: 'Users was created successfully',
           data: newUsers
         });
       } else {
         //Failed Insert Users
-        return res.json({
+        return res.status(400).json({
           message: 'Failed Insert New Users',
         });
       }
     } else {
       //Number Already Existed
-      return res.json({
+      return res.status(400).json({
         message: 'Already Existed',
       });
     }
@@ -121,8 +121,7 @@ exports.usersLogin=async(req,res)=>{
 
     //Validation Pin Check
     if (!validPin) {
-      return res.json({
-        status: 400,
+      return res.status(400).json({
         message: 'Wrong PIN!'
       })
     }else{
@@ -134,7 +133,7 @@ exports.usersLogin=async(req,res)=>{
         expiresIn: '10h'
       })
 
-      res.json({
+      res.status(200).json({
         message: 'Succes Login',
         data:usersLogin,
         token:token
@@ -189,6 +188,22 @@ exports.otpSignup=async (req,res) =>{
   })
 
 }
+
+//GET ALL USERS
+exports.getAllUsers=async(req,res)=>{
+  try {
+    const users=await Users.findAll();
+    res.json({
+      data:users
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {}
+    })
+  }
+}
+
 
 // Delete example
 // export const deleteExample = async (req, res) => {
