@@ -231,8 +231,9 @@ exports.checkNumber = async (req, res) => {
     //Status Check
     if (usersStatus) {
       
-      return res.status(200).json({
-        Users: 'old',
+      return res.json({
+        status:'failed',
+        message: 'old',
       });
     } else {
       await this.otpUsers(req, res);
