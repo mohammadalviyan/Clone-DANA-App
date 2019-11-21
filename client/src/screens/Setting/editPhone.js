@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import {Dimensions, Image, View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
+import Icon from 'react-native-vector-icons/Feather'
 
 const phone = "82169511784"
 const lastChange ="never"
 
-const editPhone = (props) => {
+const EditPhone = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -19,9 +19,12 @@ const editPhone = (props) => {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.imgContainer} source= {require('../../../asset/icons/danain-text.png')}></Image>
-            <View>
+            <View style={styles.imgContainer}>
+                <Image source= {require('../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
+            </View>
+            <View style={styles.headerTitle}>
                 <Text style={styles.title}>Your DANAIN ID has been registered below:</Text>
+                <Text style={styles.title}>Your DANAIN ID is connected to your mobile number for security verification account</Text>
             </View>
             <View style={styles.numContainer}>
                 <Text>62-{phone}</Text>
@@ -35,22 +38,34 @@ const editPhone = (props) => {
                 </Text>
             </View>
             <TouchableOpacity style={styles.changeButton} onPress={e => modalPop(e)}>
-                <Icon name="pencil" size={24}/>
+                <Icon name="edit-2" size={24}/>
                 <Text>CHANGE</Text>
             </TouchableOpacity>
         </View>
     )
 }
 
-export default editPhone
+export default EditPhone;
 
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        backgroundColor: "green"
     },
     imgContainer: {
-        marginBottom:10
+        backgroundColor: "red",
+        height: 90,
+        // justifyContent: "center",
+        // alignItems: "center"
+    },
+    image: {
+        height:90,
+        width:360
+        // resizeMode: 40
+    },
+    headerTitle: {
+        // height : 100,
+        backgroundColor: "purple"
     },
     title: {
         marginBottom:5,
@@ -60,7 +75,8 @@ const styles = StyleSheet.create({
     numContainer: {
         marginBottom:4,
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        backgroundColor: "grey"
     },
     infoContainer: {
         marginBottom:10,

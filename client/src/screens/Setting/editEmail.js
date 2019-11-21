@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const email = "ditanurhalimah@gmail.com"
 
-const editEmail = (props) => {
+const EditEmail = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -20,14 +20,17 @@ const editEmail = (props) => {
         <View style={styles.container}>
             <View>
                 <View style={styles.topHeader}>
-                    <Image style={{alignItems: "stretch"}} source= {require('../../../asset/icons/danain-text.png')}></Image>
-                    <Text>Register your email address!</Text>
-                    <Text>Your email will only be used for DANAIN account verification process</Text>
+                    <View style={styles.imgContainer}>
+                        <Image source= {require('../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
+                    </View>
+                    <Text style={styles.titleText}>Register your email address!</Text>
+                    <Text style={styles.subtitleText}>Your email will only be used for DANAIN account verification process</Text>
                 </View>
                 <View style={styles.editForm}>
                     
                     <Text>Email address</Text>
                     <TextInput value={email}></TextInput>
+                    <Icon name="cancel" size={24}/>
                 </View>
             </View>
 
@@ -38,17 +41,40 @@ const editEmail = (props) => {
     )
 }
 
-export default editEmail
+export default EditEmail
 
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 const styles = StyleSheet.create({
     container: {
         justifyContent: "space-between",
-        alignItems: "center"
+        height: screenHeight - 30,
+        alignItems: "center",
+        backgroundColor: "green"
     },
     topHeader: {
         alignItems: "center",
         justifyContent: "space-between"
+    },
+    titleText: {
+        // alignItems: "center",
+        backgroundColor: "blue"
+    },
+    subtitleText: {
+        alignItems: "center",
+        backgroundColor: "blue",
+        fontSize: 12
+    },
+    imgContainer: {
+        backgroundColor: "red",
+        height: 90,
+        // justifyContent: "center",
+        // alignItems: "center"
+    },
+    image: {
+        height:90,
+        width:360
+        // resizeMode: 40
     },
     editForm: {
         marginHorizontal: 10,

@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react'
 import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
+const pin = "821614"
 const phone = "82169511784"
 const lastChange ="never"
 
-const editPin = (props) => {
+const EditPin = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -33,12 +34,11 @@ const editPin = (props) => {
     )
 }
 
-export default editPin
+export default EditPin
 
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: "center",
     },
     text: {

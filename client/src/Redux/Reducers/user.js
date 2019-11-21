@@ -26,7 +26,7 @@ const initialState = {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultUser: action.payload.data.data[5],
+          resultUser: action.payload.data.data[4],
         };
  
       //DEFAULT STATE
