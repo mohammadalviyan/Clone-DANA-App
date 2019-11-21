@@ -98,6 +98,8 @@ exports.usersLogin = async (req, res) => {
   const phone = req.body.phone
   const pin = req.body.pin
 
+  console.log(req.body)
+
   try {
     const usersLogin = await Users.findOne({
       where: {
@@ -215,10 +217,7 @@ exports.otpUsers = async (req, res) => {
       }, 180000);
 
       //Set Response [Besok Ganti Dengan Response Reset Password]
-      res.json({
-        status:'success',
-        message: 'new'
-      })
+     
 
       if (type === 'reset') {
         res.json({
@@ -226,6 +225,10 @@ exports.otpUsers = async (req, res) => {
           message: 'success reset password'
         })
       }
+      res.json({
+        status:'success',
+        message: 'new'
+      })
 
     } else {
       //Set Response
