@@ -1,16 +1,36 @@
 import React, {useEffect, useState} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const name = "811989593"
 
 const EditNameScreen = (props) => {
     const [save, setSave] = useState(false)
+    const [name, setName] = useState ("")
+    const [isFill, setFill] =useState(false)
+    const [isEmpty, empty] = useState(false)
 
     const modalPop = (e)  => {
         setSave(true)
-        //show 
+        //check according to database
     }
+
+    const emptyWarning = () => {
+        return (
+            <View style={styles.inputWarning}>
+                <Text>Nama Akun harus diisi</Text>
+                <Icon name="warning" color="red" size={20} />
+            </View>
+        )
+    }
+    
+    const changeName = (name) => {
+        if (name.length <= 0) {
+            empty(true)
+        }
+        setName(name)
+        setFill(true)
+    } 
 
     useEffect( () => {
 
@@ -19,12 +39,16 @@ const EditNameScreen = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.editForm}>
-                <Text>Change User Account Name</Text>
-                <TextInput value={name}></TextInput>
-
+                {/* label need floating lable */}
+                <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
+                <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
+                    <TextInput value={name} style={{color: isFill ? "#fb9b1a" : '#666666' }} onChangeText={name=> changeName(name)} />
+                    {isEmpty ? null : <Icon  name="cancel" />}
+                    {isEmpty ? emptyWarning() : null}
+                </View>
             </View>
-            <TouchableOpacity style={styles.button} onPress={e => modalPop(e)}>
-                <Text style={styles.butTitle}>SAVE</Text>
+            <TouchableOpacity style={isEmpty? styles.button: styles.buttonDeactivate} onPress={e => modalPop(e)}>
+                <Text style={styles.butTitle}>SIMPAN</Text>
             </TouchableOpacity>
         </View>
     )
@@ -41,8 +65,27 @@ const styles = StyleSheet.create({
     editForm: {
         marginHorizontal: 10,
     },
+    input: {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "#ababab"
+    },
+    inputActivate: {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "#fb9b1a"
+    },
+    inputWarning: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
     button: {
-        backgroundColor: "black",
+        backgroundColor: "#0e8ee7",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    buttonDeactivate: {
+        backgroundColor: "#a0a0a0",
         alignItems: "center",
         justifyContent: "center"
     },
