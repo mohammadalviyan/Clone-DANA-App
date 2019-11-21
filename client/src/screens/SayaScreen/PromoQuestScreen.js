@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Text } from 'react-native';
 
-const SayaScreen = () => {
+const PromoQuestScreen = () => {
 
     return (
         <>
-            <Text>SAYA SCREEN</Text>
+            <Text>PROMO QUEST SCREEN</Text>
         </>
     )
 
 };
 
-export default SayaScreen;
+export default PromoQuestScreen

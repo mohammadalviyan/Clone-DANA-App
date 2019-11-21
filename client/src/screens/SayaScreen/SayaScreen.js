@@ -8,16 +8,20 @@ import {
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser} from '../Redux/Actions/user';
+
+import {getUser} from '../../Redux/Actions/user';
 
 
 
-const ProfileScreen = (props) => {
+
+
+const SayaScreen = (props) => {
   const user =  useSelector (state => state.user)
   const dispatch = useDispatch()
   useEffect( () => {
     const getData = async () => {
         await dispatch( getUser())
+        console.log(user.resultUser)
     }
     getData();
   }, [])
@@ -25,73 +29,90 @@ const ProfileScreen = (props) => {
   let list = [
     {
       title: 'Balance',
-      icon: require('../../asset/icons/dana-icon-set.png'),
-      rightTitle: `Rp ${user.resultUser.balance}`
+      icon: require('../../../asset/icons/dana-icon-set.png'),
+      rightTitle: `Rp ${user.resultUser.balance}`,
+      screen: 'Balance'
     },
     {
       title: 'Saved Card',
-      icon: require('../../asset/icons/dana-icon-set.png'),
-      rightTitle: '0 Cards'
+      icon: require('../../../asset/icons/dana-icon-set.png'),
+      rightTitle: '0 Cards',
+      screen: 'Cards'
     },
     {
       title: 'My Bills',
-      icon: require('../../asset/icons/dana-icon-set.png'),
-      rightTitle: null
+      icon: require('../../../asset/icons/dana-icon-set.png'),
+      rightTitle: null,
+      screen: 'Bills'
     },]
     let list2 = [
     {
       title: 'Apply DANAIN Bisnis Now!',
-      icon: require('../../asset/icons/dana-icon-set.png'),
+      icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers'
+      subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers',
+      screen: 'Apply'
     },
     {
       title: 'Referral Code',
-      icon: require('../../asset/icons/dana-icon-set.png'),
+      icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: null
+      subtitle: null,
+      screen: 'Referral'
     },
     {
       title: 'Promo Quest',
-      icon: require('../../asset/icons/dana-icon-set.png'),
+      icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: null
+      subtitle: null,
+      screen: 'Promo'
     },]
     let list3 = [
     {
       title: 'Tutorial',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Tutorial'
     },
     {
       title: 'FAQ',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Faq'
     },
     {
       title: 'Terms & Condition',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Terms',
     },
     {
       title: 'Privacy Policy',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Privacy'
     },]
     let list4 = [
     {
       title: 'Settings',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Setting'
     },
     {
       title: 'App Version',
-      rightTitle: '1.5.1'
+      rightTitle: '1.5.1',
+      screen: null
     },
     {
       title: 'Logout',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Logout'
     },
   ]
 
-  const onPressOptions = (e) => {
-    //navigate
-    console.log('option is pressed')
+  const onPressOptions = (e, screen) => {
+    if (screen === "Setting" || "Promo") {
+      console.log(`Navigate to ${screen}`)
+      props.navigation.navigate(screen)
+    } else {
+      console.log(`Command to ${screen}`)
+    }
   }
 
   const renderContactHeader = () => {
@@ -103,7 +124,7 @@ const ProfileScreen = (props) => {
                 <Image
             style={styles.userImage}
             source={{
-              uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`,
+              uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`, 
             }}
           /></View>
 
@@ -148,7 +169,7 @@ const ProfileScreen = (props) => {
               rightTitle={l.rightTitle}
               rightTitleStyle={{ fontSize: 15 }}
               chevron={{size:24}}
-              onPress={(e) => onPressOptions(e)}
+              onPress={(e) => onPressOptions(e, l.screen)}
               containerStyle={styles.listItemContainer}
               leftIcon={
                 <Image
@@ -167,7 +188,7 @@ const ProfileScreen = (props) => {
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={(e) => onPressOptions(e)}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -189,7 +210,7 @@ const ProfileScreen = (props) => {
             rightTitle={l.rightTitle}
             chevron={{size:24}}
             rightTitleStyle={{ fontSize: 15 }}
-            onPress={(e) => onPressOptions(e)}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             />
           ))
@@ -203,7 +224,7 @@ const ProfileScreen = (props) => {
             rightTitle={l.rightTitle}
             rightTitleStyle={{ fontSize: 15 }}
             chevron={{size:24}}
-            onPress={(e) => onPressOptions(e)}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             />
           ))
@@ -218,7 +239,7 @@ const ProfileScreen = (props) => {
 
 }
 
-export default ProfileScreen
+export default SayaScreen
 
 
 const InfoText = ({ text }) => (

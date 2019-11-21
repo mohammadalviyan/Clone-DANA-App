@@ -11,6 +11,7 @@ import SetPinScreen from '../screens/Auth/SetPinScreen';
 import TabScreen from '../screens/Main/TabScreen';
 import SaldoScreen from '../screens/Saldo/SaldoScreen';
 
+
 const StackLoading = createStackNavigator(
   {
     LoadingScreen,

@@ -6,7 +6,7 @@ const pin = "821614"
 const phone = "82169511784"
 const lastChange ="never"
 
-const EditPin = (props) => {
+const EditPinScreen = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -34,7 +34,7 @@ const EditPin = (props) => {
     )
 }
 
-export default EditPin
+export default EditPinScreen;
 
 
 const styles = StyleSheet.create({

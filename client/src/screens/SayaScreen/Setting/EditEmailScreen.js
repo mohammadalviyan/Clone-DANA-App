@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react'
 import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+
 const email = "ditanurhalimah@gmail.com"
 
-const EditEmail = (props) => {
+const EditEmailScreen = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -21,7 +22,7 @@ const EditEmail = (props) => {
             <View>
                 <View style={styles.topHeader}>
                     <View style={styles.imgContainer}>
-                        <Image source= {require('../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
+                        <Image source= {require('../../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
                     </View>
                     <Text style={styles.titleText}>Register your email address!</Text>
                     <Text style={styles.subtitleText}>Your email will only be used for DANAIN account verification process</Text>
@@ -41,7 +42,7 @@ const EditEmail = (props) => {
     )
 }
 
-export default EditEmail
+export default EditEmailScreen
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
