@@ -8,7 +8,8 @@ import AuthScreen from '../screens/AuthScreen';
 import ReferalScreen from '../screens/Auth/ReferalScreen';
 import SetProfileScreen from '../screens/Auth/SetProfileScreen';
 import SetPinScreen from '../screens/Auth/SetPinScreen';
-import MainScreen from '../screens/Main/MainScreen';
+import TabScreen from '../screens/Main/TabScreen';
+import SaldoScreen from '../screens/Saldo/SaldoScreen';
 
 const StackLoading = createStackNavigator(
   {
@@ -37,10 +38,11 @@ const StackAuth = createStackNavigator(
 
 const StackApp = createStackNavigator(
   {
-    MainScreen,
+    TabScreen,
+    SaldoScreen
   },
   {
-    initialRouteName: 'MainScreen',
+    initialRouteName: 'TabScreen',
     headerMode: 'none',
   },
 );
