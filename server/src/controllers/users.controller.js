@@ -209,7 +209,7 @@ exports.otpUsers = async (req, res) => {
 
       //Set Time Out Destroy Database
       setTimeout(async () => {
-        await Users.update({
+        await modelOtp.destroy({
           where: {
             phone
           }
