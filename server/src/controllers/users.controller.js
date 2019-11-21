@@ -54,6 +54,7 @@ exports.createUsers = async (req, res) => {
 
       //Success Insert Users
       if (newUsers) {
+
         return res.status(200).json({
           message: 'Users was created successfully',
           data: newUsers
@@ -202,6 +203,9 @@ exports.otpUsers = async (req, res) => {
         status:'success',
         message: 'new'
       })
+
+
+
     } else {
       //Set Response
       res.json({
@@ -249,7 +253,7 @@ exports.checkNumber = async (req, res) => {
 
 //Verify OTP
 exports.otpVerify = async (req, res) => {
-  try {
+  // try {
     phone = req.body.phone
     otp = req.body.otp
 
@@ -289,14 +293,14 @@ exports.otpVerify = async (req, res) => {
         response: "Your OTP is expired, please request OTP again"
       });
     }
-  } catch (error) {
-    res.status(500).json({
-      message: 'Something goes wrong',
-      data: {
-        error
-      }
-    })
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     message: 'Something goes wrong',
+  //     data: {
+  //       error
+  //     }
+  //   })
+  // }
 }
 
 //GET ALL USERS
