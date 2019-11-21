@@ -28,7 +28,7 @@ exports.createUsers = async (req, res) => {
     "/images/uploads/" + req.file.filename :
     "/images/avatar.png";
 
-  try {
+  // try {
     let checkNumber = await Users.findOne({
       where: {
         phone
@@ -54,10 +54,19 @@ exports.createUsers = async (req, res) => {
 
       //Success Insert Users
       if (newUsers) {
+        // Create and assign token
+        const token = jwt.sign({
+          pin:pin,
+          phone: phone
+        }, secretKey, {
+          expiresIn: '10h'
+        })
+
 
         return res.status(200).json({
           message: 'Users was created successfully',
-          data: newUsers
+          data: newUsers,
+          token:token
         });
       } else {
         //Failed Insert Users
@@ -71,14 +80,14 @@ exports.createUsers = async (req, res) => {
         message: 'Already Existed',
       });
     }
-  } catch (error) {
-    res.status(500).json({
-      message: 'Something goes wrong',
-      data: {
-        error
-      }
-    })
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     message: 'Something goes wrong',
+  //     data: {
+  //       error
+  //     }
+  //   })
+  // }
 };
 
 //Signin Users
@@ -104,8 +113,8 @@ exports.usersLogin = async (req, res) => {
     } else {
       // Create and assign token
       const token = jwt.sign({
-        id: usersLogin.dataValues.id,
-        phone: usersLogin.dataValues.phone
+        pin: pin,
+        phone:phone
       }, secretKey, {
         expiresIn: '10h'
       })
@@ -253,7 +262,7 @@ exports.checkNumber = async (req, res) => {
 
 //Verify OTP
 exports.otpVerify = async (req, res) => {
-  // try {
+  try {
     phone = req.body.phone
     otp = req.body.otp
 
@@ -293,14 +302,14 @@ exports.otpVerify = async (req, res) => {
         response: "Your OTP is expired, please request OTP again"
       });
     }
-  // } catch (error) {
-  //   res.status(500).json({
-  //     message: 'Something goes wrong',
-  //     data: {
-  //       error
-  //     }
-  //   })
-  // }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
+  }
 }
 
 //GET ALL USERS
