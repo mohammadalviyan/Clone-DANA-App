@@ -4,7 +4,8 @@ import {
   StatusBar,
 } from 'react-native';
 
-import MainNavigation from './src/navigations/MainNavigation'
+import MainNavigation from './src/navigations/MainNavigation';
+import PromoScreen from './src/screens/PromoScreen';
 import {Provider} from 'react-redux';
 import store from './src/Redux/Store';
 
@@ -14,6 +15,8 @@ const App = () => {
       <Provider store={store}>
         <StatusBar backgroundColor="#118eea" barStyle="light-content" />
         <MainNavigation />
+        {/* <PromoScreen/> */}
+
       </Provider>
       
     </>
