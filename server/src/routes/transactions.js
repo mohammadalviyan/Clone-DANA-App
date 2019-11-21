@@ -1,15 +1,15 @@
 const Router = require('express');
 const router = Router();
 
-const { getTransactions, createTransactions, getOneTransactions, deleteTransactions } = require('../controllers/transactions.controller');
+const { getTransactions,getAllHistory, createTransactions, getOneTransactions, deleteTransactions } = require('../controllers/transactions.controller');
 
-// /api/news/
+// /api/transactions/
 router.get('/', getTransactions);
 router.post('/', createTransactions);
 
-// /api/news/id
+// /api/transactions/id
+router.get("/history/:id", getAllHistory)
 router.get('/:id', getOneTransactions);
 router.delete('/:id', deleteTransactions);
-// router.put('/:id', upload.single("image"), updateNews);
 
 module.exports = router;

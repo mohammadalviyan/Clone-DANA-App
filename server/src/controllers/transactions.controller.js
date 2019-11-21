@@ -371,3 +371,35 @@ exports.deleteTransactions = async (req, res) => {
     });
   }
 }
+
+//Get History
+exports.getAllHistory = async (req, res) => {
+  const {
+    id
+  } = req.params;
+
+  Transactions.belongsTo(Services,{foreignKey: 'id_services'})
+  Services.hasMany(Transactions,{foreignKey: 'id'})
+
+ const historyTransactions= await Transactions.findAll({  
+   include:[{
+    model:Services,
+    require:true
+   }] ,
+   where:{
+     id_user:id
+   }
+  })
+
+  if(historyTransactions){
+    res.json({
+      message:'Succes Get Data',
+      data:historyTransactions
+    })
+  }else{
+    res.json({
+      message:'empty data'
+    })
+  }
+
+}
