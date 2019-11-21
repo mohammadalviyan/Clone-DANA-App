@@ -12,7 +12,7 @@ const salt = bcrypt.genSaltSync(10);
 
 // Register Users
 exports.createUsers = async (req, res) => {
-  //Hash password
+  //Hash passw
   const pin = bcrypt.hashSync(req.body.pin, salt)
 
   const {
@@ -219,6 +219,13 @@ exports.otpUsers = async (req, res) => {
         status:'success',
         message: 'new'
       })
+
+      if (type === 'reset') {
+        res.json({
+          status:'success',
+          message: 'success reset password'
+        })
+      }
 
     } else {
       //Set Response
