@@ -1,5 +1,5 @@
 const Users = require('../models/Users');
-const modelOtp=require('../models/Otp');
+const modelOtp = require('../models/Otp');
 
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
@@ -9,8 +9,8 @@ const secretKey = process.env.SECRET_KEY || '270400';
 const salt = bcrypt.genSaltSync(10);
 
 //Check New User/ Old User
-exports.checkNumber=async(req,res)=>{
-  const phone=req.body.phone
+exports.checkNumber = async (req, res) => {
+  const phone = req.body.phone
 
   try {
     const usersStatus = await Users.findOne({
@@ -20,13 +20,13 @@ exports.checkNumber=async(req,res)=>{
     });
 
     //Status Check
-    if(usersStatus){
+    if (usersStatus) {
       return res.status(200).json({
-        Users:'old',
+        Users: 'old',
       });
-    }else{
+    } else {
       return res.status(200).json({
-        Users:'new',
+        Users: 'new',
       });
     }
   } catch (error) {
@@ -100,15 +100,17 @@ exports.createUsers = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'Something goes wrong',
-      data: { error }
+      data: {
+        error
+      }
     })
   }
 };
 
 //Signin Users
-exports.usersLogin=async(req,res)=>{
-  const phone=req.body.phone
-  const pin=req.body.pin
+exports.usersLogin = async (req, res) => {
+  const phone = req.body.phone
+  const pin = req.body.pin
 
   try {
     const usersLogin = await Users.findOne({
@@ -125,50 +127,52 @@ exports.usersLogin=async(req,res)=>{
       return res.status(400).json({
         message: 'Wrong PIN!'
       })
-    }else{
+    } else {
       // Create and assign token
       const token = jwt.sign({
         id: usersLogin.dataValues.id,
         phone: usersLogin.dataValues.phone
-        }, secretKey, {
+      }, secretKey, {
         expiresIn: '10h'
       })
 
       res.status(200).json({
         message: 'Succes Login',
-        data:usersLogin,
-        token:token
+        data: usersLogin,
+        token: token
       })
     }
   } catch (error) {
     res.status(500).json({
       message: 'Something goes wrong',
-      data: {error}
+      data: {
+        error
+      }
     })
   }
 };
 
 //OTP REGISTER
-exports.otpUsers=async (req,res) =>{
+exports.otpUsers = async (req, res) => {
   try {
-    phone=req.body.phone;
-    type=req.body.otpType
+    phone = req.body.phone;
+    type = req.body.otpType
 
     //Check OTP Type
-    if(type==='reset'){
+    if (type === 'reset') {
       const checkNumber = await Users.findOne({
         where: {
           phone
         }
       });
 
-      if(!checkNumber){
+      if (!checkNumber) {
         res.status(400).json({
           message: 'Number Not Found '
         })
       }
     }
-    
+
     //API
     const nexmo = new Nexmo({
       apiKey: "f477fda7",
@@ -184,46 +188,47 @@ exports.otpUsers=async (req,res) =>{
 
     //Delete Old OTP Users If OTP Found
     if (oldOTP) {
-      await modelOtp.destroy(
-        { where: { phone } }
-      );
+      await modelOtp.destroy({
+        where: {
+          phone
+        }
+      });
     }
-    //Make Random OTP 
+    //Make Random OTP
     const newOtp = Math.floor(100000 + Math.random() * 900000);
     const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
-    const otp=newOtpEncrypt
-      
+    const otp = newOtpEncrypt
+
     //Update New OTP
-    const insertNewOtp = await modelOtp.create(
-      {
-        otp,
-        phone
-      },
-      { 
-        fields: ['otp', 'phone']
-      }
-    );
+    const insertNewOtp = await modelOtp.create({
+      otp,
+      phone
+    }, {
+      fields: ['otp', 'phone']
+    });
 
     //Check Update Success And Send Message
-    if(insertNewOtp){
+    if (insertNewOtp) {
       const from = "DANAIN";
-      const number=req.body.phone
-      const to = "62"+number+"";
-      const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
+      const number = req.body.phone
+      const to = "62" + number + "";
+      const text = "Info<#>" + newOtp + ".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
       nexmo.message.sendSms(from, to, text);
 
       //Set Time Out Destroy Database
       setTimeout(async () => {
-        await Users.update(
-          { where: { phone } }
-        );
+        await Users.update({
+          where: {
+            phone
+          }
+        });
       }, 180000);
 
       //Set Response
       res.status(200).json({
         message: 'Succes Send Message '
       })
-    }else{
+    } else {
       //Set Response
       res.status(200).json({
         message: 'Failed Send Message '
@@ -239,10 +244,10 @@ exports.otpUsers=async (req,res) =>{
 }
 
 //Verify OTP
-exports.otpVerify=async(req,res)=>{
+exports.otpVerify = async (req, res) => {
   try {
-    phone=req.body.phone
-    otp=req.body.otp
+    phone = req.body.phone
+    otp = req.body.otp
 
     //Find Users With Number Register
     const findOtp = await modelOtp.findOne({
@@ -250,28 +255,30 @@ exports.otpVerify=async(req,res)=>{
         phone
       }
     });
-    if(findOtp){
-      //Compare OTP 
-      if(bcrypt.compareSync(otp, findOtp.dataValues.otp)) {
+    if (findOtp) {
+      //Compare OTP
+      if (bcrypt.compareSync(otp, findOtp.dataValues.otp)) {
 
         //Delete OTP
-        await modelOtp.destroy(
-          { where: { phone } }
-        );
+        await modelOtp.destroy({
+          where: {
+            phone
+          }
+        });
 
         //Send Response Succces
         res.json({
           status: "success",
           response: "Otp code is valid"
         });
-      }else {
+      } else {
         //Send Response Otp Not Found
         res.json({
           status: "error",
           response: "Otp not match"
         });
       }
-    }else{
+    } else {
       //Send Otp Response Expired
       res.json({
         status: "error",
@@ -281,17 +288,19 @@ exports.otpVerify=async(req,res)=>{
   } catch (error) {
     res.status(500).json({
       message: 'Something goes wrong',
-      data: {error}
+      data: {
+        error
+      }
     })
   }
 }
 
 //GET ALL USERS
-exports.getAllUsers=async(req,res)=>{
+exports.getAllUsers = async (req, res) => {
   try {
-    const users=await Users.findAll();
+    const users = await Users.findAll();
     res.status(200).json({
-      data:users
+      data: users
     })
   } catch (error) {
     res.status(500).json({
@@ -302,25 +311,26 @@ exports.getAllUsers=async(req,res)=>{
 }
 
 //RESET PIN
-exports.resetPin=async(req,res)=>{
+exports.resetPin = async (req, res) => {
   try {
-    const pin=req.body.pin
-    const phone=req.body.phone
+    const pin = req.body.pin
+    const phone = req.body.phone
     const newPinEncrypt = bcrypt.hashSync(pin, salt)
 
     //Upadate Pin
-    const updatePin=await Users.update(
-      {
-        pin:newPinEncrypt
-      },
-      {where:{phone}}
-    );
+    const updatePin = await Users.update({
+      pin: newPinEncrypt
+    }, {
+      where: {
+        phone
+      }
+    });
 
-    if(updatePin){
+    if (updatePin) {
       res.status(200).json({
         status: "Succes Reset Pin",
       });
-    }else{
+    } else {
       res.status(400).json({
         status: "Failed Reset Pin",
       });
@@ -334,7 +344,7 @@ exports.resetPin=async(req,res)=>{
 }
 
 //UPDATE PROFILE
-exports.updateProfile=async(req,res)=>{
+exports.updateProfile = async (req, res) => {
   const {
     id
   } = req.params;
@@ -342,41 +352,44 @@ exports.updateProfile=async(req,res)=>{
   const {
     name,
     refferal,
+    pin,
     phone,
     balance,
     email,
-    type_user
+    type_user,
+    otp,
+    id_vouchers
   } = req.body;
 
   const image = req.file ?
-  "/images/uploads/" + req.file.filename :
-  "/images/avatar.png";
+    "/images/uploads/" + req.file.filename :
+    "/images/avatar.png";
 
   const users = await Users.findAll({
-    attributes: ['id','name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user'],
+    attributes: ['id', 'name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user', 'otp', 'id_vouchers'],
     where: {
       id
     }
   });
 
   if (users.length > 0) {
-    users.forEach(async users => {
-      await users.update({
+    users.forEach(async user => {
+      await user.update({
         name,
+        image,
         refferal,
+        pin,
         phone,
         balance,
         email,
-        image,
-        type_user
+        type_user,
+        otp,
+        id_vouchers
       });
     });
-
-    return res.json({
-      message: 'Users updated succesfully',
-      data: users
-    });
-
   }
-
+  return res.json({
+    message: 'Users updated succesfully',
+    data: users
+  });
 }
