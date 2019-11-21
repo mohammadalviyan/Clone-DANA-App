@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const name = "811989593"
 
-const EditName = (props) => {
+const EditNameScreen = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -30,7 +30,7 @@ const EditName = (props) => {
     )
 }
 
-export default EditName
+export default EditNameScreen
 
 
 const styles = StyleSheet.create({

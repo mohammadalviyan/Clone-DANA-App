@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Feather'
 const phone = "82169511784"
 const lastChange ="never"
 
-const EditPhone = (props) => {
+const EditPhoneScreen = (props) => {
     const [save, setSave] = useState(false)
 
     const modalPop = (e)  => {
@@ -20,7 +20,7 @@ const EditPhone = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.imgContainer}>
-                <Image source= {require('../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
+                <Image source= {require('../../../../asset/icons/danain-logo.png')} style={styles.image}></Image>
             </View>
             <View style={styles.headerTitle}>
                 <Text style={styles.title}>Your DANAIN ID has been registered below:</Text>
@@ -45,7 +45,7 @@ const EditPhone = (props) => {
     )
 }
 
-export default EditPhone;
+export default EditPhoneScreen;
 
 
 const styles = StyleSheet.create({

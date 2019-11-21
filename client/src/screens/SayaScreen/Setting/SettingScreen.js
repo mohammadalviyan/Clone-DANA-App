@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import ImagePicker from 'react-native-image-picker'
 import {TextMask} from 'react-native-masked-text'
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser} from '../Redux/Actions/user';
+import {getUser} from '../../../Redux/Actions/user';
 
 
 const SettingScreen = (props) => {
@@ -53,18 +53,18 @@ const SettingScreen = (props) => {
     {
       title: 'Account Type',
       rightTitle: user.isFulfilled ? user.resultUser.type_user : null,
-      command: "acc-type"
+      screen: "UserType"
     },
     {
       title: 'Change Profile Picture',
       rightTitle: user.isFulfilled ?
       <Image source ={{uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`}} style={styles.profileImage}/>  : <Icon name="user"/>,
-    command: "picture"
+      screen: "Picture"
     },
     {
       title: 'Change Name',
       rightTitle: user.isFulfilled ? user.resultUser.name : null,
-      command: "name"
+      screen: "Name"
     },]
 
     let list2 = [
@@ -74,7 +74,7 @@ const SettingScreen = (props) => {
                     type={'cel-phone'}
                     options= {{withDDD: true, dddMask: "(+62)"}}
       /> : null,
-      command: "phone"
+      screen: "Phone"
     },
     {
       title: 'Email Address',
@@ -84,60 +84,31 @@ const SettingScreen = (props) => {
                 //          options= {{obfuscated: true}}/> 
                     <Text>{user.resultUser.email}</Text>
                    : "Unset",
-      command: "email"
+      screen: "Email"
     },
     {
       title: 'Change Pin',
       rightTitle: null,
-      command: "pin"
+      screen: "Pin"
     },
     {
         title: 'Security Questions',
         rightTitle: "OFF",
-        command: "security"
+        screen: "Security"
       },
 ]
 
 
-  const onPressOptions = (e, command) => {
-    switch (command) {
-        case 'acc-type':
-            console.log('acc-type is pressed')
-            return {
-
-            };
-        case 'picture':
-            console.log('picture is pressed')
-            selectImage(e)
-            return {
-                
-            };
-        case 'name':
-            console.log('name is pressed')
-            return {
-
-            };
-        case 'phone':
-            console.log('phone is pressed')
-            return {
-    
-            };
-        case 'email':
-            console.log('email is pressed')
-            return {
-
-            };
-        case 'pin':
-            console.log('pin is pressed')
-            return {
-
-            };
-        case 'security':
-            console.log('security is pressed')
-            return {
-
-            };
-        }
+  const onPressOptions = (e, screen) => {
+    if (screen === "Picture") {
+      console.log('picture is pressed')
+      selectImage(e)
+    } else if (screen === "Security") {
+      console.log('security is pressed')
+    } else {
+      console.log(`Navigate to ${screen}`)
+      props.navigation.navigate(screen)
+    }
   }
 
     return (
@@ -159,7 +130,7 @@ const SettingScreen = (props) => {
               rightTitle={l.rightTitle}
               rightTitleStyle={{ fontSize: 15 }}
               chevron={{size:24}}
-              onPress={(e) => onPressOptions(e,l.command)}
+              onPress={(e) => onPressOptions(e,l.screen)}
               containerStyle={styles.listItemContainer}
               pad={0}
               />
@@ -173,7 +144,7 @@ const SettingScreen = (props) => {
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={(e) => onPressOptions(e,l.command)}
+            onPress={(e) => onPressOptions(e,l.screen)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -192,7 +163,7 @@ const SettingScreen = (props) => {
     )
 }
 
-export default SettingScreen
+export default SettingScreen;
 
 
 const InfoText = ({ text }) => (
