@@ -148,12 +148,27 @@ exports.usersLogin=async(req,res)=>{
   }
 };
 
-
 //OTP REGISTER
 exports.otpUsers=async (req,res) =>{
   try {
     phone=req.body.phone;
+    type=req.body.otpType
 
+    //Check OTP Type
+    if(type==='reset'){
+      const checkNumber = await Users.findOne({
+        where: {
+          phone
+        }
+      });
+
+      if(!checkNumber){
+        res.status(400).json({
+          message: 'Number Not Found '
+        })
+      }
+    }
+    
     //API
     const nexmo = new Nexmo({
       apiKey: "f477fda7",
@@ -225,7 +240,7 @@ exports.otpUsers=async (req,res) =>{
 
 //Verify OTP
 exports.otpVerify=async(req,res)=>{
-  // try {
+  try {
     phone=req.body.phone
     otp=req.body.otp
 
@@ -263,12 +278,12 @@ exports.otpVerify=async(req,res)=>{
         response: "Your OTP is expired, please request OTP again"
       });
     }
-  // } catch (error) {
-  //   res.status(500).json({
-  //     message: 'Something goes wrong',
-  //     data: {error}
-  //   })
-  // }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {error}
+    })
+  }
 }
 
 //GET ALL USERS
@@ -319,6 +334,49 @@ exports.resetPin=async(req,res)=>{
 }
 
 //UPDATE PROFILE
-exports.updateProfile=async(re,res)=>{
+exports.updateProfile=async(req,res)=>{
+  const {
+    id
+  } = req.params;
+
+  const {
+    name,
+    refferal,
+    phone,
+    balance,
+    email,
+    type_user
+  } = req.body;
+
+  const image = req.file ?
+  "/images/uploads/" + req.file.filename :
+  "/images/avatar.png";
+
+  const users = await Users.findAll({
+    attributes: ['id','name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user'],
+    where: {
+      id
+    }
+  });
+
+  if (users.length > 0) {
+    users.forEach(async users => {
+      await users.update({
+        name,
+        refferal,
+        phone,
+        balance,
+        email,
+        image,
+        type_user
+      });
+    });
+
+    return res.json({
+      message: 'Users updated succesfully',
+      data: users
+    });
+
+  }
 
 }
