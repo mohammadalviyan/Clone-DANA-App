@@ -1,4 +1,6 @@
 const Users = require('../models/Users');
+const modelOtp=require('../models/Otp');
+
 const Nexmo = require('nexmo');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -146,77 +148,87 @@ exports.usersLogin=async(req,res)=>{
   }
 };
 
-
 //OTP REGISTER
 exports.otpUsers=async (req,res) =>{
   try {
     phone=req.body.phone;
+    type=req.body.otpType
 
+    //Check OTP Type
+    if(type==='reset'){
+      const checkNumber = await Users.findOne({
+        where: {
+          phone
+        }
+      });
+
+      if(!checkNumber){
+        res.status(400).json({
+          message: 'Number Not Found '
+        })
+      }
+    }
+    
     //API
     const nexmo = new Nexmo({
-      apiKey: "834f12cf",
-      apiSecret: "GliRLNgD3hK5BQKa",
+      apiKey: "f477fda7",
+      apiSecret: "O28vfatvtLvhCh7o",
     })
 
-    //Find Users With Number Register
-    const oldOTP = await Users.findOne({
+    //Find Users With OTP
+    const oldOTP = await modelOtp.findOne({
       where: {
         phone
       }
     });
 
-    //Delete Old OTP Users If Number Found
+    //Delete Old OTP Users If OTP Found
     if (oldOTP) {
-      await Users.update(
-        {
-          otp: ' '
-        },
+      await modelOtp.destroy(
         { where: { phone } }
       );
-
-      //Make Random OTP
-      const newOtp = Math.floor(100000 + Math.random() * 900000);
-      const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
-
-
-      //Update New OTP
-      const insertNewOtp = await Users.update(
-        {
-          otp: newOtpEncrypt
-        },
-        { where: { phone } }
-      );
-
-      //Check Update Success And Send Message
-      if(insertNewOtp){
-        const from = "DANAIN";
-        const number=req.body.phone
-        const to = "62"+number+"";
-        const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
-        nexmo.message.sendSms(from, to, text);
-
-        //Set Time Out Destroy Database
-        setTimeout(async () => {
-          await Users.update(
-            {
-              otp: ' '
-            },
-            { where: { phone } }
-          );
-        }, 180000);
+    }
+    //Make Random OTP 
+    const newOtp = Math.floor(100000 + Math.random() * 900000);
+    const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
+    const otp=newOtpEncrypt
+      
+    //Update New OTP
+    const insertNewOtp = await modelOtp.create(
+      {
+        otp,
+        phone
+      },
+      { 
+        fields: ['otp', 'phone']
       }
+    );
+
+    //Check Update Success And Send Message
+    if(insertNewOtp){
+      const from = "DANAIN";
+      const number=req.body.phone
+      const to = "62"+number+"";
+      const text = "Info<#>"+newOtp+".Hati-hati penipuan!, Ini Hanya Untuk Kamu Iya Kamu";
+      nexmo.message.sendSms(from, to, text);
+
+      //Set Time Out Destroy Database
+      setTimeout(async () => {
+        await Users.update(
+          { where: { phone } }
+        );
+      }, 180000);
 
       //Set Response
       res.status(200).json({
         message: 'Succes Send Message '
       })
-
     }else{
-      res.status(400).json({
-        status: "Users Not Found",
-      });
+      //Set Response
+      res.status(200).json({
+        message: 'Failed Send Message '
+      })
     }
-
   } catch (error) {
     return res.status(400).json({
       status: "error",
@@ -233,21 +245,17 @@ exports.otpVerify=async(req,res)=>{
     otp=req.body.otp
 
     //Find Users With Number Register
-    const findUsers = await Users.findOne({
+    const findOtp = await modelOtp.findOne({
       where: {
         phone
       }
     });
-
-    if(findUsers){
-      //Compare OTP
-      if(bcrypt.compareSync(otp, findUsers.dataValues.otp)) {
+    if(findOtp){
+      //Compare OTP 
+      if(bcrypt.compareSync(otp, findOtp.dataValues.otp)) {
 
         //Delete OTP
-        await Users.update(
-          {
-            otp: ' '
-          },
+        await modelOtp.destroy(
           { where: { phone } }
         );
 
@@ -326,6 +334,49 @@ exports.resetPin=async(req,res)=>{
 }
 
 //UPDATE PROFILE
-exports.updateProfile=async(re,res)=>{
+exports.updateProfile=async(req,res)=>{
+  const {
+    id
+  } = req.params;
+
+  const {
+    name,
+    refferal,
+    phone,
+    balance,
+    email,
+    type_user
+  } = req.body;
+
+  const image = req.file ?
+  "/images/uploads/" + req.file.filename :
+  "/images/avatar.png";
+
+  const users = await Users.findAll({
+    attributes: ['id','name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user'],
+    where: {
+      id
+    }
+  });
+
+  if (users.length > 0) {
+    users.forEach(async users => {
+      await users.update({
+        name,
+        refferal,
+        phone,
+        balance,
+        email,
+        image,
+        type_user
+      });
+    });
+
+    return res.json({
+      message: 'Users updated succesfully',
+      data: users
+    });
+
+  }
 
 }
