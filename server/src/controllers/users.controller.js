@@ -28,7 +28,7 @@ exports.createUsers = async (req, res) => {
     "/images/uploads/" + req.file.filename :
     "/images/avatar.png";
 
-  // try {
+  try {
     let checkNumber = await Users.findOne({
       where: {
         phone
@@ -62,32 +62,35 @@ exports.createUsers = async (req, res) => {
           expiresIn: '10h'
         })
 
-
-        return res.status(200).json({
+        return res.json({
+          status:'success',
           message: 'Users was created successfully',
           data: newUsers,
           token:token
         });
       } else {
         //Failed Insert Users
-        return res.status(400).json({
+        return res.json({
+          status:'error',
           message: 'Failed Insert New Users',
         });
       }
     } else {
       //Number Already Existed
-      return res.status(400).json({
+      return res.json({
+        status:'error',
         message: 'Already Existed',
       });
     }
-  // } catch (error) {
-  //   res.status(500).json({
-  //     message: 'Something goes wrong',
-  //     data: {
-  //       error
-  //     }
-  //   })
-  // }
+  } catch (error) {
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
+  }
 };
 
 //Signin Users
@@ -107,7 +110,8 @@ exports.usersLogin = async (req, res) => {
 
     //Validation Pin Check
     if (!validPin) {
-      return res.status(400).json({
+      return res.json({
+        status:'error',
         message: 'Wrong PIN!'
       })
     } else {
@@ -119,7 +123,8 @@ exports.usersLogin = async (req, res) => {
         expiresIn: '10h'
       })
 
-      res.status(200).json({
+      res.json({
+        status:'success',
         message: 'Succes Login',
         data: usersLogin,
         token: token
@@ -127,6 +132,7 @@ exports.usersLogin = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
       data: {
         error
@@ -150,7 +156,8 @@ exports.otpUsers = async (req, res) => {
       });
 
       if (!checkNumber) {
-        res.status(400).json({
+        res.json({
+          status:'error',
           message: 'Number Not Found '
         })
       }
@@ -190,7 +197,7 @@ exports.otpUsers = async (req, res) => {
       fields: ['otp', 'phone']
     });
 
-    //Check Update Success And Send Message
+    //Check Insert Success And Send Message
     if (insertNewOtp) {
       const from = "DANAIN";
       const number = req.body.phone
@@ -213,19 +220,21 @@ exports.otpUsers = async (req, res) => {
         message: 'new'
       })
 
-
-
     } else {
       //Set Response
       res.json({
+        status:'error',
         message: 'Failed Send Message '
       })
     }
   } catch (error) {
-    return res.status(400).json({
-      status: "error",
-      response: error
-    });
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
   }
 
 }
@@ -243,9 +252,8 @@ exports.checkNumber = async (req, res) => {
 
     //Status Check
     if (usersStatus) {
-      
       return res.json({
-        status:'failed',
+        status:'success',
         message: 'old',
       });
     } else {
@@ -254,8 +262,11 @@ exports.checkNumber = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
-      data: {}
+      data: {
+        error
+      }
     })
   }
 };
@@ -286,24 +297,25 @@ exports.otpVerify = async (req, res) => {
         //Send Response Succces
         res.json({
           status: "success",
-          response: "Otp code is valid"
+          message: "Otp code is valid"
         });
       } else {
         //Send Response Otp Not Found
         res.json({
           status: "error",
-          response: "Otp not match"
+          message: "Otp not match"
         });
       }
     } else {
       //Send Otp Response Expired
       res.json({
         status: "error",
-        response: "Your OTP is expired, please request OTP again"
+        message: "Your OTP is expired, please request OTP again"
       });
     }
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
       data: {
         error
@@ -316,13 +328,15 @@ exports.otpVerify = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll();
-    res.status(200).json({
+    res.json({
+      status:'success',
       data: users
     })
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
-      data: {}
+      data: {error}
     })
   }
 }
@@ -344,69 +358,85 @@ exports.resetPin = async (req, res) => {
     });
 
     if (updatePin) {
-      res.status(200).json({
-        status: "Succes Reset Pin",
+      res.json({
+        status: "success",
+        message:"Succes Reset Pin"
       });
     } else {
-      res.status(400).json({
-        status: "Failed Reset Pin",
+      res.json({
+        status: "error",
+        message:"Failed Reset Pin"
       });
     }
   } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      response: error
-    });
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
   }
 }
 
 //UPDATE PROFILE
 exports.updateProfile = async (req, res) => {
-  const {
-    id
-  } = req.params;
-
-  const {
-    name,
-    refferal,
-    pin,
-    phone,
-    balance,
-    email,
-    type_user,
-    otp,
-    id_vouchers
-  } = req.body;
-
-  const image = req.file ?
-    "/images/uploads/" + req.file.filename :
-    "/images/avatar.png";
-
-  const users = await Users.findAll({
-    attributes: ['id', 'name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user', 'otp', 'id_vouchers'],
-    where: {
+  try {
+    const {
       id
-    }
-  });
+    } = req.params;
 
-  if (users.length > 0) {
-    users.forEach(async user => {
-      await user.update({
-        name,
-        image,
-        refferal,
-        pin,
-        phone,
-        balance,
-        email,
-        type_user,
-        otp,
-        id_vouchers
-      });
+    const {
+      name,
+      refferal,
+      pin,
+      phone,
+      balance,
+      email,
+      type_user,
+      otp,
+      id_vouchers
+    } = req.body;
+
+    const image = req.file ?
+      "/images/uploads/" + req.file.filename :
+      "/images/avatar.png";
+
+    const users = await Users.findAll({
+      attributes: ['id', 'name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user', 'otp', 'id_vouchers'],
+      where: {
+        id
+      }
     });
+
+    if (users.length > 0) {
+      users.forEach(async user => {
+        await user.update({
+          name,
+          image,
+          refferal,
+          pin,
+          phone,
+          balance,
+          email,
+          type_user,
+          otp,
+          id_vouchers
+        });
+      });
+    }
+    res.json({
+      status:'success',
+      message: 'Users updated succesfully',
+      data: users
+    });
+  } catch (error) {
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
   }
-  return res.json({
-    message: 'Users updated succesfully',
-    data: users
-  });
 }

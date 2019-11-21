@@ -8,33 +8,43 @@ exports.getTransactions = async (req, res) => {
   try {
     const transactions = await Transactions.findAll();
     res.json({
+      status:'success',
       data: transactions
     });
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
-      data: {}
+      data: {error}
     });
   }
 }
 
 // Transaction parrent
 exports.createTransactions = async (req, res) => {
-  const {
-    id_services
-  } = req.body;
+  try {
+    const {
+      id_services
+    } = req.body;
 
-  const service = await Services.findOne({
-    where: {
-      id: id_services
+    const service = await Services.findOne({
+      where: {
+        id: id_services
+      }
+    });
+    if (service.dataValues.type === "BALANCE") {
+      this.createTransactionsTransfer(req, res)
+    } else if (service.dataValues.type === "TOPUP") {
+      this.createTransactionsTopUp(req, res)
+    } else if (service.dataValues.type === "PPOB") {
+      this.createTransactionsPPOB(req, res)
     }
-  });
-  if (service.dataValues.type === "BALANCE") {
-    this.createTransactionsTransfer(req, res)
-  } else if (service.dataValues.type === "TOPUP") {
-    this.createTransactionsTopUp(req, res)
-  } else if (service.dataValues.type === "PPOB") {
-    this.createTransactionsPPOB(req, res)
+  } catch (error) {
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {error}
+    });
   }
 }
 
@@ -91,6 +101,7 @@ exports.createTransactionsTransfer = async (req, res) => {
     //Check balance current user
     if (currentUser.dataValues.balance < amount) {
       return res.json({
+        status:'error',
         message: 'Insufficient Balance'
       })
     } else {
@@ -131,6 +142,7 @@ exports.createTransactionsTransfer = async (req, res) => {
         });
 
         return res.json({
+          status:'success',
           message: 'Transactions was created succesfully',
           data: newTransactions
         });
@@ -138,8 +150,9 @@ exports.createTransactionsTransfer = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
-      data: {}
+      data: {error}
     });
   }
 };
@@ -218,14 +231,16 @@ exports.createTransactionsTopUp = async (req, res) => {
     });
 
     return res.json({
+      status:'success',
       message: 'Transactions was created succesfully',
       data: newTransactions
     });
   }
   // } catch (error) {
   res.status(500).json({
+    status:'error',
     message: 'Something goes wrong',
-    data: {}
+    data: {error}
   });
   // }
 };
