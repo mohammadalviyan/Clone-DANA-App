@@ -1,14 +1,21 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import {useSelector, useDispatch} from 'react-redux';
 
-const name = "811989593"
+const nameDefault = "811989593"
+
+const screenHeight = Dimensions.get('window').height;
 
 const EditNameScreen = (props) => {
+    const user =  useSelector (state => state.user)
+
     const [save, setSave] = useState(false)
-    const [name, setName] = useState ("")
+    const [name, setName] = useState (user.resultUser.name) //get from database
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
+
+    
 
     const modalPop = (e)  => {
         setSave(true)
@@ -32,6 +39,10 @@ const EditNameScreen = (props) => {
         setFill(true)
     } 
 
+    const emptyName = (e) => {
+        setName("")
+    }
+
     useEffect( () => {
 
     }, [save])
@@ -43,7 +54,11 @@ const EditNameScreen = (props) => {
                 <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
                 <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
                     <TextInput value={name} style={{color: isFill ? "#fb9b1a" : '#666666' }} onChangeText={name=> handleChangeName(name)} />
-                    {isEmpty ? null : <Icon  name="cancel" />}
+                    {isEmpty ? null : 
+                    <TouchableOpacity onPress={e => emptyName(e)}>
+                        <Icon  name="cancel" />
+                    </TouchableOpacity>
+                    }
                     {isEmpty ? emptyWarning() : null}
                 </View>
             </View>
@@ -59,11 +74,14 @@ export default EditNameScreen
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "space-around",
-        alignItems: "center"
+        justifyContent: "space-between",
+        flex: 1,
+        margin: 20,
+        backgroundColor: 'red'
     },
     editForm: {
         marginHorizontal: 10,
+        backgroundColor: "green"
     },
     input: {
         flexDirection: "row",
