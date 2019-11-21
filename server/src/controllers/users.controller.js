@@ -253,7 +253,7 @@ exports.checkNumber = async (req, res) => {
 
 //Verify OTP
 exports.otpVerify = async (req, res) => {
-  // try {
+  try {
     phone = req.body.phone
     otp = req.body.otp
 
@@ -293,14 +293,14 @@ exports.otpVerify = async (req, res) => {
         response: "Your OTP is expired, please request OTP again"
       });
     }
-  // } catch (error) {
-  //   res.status(500).json({
-  //     message: 'Something goes wrong',
-  //     data: {
-  //       error
-  //     }
-  //   })
-  // }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
+  }
 }
 
 //GET ALL USERS
