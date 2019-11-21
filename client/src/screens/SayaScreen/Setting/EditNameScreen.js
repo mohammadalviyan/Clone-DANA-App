@@ -17,14 +17,14 @@ const EditNameScreen = (props) => {
 
     const emptyWarning = () => {
         return (
-            <View style={styles.inputWarning}>
+            <View style={styles.warning}>
                 <Text>Nama Akun harus diisi</Text>
                 <Icon name="warning" color="red" size={20} />
             </View>
         )
     }
     
-    const changeName = (name) => {
+    const handleChangeName = (name) => {
         if (name.length <= 0) {
             empty(true)
         }
@@ -42,7 +42,7 @@ const EditNameScreen = (props) => {
                 {/* label need floating lable */}
                 <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
                 <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
-                    <TextInput value={name} style={{color: isFill ? "#fb9b1a" : '#666666' }} onChangeText={name=> changeName(name)} />
+                    <TextInput value={name} style={{color: isFill ? "#fb9b1a" : '#666666' }} onChangeText={name=> handleChangeName(name)} />
                     {isEmpty ? null : <Icon  name="cancel" />}
                     {isEmpty ? emptyWarning() : null}
                 </View>
@@ -75,7 +75,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: "#fb9b1a"
     },
-    inputWarning: {
+    inputWarning : {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "red"
+    },
+    warning: {
         flexDirection: "row",
         justifyContent: "space-between"
     },
