@@ -8,34 +8,7 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY || '270400';
 const salt = bcrypt.genSaltSync(10);
 
-//Check New User/ Old User
-exports.checkNumber = async (req, res) => {
-  const phone = req.body.phone
 
-  try {
-    const usersStatus = await Users.findOne({
-      where: {
-        phone
-      }
-    });
-
-    //Status Check
-    if (usersStatus) {
-      return res.status(200).json({
-        Users: 'old',
-      });
-    } else {
-      return res.status(200).json({
-        Users: 'new',
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      message: 'Something goes wrong',
-      data: {}
-    })
-  }
-};
 
 // Register Users
 exports.createUsers = async (req, res) => {
@@ -199,7 +172,7 @@ exports.otpUsers = async (req, res) => {
     const newOtpEncrypt = bcrypt.hashSync(newOtp, salt)
     const otp = newOtpEncrypt
 
-    //Update New OTP
+    //Insert New OTP
     const insertNewOtp = await modelOtp.create({
       otp,
       phone
@@ -224,13 +197,14 @@ exports.otpUsers = async (req, res) => {
         });
       }, 180000);
 
-      //Set Response
-      res.status(200).json({
-        message: 'Succes Send Message '
+      //Set Response [Besok Ganti Dengan Response Reset Password]
+      res.json({
+        status:'success',
+        message: 'new'
       })
     } else {
       //Set Response
-      res.status(200).json({
+      res.json({
         message: 'Failed Send Message '
       })
     }
@@ -242,6 +216,35 @@ exports.otpUsers = async (req, res) => {
   }
 
 }
+
+//Check New User/ Old User
+exports.checkNumber = async (req, res) => {
+  const phone = req.body.phone
+
+  try {
+    const usersStatus = await Users.findOne({
+      where: {
+        phone
+      }
+    });
+
+    //Status Check
+    if (usersStatus) {
+      
+      return res.status(200).json({
+        Users: 'old',
+      });
+    } else {
+      await this.otpUsers(req, res);
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {}
+    })
+  }
+};
 
 //Verify OTP
 exports.otpVerify = async (req, res) => {
