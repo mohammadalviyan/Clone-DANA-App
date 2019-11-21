@@ -1,6 +1,7 @@
 const Transactions = require('../models/Transactions');
 const Users = require('../models/Users');
 const Services = require('../models/Services');
+const Vouchers = require('../models/Vouchers');
 
 // Get transactions
 exports.getTransactions = async (req, res) => {
@@ -30,16 +31,14 @@ exports.createTransactions = async (req, res) => {
   });
   if (service.dataValues.type === "BALANCE") {
     this.createTransactionsTransfer(req, res)
-  }
-  if (service.dataValues.type === "TOPUP") {
+  } else if (service.dataValues.type === "TOPUP") {
     this.createTransactionsTopUp(req, res)
-  }
-  if (service.dataValues.type === "PPOB") {
-    this.createTransactionsTransfer(req, res)
+  } else if (service.dataValues.type === "PPOB") {
+    this.createTransactionsPPOB(req, res)
   }
 }
 
-// Create transactions
+// Create transactions transfer
 exports.createTransactionsTransfer = async (req, res) => {
   const status = 'success';
   const {
@@ -49,7 +48,8 @@ exports.createTransactionsTransfer = async (req, res) => {
     amount,
     id_services,
     id_vouchers,
-    description
+    description,
+    payment_method
   } = req.body;
 
   try {
@@ -106,9 +106,10 @@ exports.createTransactionsTransfer = async (req, res) => {
         id_services,
         id_vouchers,
         status,
-        description
+        description,
+        payment_method
       }, {
-        fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description']
+        fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
       });
       if (newTransactions) {
         //Update Current Users
@@ -153,7 +154,8 @@ exports.createTransactionsTopUp = async (req, res) => {
     amount,
     id_services,
     id_vouchers,
-    description
+    description,
+    payment_method
   } = req.body;
 
   // try {
@@ -191,9 +193,10 @@ exports.createTransactionsTopUp = async (req, res) => {
     id_services,
     id_vouchers,
     status,
-    description
+    description,
+    payment_method
   }, {
-    fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description']
+    fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
   });
   if (newTransactions) {
     //Update Current Users
@@ -227,28 +230,23 @@ exports.createTransactionsTopUp = async (req, res) => {
   // }
 };
 
-// Create transaction TopUp
-exports.createTransactionsTopUp = async (req, res) => {
+// Create transaction PPOB
+exports.createTransactionsPPOB = async (req, res) => {
   const status = 'success';
+  let currentAmount = '';
   const {
     invoice,
     customer,
     id_user,
-    amount,
     id_services,
     id_vouchers,
-    description
+    description,
+    payment_method
   } = req.body;
+  let {amount} = req.body;
 
   // try {
   //check and handle null
-  if (amount === "" || amount === null || amount < 10000) {
-    return res.json({
-      status: "error",
-      message: "Amount minimum is Rp.10000!"
-    });
-  }
-
   if (status === "" || status === null) {
     return res.json({
       status: "error",
@@ -263,8 +261,27 @@ exports.createTransactionsTopUp = async (req, res) => {
     }
   })
 
+  // get vouchers
+  const voucher = await Vouchers.findOne({
+    where: {
+      id: id_vouchers
+    }
+  })
+
+  if (voucher) {
+    currentAmount = amount - voucher.dataValues.amount;
+    amount = currentAmount;
+  } else {
+    currentAmount = amount;
+  }
+
+  if (currentUser.dataValues.balance <= currentAmount) {
+    return res.json({
+      message: "Insufficient balance"
+    })
+  }
   //Check balance current user
-  const balanceCurrent = currentUser.dataValues.balance - amount;
+  const balanceCurrent = currentUser.dataValues.balance - currentAmount;
 
   //Insert Transaction to database
   let newTransactions = await Transactions.create({
@@ -275,9 +292,10 @@ exports.createTransactionsTopUp = async (req, res) => {
     id_services,
     id_vouchers,
     status,
-    description
+    description,
+    payment_method
   }, {
-    fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description']
+    fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
   });
   if (newTransactions) {
     //Update Current Users

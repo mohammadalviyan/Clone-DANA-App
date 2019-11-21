@@ -35,6 +35,9 @@ const Transactions = sequelize.define('transaction', {
   },
   description: {
     type: Sequelize.TEXT
+  },
+  payment_method: {
+    type: Sequelize.STRING
   }
 }, {
   timestamps: false
