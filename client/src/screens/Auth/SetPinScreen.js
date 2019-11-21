@@ -5,6 +5,7 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity,
+    ActivityIndicator
  } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -23,17 +24,18 @@ const SetPinScreen = (props) => {
     });
 
     const [pin, setPin] = useState({pin: ''});
+    const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch();
 
-    // console.log('PIN', input);
+    console.log('PIN', input.pin.length);
 
     const handleRegister = () => {
+      setIsLoading(true)
       dispatch(register(input, pin))
         .then(response => { console.log(response)
           if (response.value.status === 200) {
-            setTimeout(() => {
-              props.navigation.navigate('MainScreen');
-            }, 500);
+            props.navigation.navigate('TabScreen');
+            setIsLoading(false )
           } 
         })
         .catch(error => alert(error));
@@ -57,10 +59,23 @@ const SetPinScreen = (props) => {
           </View>
 
           <View style={{width: 80}}>
-            <TouchableOpacity
-              onPress={() => handleRegister()}>
-              <Text style={styles.textRegister}>Next</Text>
-            </TouchableOpacity>
+            {input.pin.length >= 5 ? (
+              isLoading ? (
+                <ActivityIndicator
+                  animating={true}
+                  color="white"
+                  size="small"
+                  style={{ paddingTop: 20, paddingRight: 25, justifyContent: 'center' }}
+                />
+              ) : (
+                <TouchableOpacity
+                  onPress={() => handleRegister()}>
+                  <Text style={styles.textRegister}>Next</Text>
+                </TouchableOpacity>
+                )
+            ) : (
+                <Text style={styles.textRegisterOff}>Next</Text>
+            )}
           </View>
         </View>
 
@@ -105,9 +120,15 @@ const styles = StyleSheet.create({
     },
     textRegister: {
         fontSize: 18,
-        color: '#84c8f9',
+        color: '#FFF',
         paddingTop: 20,
         textAlign: 'left',
+    },
+    textRegisterOff: {
+      fontSize: 18,
+      color: '#84c8f9',
+      paddingTop: 20,
+      textAlign: 'left',
     }, 
     image: {
         width: 130,

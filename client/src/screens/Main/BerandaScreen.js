@@ -54,7 +54,7 @@ const BerandaScreen = (props) => {
                                 <Text style={styles.textBeliPulsa}>Beli Pulsa Yuk!</Text>
                             </View>
                             <View style={styles.containerButtonBeli}>
-                                <TouchableHighlight style={styles.buttonBeli}>
+                                <TouchableHighlight onPress={() => props.navigation.navigate('TransaksiScreen')}  style={styles.buttonBeli}>
                                     <Text style={styles.textBeli}>BELI</Text>
                                 </TouchableHighlight>
                             </View>
@@ -172,6 +172,7 @@ const BerandaScreen = (props) => {
                     <Text style={{ fontSize: 12, color:'#b6b6b6'}}>BERITA DANA</Text>
                 </View>
 
+            {/* COMPONENT NEWS */}
                 <View style={{marginBottom:3, justifyContent:'center', alignItems:'center', backgroundColor: '#FFF',height: 78, marginTop:5, marginHorizontal: 15, borderRadius: 6, borderWidth: 1, borderColor: '#e3e3e3'}}>
                     <View style={{flexDirection:'row', marginHorizontal: 15, alignItems:'center'}}>
                         <View style={{flex: 1}}>

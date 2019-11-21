@@ -10,6 +10,8 @@ import SetProfileScreen from '../screens/Auth/SetProfileScreen';
 import SetPinScreen from '../screens/Auth/SetPinScreen';
 import TabScreen from '../screens/Main/TabScreen';
 import SaldoScreen from '../screens/Saldo/SaldoScreen';
+import MethodScreen from '../screens/Saldo/MethodScreen';
+import TransaksiScreen from '../screens/TransactionScreen/TransaksiScreen';
 
 const StackLoading = createStackNavigator(
   {
@@ -39,7 +41,9 @@ const StackAuth = createStackNavigator(
 const StackApp = createStackNavigator(
   {
     TabScreen,
-    SaldoScreen
+    SaldoScreen,
+    MethodScreen,
+    TransaksiScreen
   },
   {
     initialRouteName: 'TabScreen',
@@ -54,7 +58,7 @@ const Router = createSwitchNavigator(
     StackApp
   },
   {
-    initialRouteName: 'StackApp',
+    initialRouteName: 'StackLoading',
     headerMode: 'none',
   },
 );
