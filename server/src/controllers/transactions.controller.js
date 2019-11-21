@@ -41,8 +41,8 @@ exports.createTransactions = async (req, res) => {
 // Create transactions transfer
 exports.createTransactionsTransfer = async (req, res) => {
   const status = 'success';
+  let invoice = "inv";
   const {
-    invoice,
     customer,
     id_user,
     amount,
@@ -88,6 +88,21 @@ exports.createTransactionsTransfer = async (req, res) => {
       }
     })
 
+    let r = Math.random().toString(36).substring(7);
+    invoice = invoice + r;
+
+    // Random invoice
+    const invoiceData = await Transactions.findAll({
+      where: {
+        invoice: invoice
+      }
+    });
+
+    while (invoiceData) {
+      let r = Math.random().toString(36).substring(7);
+      invoice = invoice + r;
+    }
+
     //Check balance current user
     if (currentUser.dataValues.balance < amount) {
       return res.json({
@@ -131,7 +146,7 @@ exports.createTransactionsTransfer = async (req, res) => {
         });
 
         return res.json({
-          message: 'Transactions was created succesfully',
+          message: 'Transfers success',
           data: newTransactions
         });
       }
@@ -147,8 +162,8 @@ exports.createTransactionsTransfer = async (req, res) => {
 // Create transaction TopUp
 exports.createTransactionsTopUp = async (req, res) => {
   const status = 'pending';
+  let invoice = 'inv'
   const {
-    invoice,
     customer,
     id_user,
     amount,
@@ -158,84 +173,84 @@ exports.createTransactionsTopUp = async (req, res) => {
     payment_method
   } = req.body;
 
-  // try {
-  //check and handle null
-  if (amount === "" || amount === null || amount < 10000) {
-    return res.json({
-      status: "error",
-      message: "Amount minimum is Rp.10000!"
-    });
-  }
+  try {
+    // Get id current user
+    const currentUser = await Users.findOne({
+      where: {
+        id: id_user
+      }
+    })
 
-  if (status === "" || status === null) {
-    return res.json({
-      status: "error",
-      message: "Status must be filled!"
-    });
-  }
+    let r = Math.random().toString(36).substring(7);
+    invoice = invoice + r;
 
-  // Get id current user
-  const currentUser = await Users.findOne({
-    where: {
-      id: id_user
+    // Random invoice
+    const invoiceData = await Transactions.findAll({
+      where: {
+        invoice: invoice
+      }
+    });
+
+    while (invoiceData) {
+      let r = Math.random().toString(36).substring(7);
+      invoice = invoice + r;
     }
-  })
 
-  //Check balance current user
-  const balanceCurrent = currentUser.dataValues.balance + amount;
+    //Check balance current user
+    const balanceCurrent = currentUser.dataValues.balance + amount;
 
-  //Insert Transaction to database
-  let newTransactions = await Transactions.create({
-    invoice,
-    customer,
-    id_user,
-    amount,
-    id_services,
-    id_vouchers,
-    status,
-    description,
-    payment_method
-  }, {
-    fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
-  });
-  if (newTransactions) {
-    //Update Current Users
-    await Users.update({
-      balance: balanceCurrent
+    //Insert Transaction to database
+    let newTransactions = await Transactions.create({
+      invoice,
+      customer,
+      id_user,
+      amount,
+      id_services,
+      id_vouchers,
+      status,
+      description,
+      payment_method
     }, {
-      where: {
-        id: id_user
-      }
+      fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
     });
+    if (newTransactions) {
+      //Update Current Users
+      await Users.update({
+        balance: balanceCurrent
+      }, {
+        where: {
+          id: id_user
+        }
+      });
 
-    //Update Current Users
-    await Users.update({
-      balance: balanceCurrent
-    }, {
-      where: {
-        id: id_user
-      }
-    });
+      //Update Current Users
+      await Users.update({
+        balance: balanceCurrent
+      }, {
+        where: {
+          id: id_user
+        }
+      });
 
-    return res.json({
-      message: 'Transactions was created succesfully',
-      data: newTransactions
+      return res.json({
+        message: 'Transactions was created succesfully',
+        data: newTransactions
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Something goes wrong',
+      data: {}
     });
   }
-  // } catch (error) {
-  res.status(500).json({
-    message: 'Something goes wrong',
-    data: {}
-  });
-  // }
 };
 
 // Create transaction PPOB
 exports.createTransactionsPPOB = async (req, res) => {
-  const status = 'success';
+  let status = 'pending';
   let currentAmount = '';
+  let invoice = 'inv';
   const {
-    invoice,
     customer,
     id_user,
     id_services,
@@ -243,17 +258,11 @@ exports.createTransactionsPPOB = async (req, res) => {
     description,
     payment_method
   } = req.body;
-  let {amount} = req.body;
+  let {
+    amount
+  } = req.body;
 
-  // try {
-  //check and handle null
-  if (status === "" || status === null) {
-    return res.json({
-      status: "error",
-      message: "Status must be filled!"
-    });
-  }
-
+  try {
   // Get id current user
   const currentUser = await Users.findOne({
     where: {
@@ -271,6 +280,11 @@ exports.createTransactionsPPOB = async (req, res) => {
   if (voucher) {
     currentAmount = amount - voucher.dataValues.amount;
     amount = currentAmount;
+    if (payment_method === "BANK") {
+      currentAmount = 0;
+    } else {
+      status = "success"
+    }
   } else {
     currentAmount = amount;
   }
@@ -279,6 +293,21 @@ exports.createTransactionsPPOB = async (req, res) => {
     return res.json({
       message: "Insufficient balance"
     })
+  }
+
+  let r = Math.random().toString(36).substring(7);
+  invoice = invoice + r;
+
+  // Random invoice
+  const invoiceData = await Transactions.findAll({
+    where: {
+      invoice: invoice
+    }
+  });
+
+  while(invoiceData){
+    let r = Math.random().toString(36).substring(7);
+    invoice = invoice + r;
   }
   //Check balance current user
   const balanceCurrent = currentUser.dataValues.balance - currentAmount;
@@ -321,12 +350,12 @@ exports.createTransactionsPPOB = async (req, res) => {
       data: newTransactions
     });
   }
-  // } catch (error) {
+  } catch (error) {
   res.status(500).json({
     message: 'Something goes wrong',
     data: {}
   });
-  // }
+  }
 };
 
 // Get one transactions
