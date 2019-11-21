@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
 
 const nameDefault = "811989593"
-
 const screenHeight = Dimensions.get('window').height;
 
 const EditNameScreen = (props) => {
@@ -14,13 +13,20 @@ const EditNameScreen = (props) => {
     const [name, setName] = useState (user.resultUser.name) //get from database
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
+    const [disable, setDisable] = useState(true)
 
     
 
     const modalPop = (e)  => {
-        setSave(true)
-        //check according to database
+        if(name === user.resultUser.name) {
+            props.navigation.navigate("Settings")
+        }
+        if (user.resultUser.isFulfilled) {
+            ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
+            props.navigation.navigate("Settings")
+        }
     }
+
 
     const emptyWarning = () => {
         return (
@@ -32,15 +38,21 @@ const EditNameScreen = (props) => {
     }
     
     const handleChangeName = (name) => {
+        setFill(true)
         if (name.length <= 0) {
             empty(true)
+        } else{
+            empty(false)
+            setName(name)
+            setDisable(false)
         }
-        setName(name)
-        setFill(true)
+        
     } 
 
     const emptyName = (e) => {
         setName("")
+        empty(true)
+        setDisable(true)
     }
 
     useEffect( () => {
@@ -53,7 +65,7 @@ const EditNameScreen = (props) => {
                 {/* label need floating lable */}
                 <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
                 <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
-                    <TextInput value={name} style={{color: isFill ? "#fb9b1a" : '#666666' }} onChangeText={name=> handleChangeName(name)} />
+                    <TextInput value={name} style={{color: 'black'}} onChangeText={name=> handleChangeName(name)} />
                     {isEmpty ? null : 
                     <TouchableOpacity onPress={e => emptyName(e)}>
                         <Icon  name="cancel" />
@@ -62,7 +74,7 @@ const EditNameScreen = (props) => {
                     {isEmpty ? emptyWarning() : null}
                 </View>
             </View>
-            <TouchableOpacity style={isEmpty? styles.button: styles.buttonDeactivate} onPress={e => modalPop(e)}>
+            <TouchableOpacity style={disable? styles.buttonDeactivate : styles.button} onPress={e => modalPop(e)} disabled={disable}>
                 <Text style={styles.butTitle}>SIMPAN</Text>
             </TouchableOpacity>
         </View>
@@ -114,6 +126,11 @@ const styles = StyleSheet.create({
     },
     butTitle: {
         color: "#fff"
+    },
+    modalContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 300
     }
 
 })
