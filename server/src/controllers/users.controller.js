@@ -108,7 +108,7 @@ exports.usersLogin = async (req, res) => {
 
   console.log(req.body)
 
-  // try {
+  try {
     const usersLogin = await Users.findOne({
       where: {
         phone
@@ -118,13 +118,13 @@ exports.usersLogin = async (req, res) => {
     // check hashed pin
     const validPin = bcrypt.compareSync(pin, usersLogin.dataValues.pin)
 
-    // //Validation Data
-    // if (pin === "" || pin === null || pin === undefined) {
-    //   return res.json({
-    //     status: "error",
-    //     response: "Pin can't be empty"
-    //   });
-    // }
+    //Validation Data
+    if (pin === "" || pin === null || pin === undefined) {
+      return res.json({
+        status: "error",
+        response: "Pin can't be empty"
+      });
+    }
 
     //Validation Pin Check
     if (!validPin) {
@@ -155,15 +155,15 @@ exports.usersLogin = async (req, res) => {
         token: token
       })
     }
-  // } catch (error) {
-  //   res.status(500).json({
-  //     status:'error',
-  //     message: 'Something goes wrong',
-  //     data: {
-  //       error
-  //     }
-  //   })
-  // }
+  } catch (error) {
+    res.status(500).json({
+      status:'error',
+      message: 'Something goes wrong',
+      data: {
+        error
+      }
+    })
+  }
 };
 
 //OTP REGISTER
@@ -447,6 +447,7 @@ exports.updateProfile = async (req, res) => {
     const {
       id
     } = req.params;
+    
 
     const {
       name,
@@ -487,11 +488,13 @@ exports.updateProfile = async (req, res) => {
         });
       });
     }
+
     res.json({
       status:'success',
       message: 'Users updated succesfully',
       data: users
     });
+
   } catch (error) {
     res.status(500).json({
       status:'error',
