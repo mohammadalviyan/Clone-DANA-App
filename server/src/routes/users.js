@@ -10,7 +10,7 @@ router
   .post("/checkusers", usersController.checkNumber)
   .post("/otp", usersController.otpUsers)
   .post("/otpverify", usersController.otpVerify)
-  .post("/resetpin", usersController.resetPin)
+  .put("/resetpin", usersController.resetPin)
 
   .get("/",usersController.getAllUsers)
   .put("/:id",usersController.updateProfile)

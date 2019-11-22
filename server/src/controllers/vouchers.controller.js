@@ -5,12 +5,13 @@ exports.getVouchers = async (req, res) => {
   try {
     const vouchers = await Vouchers.findAll();
     res.json({
+      status:'success',
       data: vouchers
     });
   } catch (error) {
     res.status(500).json({
       message: 'Something goes wrong',
-      data: {}
+      data: {error}
     });
   }
 };
@@ -60,14 +61,16 @@ exports.createVouchers = async (req, res) => {
 
     if (newVouchers) {
       return res.json({
+        status:'success',
         message: 'Vouchers was created succesfully',
         data: newVouchers
       });
     }
   } catch (error) {
     res.status(500).json({
+      status:'error',
       message: 'Something goes wrong',
-      data: {}
+      data: {error}
     });
   }
 };
@@ -84,10 +87,12 @@ exports.getOneVouchers = async (req, res) => {
   });
   if (vouchers) {
     res.json({
+      status:"success",
       data: vouchers
     });
   } else {
     res.json({
+      status:"error",
       message: "Vouchers id not found"
     });
   }
@@ -105,11 +110,13 @@ exports.deleteVouchers = async (req, res) => {
   });
   if (deleteRowCount) {
     res.json({
+      status:"success",
       message: 'Vouchers deleted succesully',
       count: deleteRowCount
     });
   } else {
     res.json({
+      status:"error",
       message: "Vouchers id not found"
     });
   }
@@ -156,6 +163,7 @@ exports.updateVouchers = async (req, res) => {
   }
 
   return res.json({
+    status:"error",
     message: 'Vouchers updated succesfully',
     data: vouchers
   });
