@@ -190,8 +190,8 @@ exports.otpUsers = async (req, res) => {
 
     //API
     const nexmo = new Nexmo({
-      apiKey: "f477fda7",
-      apiSecret: "O28vfatvtLvhCh7o",
+      apiKey: "08b596e7",
+      apiSecret: "2LfQPXoEA0Nrszdd",
     })
 
     //Find Users With OTP
