@@ -22,7 +22,7 @@ exports.getTransactions = async (req, res) => {
 
 // Transaction parrent
 exports.createTransactions = async (req, res) => {
-  try {
+  // try {
     const {
       id_services
     } = req.body;
@@ -39,13 +39,13 @@ exports.createTransactions = async (req, res) => {
     } else if (service.dataValues.type === "PPOB") {
       this.createTransactionsPPOB(req, res)
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {error}
-    });
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {error}
+  //   });
+  // }
 }
 
 // Create transactions transfer
