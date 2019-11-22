@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { 
   Text,
   View,
@@ -15,6 +15,10 @@ const ReferalScreen = (props) => {
   const [refferal, setRefferal] = useState({refferal: ''})
   const [isLoading, setIsLoading] = useState(false)
 
+  useEffect( () => {
+    setInput({phone:props.navigation.getParam('input')})
+  },[])
+  
   const handleNext = () => {
     setIsLoading(true)
     setTimeout(() => {
@@ -26,7 +30,7 @@ const ReferalScreen = (props) => {
     }, 5000)
   }
 
-  // console.log('LOAD',isLoading);
+  console.log('REFERAL', refferal);
 
     return (
       <>

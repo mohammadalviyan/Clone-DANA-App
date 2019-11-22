@@ -4,7 +4,9 @@ import axios from 'axios';
 export const check = input => {
   return {
     type: 'CHECK',
-    payload: axios.post('https://clonedana.herokuapp.com/api/users/checkusers/', input),
+    payload: axios.post('https://clonedana.herokuapp.com/api/users/checkusers/', {
+      phone:input
+    }),
   };
 };
 
@@ -16,6 +18,18 @@ export const register = (input) => {
     payload: axios.post(
       'https://clonedana.herokuapp.com/api/users/register/',
       input
+    ),
+  };
+};
+
+export const otpreq = (otp, input) => {
+  return {
+    type: 'OTP',
+    payload: axios.post(
+      'https://clonedana.herokuapp.com/api/users/otpverify/', {
+        otp, 
+        phone: input
+      }
     ),
   };
 };

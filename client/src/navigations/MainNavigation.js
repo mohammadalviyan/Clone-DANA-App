@@ -10,6 +10,10 @@ import SetProfileScreen from '../screens/Auth/SetProfileScreen';
 import SetPinScreen from '../screens/Auth/SetPinScreen';
 import TabScreen from '../screens/Main/TabScreen';
 import SaldoScreen from '../screens/Saldo/SaldoScreen';
+import MethodScreen from '../screens/Saldo/MethodScreen';
+import TransaksiScreen from '../screens/TransactionScreen/TransaksiScreen';
+import PulsaScreen from '../screens/TransactionScreen/PulsaScreen';
+import TransferScreen from '../screens/TransactionScreen/TransferScreen';
 
 
 const StackLoading = createStackNavigator(
@@ -40,7 +44,11 @@ const StackAuth = createStackNavigator(
 const StackApp = createStackNavigator(
   {
     TabScreen,
-    SaldoScreen
+    SaldoScreen,
+    MethodScreen,
+    TransaksiScreen,
+    PulsaScreen,
+    TransferScreen
   },
   {
     initialRouteName: 'TabScreen',
@@ -52,7 +60,7 @@ const Router = createSwitchNavigator(
   {
     StackLoading,
     StackAuth,
-    StackApp
+    StackApp,
   },
   {
     initialRouteName: 'StackApp',
