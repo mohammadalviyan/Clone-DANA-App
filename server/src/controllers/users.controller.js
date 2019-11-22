@@ -327,9 +327,7 @@ exports.otpVerify = async (req, res) => {
     res.status(500).json({
       status:'error',
       message: 'Something goes wrong',
-      data: {
-        error
-      }
+      data: {}
     })
   }
 }
@@ -444,9 +442,7 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({
       status:'error',
       message: 'Something goes wrong',
-      data: {
-        error
-      }
+      data: {}
     })
   }
 }
