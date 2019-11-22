@@ -100,14 +100,6 @@ const auth = (state = initialState, action) => {
       const balance = action.payload.data.data.balance;
       let storage = () => {
         try {
-          // AsyncStorage.setItem('xaccess-token', action.payload.data.token);
-          // AsyncStorage.setItem('id', id.toString());
-          // AsyncStorage.setItem('name', action.payload.data.data.name);
-          // AsyncStorage.setItem('image', action.payload.data.data.image);
-          // AsyncStorage.setItem('phone', action.payload.data.data.phone);
-          // AsyncStorage.setItem('balance', balance.toString());
-          // AsyncStorage.setItem('type_user', action.payload.data.data.type_user);
-
           AsyncStorage.setItem(
             'user',
             JSON.stringify(action.payload.data.data),
@@ -139,7 +131,7 @@ const auth = (state = initialState, action) => {
         isRejected: true,
       };
     case 'GET_TOKEN_FULFILLED':
-      console.log(action.payload ? JSON.parse(action.payload) : [], 'REDUCER');
+      // console.log(action.payload ? JSON.parse(action.payload) : [], 'REDUCER');
       return {
         ...state,
         isLoading: false,

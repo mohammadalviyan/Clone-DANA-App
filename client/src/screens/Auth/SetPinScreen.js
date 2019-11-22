@@ -27,7 +27,7 @@ const SetPinScreen = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch();
 
-    console.log('PIN', input.pin.length);
+    // console.log('PIN', input.pin.length);
 
     const handleRegister = () => {
       setIsLoading(true)

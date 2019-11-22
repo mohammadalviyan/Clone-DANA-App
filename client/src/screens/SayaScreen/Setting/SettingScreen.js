@@ -21,16 +21,16 @@ const SettingScreen = (props) => {
 
   const selectImage = async (e) => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
-        console.log('Response = ', response);
+        // console.log('Response = ', response);
       
         if (response.didCancel) {
-          console.log('User cancelled image picker');
+          // console.log('User cancelled image picker');
         } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
+          // console.log('ImagePicker Error: ', response.error);
         } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
+          // console.log('User tapped custom button: ', response.customButton);
         } else {
-          console.log(response.uri, "response image")
+          // console.log(response.uri, "response image")
           const newUser = {
             ...user.resultUser,
             image: {
@@ -40,7 +40,7 @@ const SettingScreen = (props) => {
             }
           }   
           dispatch(updateUser("image", user.resultUser.id, newUser))
-          console.log(user.resultUser, "after updating")
+          // console.log(user.resultUser, "after updating")
           if (user.isFulfilled) {
             ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
           }  
@@ -74,19 +74,16 @@ const SettingScreen = (props) => {
     {
       title: 'Mobile No.',
       rightTitle: user.isFulfilled ? <TextMask value={user.resultUser.phone}
-                    type={'cel-phone'}
-                    options= {{withDDD: true, dddMask: "(+62)"}}
+        type={'cel-phone'}
+        options= {{withDDD: true, dddMask: "(+62)"}}
       /> : null,
       screen: "Phone"
     },
     {
       title: 'Email Address',
       rightTitle: user.isFulfilled ? 
-                //    <TextMask value={user.resultUser.email}
-                //          type={''}
-                //          options= {{obfuscated: true}}/> 
-                    <Text>{user.resultUser.email}</Text>
-                   : "Unset",
+      <Text>{user.resultUser.email}</Text>
+      : "Unset",
       screen: "Email"
     },
     {
@@ -104,12 +101,12 @@ const SettingScreen = (props) => {
 
   const onPressOptions = (e, screen) => {
     if (screen === "Picture") {
-      console.log('picture is pressed')
+      // // console.log('picture is pressed')
       selectImage(e)
     } else if (screen === "Security") {
-      console.log('security is pressed')
+      // console.log('security is pressed')
     } else {
-      console.log(`Navigate to ${screen}`)
+      // console.log(`Navigate to ${screen}`)
       props.navigation.navigate(screen)
     }
   }

@@ -19,16 +19,13 @@ const UserIcon = () => {
   )
 }
 
-
-
-
 const SayaScreen = (props) => {
   const user =  useSelector (state => state.user)
   const dispatch = useDispatch()
   useEffect( () => {
     const getData = async () => {
         await dispatch( getUser())
-        console.log(user.resultUser)
+        // console.log(user.resultUser)
     }
     getData();
   }, [])
@@ -115,14 +112,12 @@ const SayaScreen = (props) => {
 
   const onPressOptions = (e, screen) => {
     if (screen === "Setting" || "Promo") {
-      console.log(`Navigate to ${screen}`)
+      // console.log(`Navigate to ${screen}`)
       props.navigation.navigate(screen)
     } else {
-      console.log(`Command to ${screen}`)
+      // console.log(`Command to ${screen}`)
     }
   }
-
-
 
   const renderContactHeader = () => {
     return (

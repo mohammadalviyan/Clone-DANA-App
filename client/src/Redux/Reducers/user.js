@@ -44,7 +44,7 @@ const initialState = {
           isRejected: true,
         };
       case 'UPDATE_USER_FULFILLED':
-        console.log(state.resultUser, "userresult")
+        // console.log(state.resultUser, "userresult")
         const { field } = action;
         const newUser = action.payload.data.data[0];
         // if (typeof user[field] !== 'undefined' && typeof action.payload.data.data[field] !== 'undefined') {

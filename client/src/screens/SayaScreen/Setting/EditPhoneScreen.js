@@ -19,13 +19,13 @@ const EditPhoneScreen = (props) => {
         //navigate to pin change screen first
 
         //code here
-        console.log("sendOTPCode")
+        // console.log("sendOTPCode")
     }
     const dontHaveOldNumber = (e) => {
         //navigate to pin change screen first
 
         //code here
-        console.log("dontHaveOldNumber")
+        // console.log("dontHaveOldNumber")
     }
 
     // useEffect( () => {
