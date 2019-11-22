@@ -1,6 +1,6 @@
 const initialState = {
-    resultVoucher: [],
-    resultPromo: [],
+    VoucherList: [],
+    PromoList: [],
     isLoading: false,
     isRejected: false,
     isFulfilled: false,
@@ -27,7 +27,7 @@ const initialState = {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultsVoucher: action.payload.data.Users, //check again
+          VoucherList: action.payload.data.data, //check again
         };
   
       //PROMO
