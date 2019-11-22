@@ -9,7 +9,8 @@ import {
 import {ListItem} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
 
-import {getUser} from '../../Redux/Actions/user';
+import {getUser} from '../../Redux/Actions/user'
+
 
 
 

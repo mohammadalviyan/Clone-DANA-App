@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
+import {updateUser} from '../../../Redux/Actions/user';
 
-const nameDefault = "811989593"
+
 const screenHeight = Dimensions.get('window').height;
 
 const EditNameScreen = (props) => {
     const user =  useSelector (state => state.user)
+    const dispatch = useDispatch()
 
     const [save, setSave] = useState(false)
     const [name, setName] = useState (user.resultUser.name) //get from database
@@ -17,11 +19,18 @@ const EditNameScreen = (props) => {
 
     
 
-    const modalPop = (e)  => {
+    const modalPop = async (e)  => {
         if(name === user.resultUser.name) {
             props.navigation.navigate("Settings")
         }
-        if (user.resultUser.isFulfilled) {
+        console.log("userid", user.resultUser.id)
+        const newUser = {
+            ...user.resultUser,
+            name
+        }
+        dispatch(updateUser("name", user.resultUser.id, newUser))
+        console.log("name updated", user.resultUser)
+        if (user.isFulfilled) {
             ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
             props.navigation.navigate("Settings")
         }

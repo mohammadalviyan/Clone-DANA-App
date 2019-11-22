@@ -43,34 +43,20 @@ const initialState = {
           isLoading: false,
           isRejected: true,
         };
-      //////////perlu direvisi ulang
       case 'UPDATE_USER_FULFILLED':
-        const dataAfterPut = (singleData) => {
-          state.resultUser.map (user => {
-            if (user.id === action.payload.data.data.id) {
-              {
-                [...action.payload.data.data, action.payload.data.data.singleData]
-              }
-              return action.payload.data.data;
-            }
-            return user;
-          })
-        };
-        const dataAfterPut = state.resultUser.map(user => {
-          if (user.id === action.payload.data.data.id) {
-            const { field } = action;
-            // if (typeof user[field] !== 'undefined' && typeof action.payload.data.data[field] !== 'undefined') {
-            if (user.hasOwnProperty(field) && action.payload.data.data.hasOwnProperty(field)) {
-              user[field] = action.payload.data.data[field];
-            }
-          }
-          return user;
-        });
+        console.log(state.resultUser, "userresult")
+        const { field } = action;
+        const newUser = action.payload.data.data[0];
+        // if (typeof user[field] !== 'undefined' && typeof action.payload.data.data[field] !== 'undefined') {
+        // const user = state.resultUser.hasOwnProperty(field) && newUser.hasOwnProperty(field) ? {
+        //   ...state.resultUser,
+        //   [field]: newUser[field]
+        // } : state.resultUser;
         return {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultUser: dataAfterPut,
+          resultUser: newUser,
         };
       /////////////////////////////////////////
  
