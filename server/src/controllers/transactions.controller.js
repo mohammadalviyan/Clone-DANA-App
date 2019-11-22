@@ -468,8 +468,16 @@ exports.updateTransactions = async (req, res) => {
     payment_method
   } = req.body;
 
-  const transaction = await News.findAll({
-    attributes: ['id', 'invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method'],
+  const currentUser = await Users.findOne({
+    where: {
+      id: id_user
+    }
+  })
+
+  const balanceCurrent = currentUser.dataValues.balance + amount;
+
+  const transaction = await Transactions.findAll({
+    attributes: ['id', 'invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'date_added', 'date_updated', 'status', 'description', 'payment_method'],
     where: {
       id
     }
@@ -488,6 +496,14 @@ exports.updateTransactions = async (req, res) => {
         description,
         payment_method
       });
+    });
+
+    await Users.update({
+      balance: balanceCurrent
+    }, {
+      where: {
+        id: id_user
+      }
     });
   }
 
