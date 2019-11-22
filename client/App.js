@@ -16,9 +16,9 @@ const App = () => {
     <>
       <Provider store={store}>
         <StatusBar backgroundColor="#118eea" barStyle="light-content" />
-        {/* <MainNavigation /> */}
+        <MainNavigation />
         {/* <PromoScreen/> */}
-        <PromoDetailScreen/>
+        {/* <PromoDetailScreen/> */}
 
       </Provider>
       
