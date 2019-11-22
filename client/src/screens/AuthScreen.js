@@ -16,6 +16,9 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {check, otpreq} from '../Redux/Actions/auth';
+import setLoading from '../Redux/Actions/loading';
+import user from '../Redux/Actions/user';
+
 
 const AuthScreen = (props) => {
   const [bottomModal, setBottomModal] = useState(false);
@@ -28,22 +31,22 @@ const AuthScreen = (props) => {
     setIsLoading(true)
     dispatch(check(input))
       .then(response => {
-      if (response.value.data.message === 'new'){
-        setIsLoading(false)
-        setTimeout(() => {
-          setUser(response.value.data.message)
-          setBottomModal(true)
-          // props.navigation.navigate('ReferalScreen',{input});
-        }, 500);
-      } else {
-        setIsLoading(false)
-        setTimeout(() => {
-          setUser(response.value.data.message)
-          setBottomModal(true)
-        }, 500);
-      }
-    })
-    .catch(error => alert(error))
+        if (response.value.data.message === 'new') {
+          setIsLoading(false);
+          setTimeout(() => {
+            setUser(response.value.data.message);
+            setBottomModal(true);
+            // props.navigation.navigate('ReferalScreen',{input});
+          }, 500);
+        } else {
+          setIsLoading(false);
+          setTimeout(() => {
+            setUser(response.value.data.message);
+            setBottomModal(true);
+          }, 500);
+        }
+      })
+      .catch(error => alert(error));
   }
 
   // console.log('code', input);
@@ -74,7 +77,6 @@ const AuthScreen = (props) => {
           {user === 'old' ? (
             <View style={{alignItems: 'center'}}>
               <TextInput
-                style={{}}
                 maxLength={16}
                 placeholder="Phone Number"
                 placeholderTextColor="#84c8f9"
@@ -269,6 +271,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     color: '#FFF',
     fontWeight: '100',
+    paddingHorizontal: 15,
   },
   iconCon: {
     width: 40,
@@ -283,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
     borderColor: '#FFF',
     borderRadius: 8,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   underlineStyleHighLighted: {
     borderColor: '#FFF',

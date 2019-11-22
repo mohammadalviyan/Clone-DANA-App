@@ -9,15 +9,15 @@ import {
 import MainNavigation from './src/navigations/MainNavigation'
 
 import {Provider} from 'react-redux';
-import {store, persistor} from './src/Redux/Store';
-import {PersistGate} from 'redux-persist/integration/react';
+import store from './src/Redux/Store';
+
 
 const App = () => {
   return (
     <>
       <Provider store={store}>
-          <StatusBar backgroundColor="#118eea" barStyle="light-content" />
-          <MainNavigation />
+        <StatusBar backgroundColor="#118eea" barStyle="light-content" />
+        <MainNavigation />
       </Provider>
       
       {/* <StatusBar barStyle="dark-content" backgroundColor="#0E8EE7"/>

@@ -43,9 +43,12 @@ const TransaksiScreen = (props) => {
             {/* COMPONENT CARD */}
                 <View style={{flexDirection:'row', marginBottom:15}}>
                     <View style={{width: '44%', paddingLeft: 15, justifyContent:'center', marginLeft:15, height: 80 , borderRadius: 4, borderWidth: 1, borderColor: '#eaeaea'}}>
-                        <Text style={{fontWeight:'bold', fontSize:27, color:'#393939'}}>5rb</Text>
-                        <Text style={{color:'#118eea'}}>Harga Rp. 6.400</Text>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('PulsaScreen')}>
+                            <Text style={{fontWeight:'bold', fontSize:27, color:'#393939'}}>5rb</Text>
+                            <Text style={{color:'#118eea'}}>Harga Rp. 6.400</Text>
+                        </TouchableOpacity>
                     </View>
+
                     <View style={{width: '44%', paddingLeft: 15, justifyContent:'center', marginLeft: 20, borderRadius: 4, borderWidth: 1, borderColor: '#eaeaea'}}>
                         <Text style={{fontWeight:'bold', fontSize:27, color:'#393939'}}>10rb</Text>
                         <Text style={{color:'#118eea'}}>Harga Rp. 11.500</Text>
