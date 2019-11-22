@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../../../Redux/Actions/user';
@@ -16,8 +16,7 @@ const EditNameScreen = (props) => {
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
     const [disable, setDisable] = useState(true)
-
-    
+   
 
     const modalPop = async (e)  => {
         if(name === user.resultUser.name) {

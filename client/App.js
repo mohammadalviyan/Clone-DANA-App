@@ -8,7 +8,7 @@ import {
 import MainNavigation from './src/navigations/MainNavigation';
 import PromoDetailScreen from './src/screens/PromoDetailScreen';
 import PromoScreen from './src/screens/PromoScreen';
-import EditNameScreen from './src/screens/SayaScreen/Setting/EditNameScreen'
+import EditEmailScreen from './src/screens/SayaScreen/Setting/EditEmailScreen'
 import {Provider} from 'react-redux';
 import store from './src/Redux/Store';
 
@@ -17,7 +17,7 @@ const App = () => {
     <>
       <Provider store={store}>
         <StatusBar backgroundColor="#118eea" barStyle="light-content" />
-        <EditNameScreen/>
+        <EditEmailScreen/>
         {/* <MainNavigation /> */}
         {/* <PromoScreen/> */}
         {/* <PromoDetailScreen/> */}
