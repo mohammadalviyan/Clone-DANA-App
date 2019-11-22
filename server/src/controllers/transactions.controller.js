@@ -62,7 +62,7 @@ exports.createTransactionsTransfer = async (req, res) => {
     description
   } = req.body;
 
-  try {
+  // try {
     //check and handle null
     if (customer === "" || customer === null) {
       return res.json({
@@ -170,13 +170,13 @@ exports.createTransactionsTransfer = async (req, res) => {
         });
       }
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {error}
-    });
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {error}
+  //   });
+  // }
 };
 
 // Create transaction TopUp
@@ -283,7 +283,7 @@ exports.createTransactionsPPOB = async (req, res) => {
   } = req.body;
 
 
-  try {
+  // try {
   // Get id current user
   const currentUser = await Users.findOne({
     where: {
@@ -371,12 +371,12 @@ exports.createTransactionsPPOB = async (req, res) => {
       data: newTransactions
     });
   }
-  } catch (error) {
-  res.status(500).json({
-    message: 'Something goes wrong',
-    data: {}
-  });
-  }
+  // } catch (error) {
+  // res.status(500).json({
+  //   message: 'Something goes wrong',
+  //   data: {}
+  // });
+  // }
 };
 
 // Get one transactions

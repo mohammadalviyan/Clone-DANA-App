@@ -509,4 +509,25 @@ exports.getUsersbyId=async(req,res)=>{
   const{
     id
   }=req.params
+
+  const usersByid = await Users.findOne({
+    where: {
+      id
+    }
+  });
+
+  if(usersByid){
+    res.json({
+      status:'success',
+      message:'Success Get data Users',
+      data: usersByid
+    });
+  }else{
+    res.json({
+      status:'error',
+      message:'Failed Get data Users',
+    });
+  }
+  
+
 }

@@ -13,6 +13,7 @@ router
   .put("/resetpin", usersController.resetPin)
 
   .get("/",usersController.getAllUsers)
+  .get("/:id",usersController.getUsersbyId)
   .put("/:id",usersController.updateProfile)
 
 module.exports = router;
