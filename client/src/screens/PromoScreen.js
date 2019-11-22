@@ -1,8 +1,19 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import {useSelector, useDispatch} from 'react-redux';
+import {getVoucher} from '../Redux/Actions/coupon'
 
 
+/**
+ * id: 6,
+ * name: Hello,
+ * amount: 10000,
+ * created_at: 
+ * expired_at:
+ * image:
+ * 
+ */
 const promo = [
     {
         "image": "https://codecanyon.img.customer.envatousercontent.com/files/218715001/banner-inline.png?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=300&s=6ed404df116ef3f3e65c3d7b59e67015",
@@ -32,8 +43,17 @@ const promo = [
 ]
 
 const PromoScreen = (props) => {
+    const coupon =  useSelector (state => state.coupon)
+    const dispatch = useDispatch()
+
+    useEffect(()=> {
+        dispatch(getVoucher())
+        console.log(coupon.VoucherList)
+    }, [])
+
+
     const renderRow = ({item}) => {
-        const {image, title, dateExpire} = item
+        const {image, name, expired_at} = item
         return(
 
                 <View
@@ -43,12 +63,12 @@ const PromoScreen = (props) => {
                     style={styles.imgStyle}
                     source={{uri: image}}
                   />
-                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.title}>{name}</Text>
                     <View style={styles.infoContainer}>
                         <View style={styles.iconContainer}>
                             <Icon name="clock" color='#f18d0c' size={15} />
                             <Text style={styles.info}>
-                                Valid until {dateExpire}
+                                Valid until {expired_at}
                             </Text>
                         </View>
                         <TouchableOpacity style={styles.touchDetail}>
@@ -65,7 +85,7 @@ const PromoScreen = (props) => {
             <SafeAreaView>
                 <FlatList
                     style={{padding:5}}
-                    data={promo} 
+                    data={coupon.VoucherList} 
                     renderItem={renderRow}
                     keyExtractor={(item, index)=>index.toString()}/>
             </SafeAreaView>
