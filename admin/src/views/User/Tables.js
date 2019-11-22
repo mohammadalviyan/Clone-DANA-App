@@ -1,7 +1,33 @@
 import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 
+import axios from 'axios';
+
 class Tables extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      usersData: []
+    };
+  }
+
+  getUsers () {
+    axios.get('https://clonedana.herokuapp.com/api/users')
+        .then(res => {
+          this.setState({
+            usersData: res.data.data
+          });
+        })
+        .catch(err => {
+
+        })
+  }
+
+  componentDidMount(){
+    this.getUsers()
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -15,53 +41,27 @@ class Tables extends Component {
                 <Table responsive>
                   <thead>
                   <tr>
-                    <th>Username</th>
-                    <th>Date registered</th>
-                    <th>Role</th>
+                    <td>No.</td>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>Type</th>
                     <th>Status</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Samppa Nori</td>
-                    <td>2012/01/01</td>
-                    <td>Member</td>
+                  {this.state.usersData.map((data, idx) => (
+                  <tr key={idx}>
+                    <td>{idx+1}</td>
+                    <td>{data.name}</td>
+                    <td>{data.email}</td>
+                    <td>Rp.{data.balance}</td>
+                    <td>{data.type_user}</td>
                     <td>
-                      <Badge color="success">Active</Badge>
+                      <Badge color="success">Premium</Badge>
                     </td>
                   </tr>
-                  <tr>
-                    <td>Estavan Lykos</td>
-                    <td>2012/02/01</td>
-                    <td>Staff</td>
-                    <td>
-                      <Badge color="danger">Banned</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Chetan Mohamed</td>
-                    <td>2012/02/01</td>
-                    <td>Admin</td>
-                    <td>
-                      <Badge color="secondary">Inactive</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Derick Maximinus</td>
-                    <td>2012/03/01</td>
-                    <td>Member</td>
-                    <td>
-                      <Badge color="warning">Pending</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Friderik Dávid</td>
-                    <td>2012/01/21</td>
-                    <td>Staff</td>
-                    <td>
-                      <Badge color="success">Active</Badge>
-                    </td>
-                  </tr>
+                  ))}
                   </tbody>
                 </Table>
                 <Pagination>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Badge,
   Button,
   Card,
   CardBody,
@@ -9,24 +8,98 @@ import {
   Col,
   Form,
   FormGroup,
-  FormText,
   Input,
   Label,
   Row,
   Pagination, PaginationItem, PaginationLink, Table
 } from 'reactstrap';
 
+import axios from 'axios';
+
 class Forms extends Component {
   constructor(props) {
     super(props);
 
+    this.postVouchers = this.postVouchers.bind(this);
+    this.removeVouchers = this.removeVouchers.bind(this);
+    this.inputChange = this.inputChange.bind(this);
+    this.imageChange = this.imageChange.bind(this);
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
       collapse: true,
       fadeIn: true,
-      timeout: 300
+      timeout: 300,
+      vouchersData: [],
+      vouchersDataPost: {
+        name: '',
+        amount: '',
+        expired_at: '',
+        image: ''
+      }
     };
+  }
+
+  getVouchers () {
+    axios.get('https://clonedana.herokuapp.com/api/vouchers')
+        .then(res => {
+          this.setState({
+            vouchersData: res.data.data
+          });
+        })
+        .catch(err => {
+
+        })
+  }
+
+  postVouchers(){
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    };
+
+    const formData = new FormData();
+    formData.append('name', this.state.vouchersDataPost.name);
+    formData.append('amount', this.state.vouchersDataPost.amount);
+    formData.append('expired_at', this.state.vouchersDataPost.expired_at);
+    formData.append('image', this.state.vouchersDataPost.image);
+
+    axios.post('https://clonedana.herokuapp.com/api/vouchers', formData, config)
+        .then(() =>
+        {
+          this.getVouchers()
+        })
+  }
+
+  removeVouchers(e){
+    axios.delete(`https://clonedana.herokuapp.com/api/vouchers/${e.currentTarget.value}`)
+      .then(() =>
+        {
+          this.getVouchers()
+        })
+  }
+
+  inputChange(e) {
+    let newVouchers = {...this.state.vouchersDataPost}
+    newVouchers[e.currentTarget.name] = e.currentTarget.value;
+    console.log(newVouchers)
+    this.setState({
+      vouchersDataPost: newVouchers
+    });
+  }
+
+  imageChange(e) {
+    let image = {...this.state.vouchersDataPost}
+    image[e.currentTarget.name] = e.target.files[0]
+    console.log(image)
+    this.setState({
+      vouchersDataPost: image
+    });
+  }
+
+  componentDidMount() {
+    this.getVouchers()
   }
 
   toggle() {
@@ -47,56 +120,43 @@ class Forms extends Component {
                 <strong>Voucher Forms</strong>
               </CardHeader>
               <CardBody>
-                <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                <Form encType="multipart/form-data" className="form-horizontal">
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="text-input">Text Input</Label>
+                      <Label htmlFor="text-input">Name Voucher</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Text" />
-                      <FormText color="muted">This is a help text</FormText>
+                      <Input type="text" id="name" name="name" placeholder="Name" onChange={this.inputChange} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="email-input">Email Input</Label>
+                      <Label htmlFor="text-input">Amount</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="email" id="email-input" name="email-input" placeholder="Enter Email" autoComplete="email"/>
-                      <FormText className="help-block">Please enter your email</FormText>
+                      <Input type="number" id="amount" name="amount" placeholder="Amount" onChange={this.inputChange}/>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="date-input">Date Input <Badge>NEW</Badge></Label>
+                      <Label htmlFor="date-input">Expired Date</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="date" id="date-input" name="date-input" placeholder="date" />
+                      <Input type="date" id="expired_at" name="expired_at" placeholder="date" onChange={this.inputChange}/>
                     </Col>
                   </FormGroup>
-
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="textarea-input">Textarea</Label>
+                      <Label htmlFor="file-input">Image input</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="textarea" name="textarea-input" id="textarea-input" rows="9"
-                             placeholder="Content..." />
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="file-input">File input</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="file" id="file-input" name="file-input" />
+                      <Input type="file" id="image" name="image" onChange={this.imageChange}/>
                     </Col>
                   </FormGroup>
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                <Button type="submit" size="sm" color="primary" onClick={this.postVouchers}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                 <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
               </CardFooter>
             </Card>
@@ -110,53 +170,26 @@ class Forms extends Component {
                 <Table responsive>
                   <thead>
                   <tr>
-                    <th>Username</th>
-                    <th>Date registered</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <td>No.</td>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Date Expired</th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Samppa Nori</td>
-                    <td>2012/01/01</td>
-                    <td>Member</td>
+                  {this.state.vouchersData.map((data, idx) => (
+                  <tr key={idx}>
+                    <td>{idx+1}</td>
+                    <td>{data.name}</td>
+                    <td>Rp.{data.amount}</td>
+                    <td>{data.expired_at}</td>
                     <td>
-                      <Badge color="success">Active</Badge>
+                    <Button size="sm" color="danger" value={data.id} onClick={this.removeVouchers}>
+                        <i className="fa fa-trash"></i> delete</Button>
                     </td>
                   </tr>
-                  <tr>
-                    <td>Estavan Lykos</td>
-                    <td>2012/02/01</td>
-                    <td>Staff</td>
-                    <td>
-                      <Badge color="danger">Banned</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Chetan Mohamed</td>
-                    <td>2012/02/01</td>
-                    <td>Admin</td>
-                    <td>
-                      <Badge color="secondary">Inactive</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Derick Maximinus</td>
-                    <td>2012/03/01</td>
-                    <td>Member</td>
-                    <td>
-                      <Badge color="warning">Pending</Badge>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Friderik Dávid</td>
-                    <td>2012/01/21</td>
-                    <td>Staff</td>
-                    <td>
-                      <Badge color="success">Active</Badge>
-                    </td>
-                  </tr>
+                  ))}
                   </tbody>
                 </Table>
                 <Pagination>
