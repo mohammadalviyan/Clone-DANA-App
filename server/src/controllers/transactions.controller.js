@@ -270,7 +270,7 @@ exports.createTransactionsPPOB = async (req, res) => {
   let status = 'pending';
   let currentAmount = '';
   let invoice = 'inv';
-  
+
   const {
     id_user,
     id_services,
@@ -282,7 +282,7 @@ exports.createTransactionsPPOB = async (req, res) => {
     amount
   } = req.body;
 
-  
+
   try {
   // Get id current user
   const currentUser = await Users.findOne({
@@ -431,7 +431,7 @@ exports.getAllHistory = async (req, res) => {
   Transactions.belongsTo(Services,{foreignKey: 'id_services'})
   Services.hasMany(Transactions,{foreignKey: 'id'})
 
- const historyTransactions= await Transactions.findAll({  
+ const historyTransactions= await Transactions.findAll({
    include:[{
     model:Services,
     require:true
@@ -452,4 +452,47 @@ exports.getAllHistory = async (req, res) => {
     })
   }
 
+}
+
+exports.updateTransactions = async (req, res) => {
+  const { id } = req.params;
+  const {
+    invoice,
+    customer,
+    id_user,
+    amount,
+    id_services,
+    id_vouchers,
+    status,
+    description,
+    payment_method
+  } = req.body;
+
+  const transaction = await News.findAll({
+    attributes: ['id', 'invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method'],
+    where: {
+      id
+    }
+  });
+
+  if (transaction.length > 0) {
+    transaction.forEach(async trans => {
+      await trans.update({
+        invoice,
+        customer,
+        id_user,
+        amount,
+        id_services,
+        id_vouchers,
+        status,
+        description,
+        payment_method
+      });
+    });
+  }
+
+  return res.json({
+    message: 'Transactions updated succesfully',
+    data: transaction
+  });
 }
