@@ -21,7 +21,7 @@ db.authenticate()
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
 const portServer = 5000;
 const port = process.env.PORT || portServer;
