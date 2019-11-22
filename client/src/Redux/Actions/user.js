@@ -9,9 +9,10 @@ export const getUser = () => {
 };
 
 
-export const updateUser = (id, data) => {
+export const updateUser = (id, data, field) => {
   return {
     type: 'UPDATE_USER',
+    field,
     payload: axios.put(`https://clonedana.herokuapp.com/api/users/${id}`, data),
   };
 };
