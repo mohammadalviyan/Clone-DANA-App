@@ -7,13 +7,15 @@ const {height, width} = Dimensions.get("window")
 
 const styles = StyleSheet.create({
     mainContainer: {
-        alignContent : "space-between",
-        backgroundColor: "#d6d6d6", 
+        // alignContent : "space-between",
+        backgroundColor: "#F5F5F5", 
+        flex: 1
     },
     firstContainer: {
-        backgroundColor: "red",
+        backgroundColor: "white",
         marginBottom: 8
     },
+
     subFirstContainer :{
         padding: 10
     },
@@ -22,38 +24,41 @@ const styles = StyleSheet.create({
         backgroundColor: "black"
     },
     title: {
-        backgroundColor: "magenta",
+        // backgroundColor: "magenta",
         fontSize: 20,
         fontWeight: "bold",
         marginVertical: 13
     },
     subsubFirstContainer : {
         marginTop: 5,
-        backgroundColor: "lightblue",
+        // backgroundColor: "lightblue",
         flexDirection : "row",
         justifyContent : "space-between"
     },  
     infoContainer : {
         flexDirection: "row",
         padding: 6,
-        height: 60,
+        height: 50,
         width : 105,
         alignItems: "center",
-        backgroundColor: "cyan",
-        borderRadius: 10
+        backgroundColor: "#F5F5F5",
+        borderRadius: 4
     },
     textContainer : {
         flexDirection: "column",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
+        height: 30
     },  
     textInfo: {
-        fontSize: 10
+        fontSize: 10,
+        color: "#a0a0a0"
     },
     textValue: {
-        fontSize: 12
+        fontSize: 12,
+        
     },
     secondContainer: {
-        backgroundColor: "green",
+        backgroundColor: "white",
         marginBottom: 8, 
         paddingLeft: 10,
         justifyContent: "center",
@@ -69,14 +74,43 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     thirdContainer: {
-        backgroundColor: "blue"
+        backgroundColor: "white"
     },
     subThirdContainer: {
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        borderBottomWidth: 1,
+        borderColor: "#F5F5F5",
+        // backgroundColor :"pink",
+        height: 100,
+        justifyContent: "space-between"
+    },
+    iconAvatar : {
+        alignItems : "center",
+        width : 80
+    },
+    step : {
+        alignItems : "center",
+        width : 20
     },
     lihatButton: {
-        backgroundColor: "purple"
+        backgroundColor: "#0e8ee7",
+        alignItems : "center",
+        justifyContent: "center",
+        paddingVertical: 10,
+        paddingHorizontal: 60,
+        borderRadius: 4
+    },
+    bottom :{
+        height : 60,
+        marginBottom: 2,
+        alignItems : "center",
+        justifyContent: "center",
+        backgroundColor: "white"
+    },
+    bottomTitle : {
+        fontSize : 18,
+        color : "#FFF"
     }
 
 })
@@ -107,7 +141,7 @@ const procedure = [
     },
     {
         "icon" : "wallet",
-        "step" : 3,
+        "step" : 4,
         "order" : "Cashback akan didapatkan setelah transaksi berhasil"
     },
 ]
@@ -116,14 +150,14 @@ const PromoDetailScreen = () => {
     const renderProcedure = ({item}) => {
         return (
         <View style={styles.subThirdContainer}>
-            <View>
+            <View style={styles.iconAvatar}>
                 <Icon name={item.icon}/>
             </View>
-            <View>
-                <Text>{item.step}</Text>
+            <View style={styles.step}>
+                <Text style={{fontSize: 13}}>{item.step}</Text>
             </View>
-            <View>
-                <Text>{item.order}</Text>
+            <View style={{width: 240}}>
+                <Text style={{fontSize: 13}}>{item.order}</Text>
             </View>
         </View>
         )
@@ -133,8 +167,8 @@ const PromoDetailScreen = () => {
         <View style={styles.mainContainer}>
             <View ><Text>{"< DANA"}</Text></View>
             <ScrollView>
-                <View style={styles.firstContainer}>
                     <Image source={{uri: `https://clonedana.herokuapp.com/${voucher.image}`}} style={styles.imageStyle} />
+                <View style={styles.firstContainer}>
                     <View style={styles.subFirstContainer}>
                         <Text style={styles.title}>{voucher.name}</Text>
                         <View style={styles.subsubFirstContainer}>
@@ -149,14 +183,14 @@ const PromoDetailScreen = () => {
                                 <Icon name="cash" size={16} color="#fb9b1a"/>
                                 <View style={styles.textContainer}>
                                     <Text style={styles.textInfo}>Min. transaksi</Text>
-                                    <Text style={styles.textInfo}>- </Text>
+                                    <Text style={styles.textValue}>- </Text>
                                 </View>
                             </View>
                             <View style={styles.infoContainer}>
                                 <Icon name="clock" size={16} color="#fb9b1a"/>
                                 <View style={styles.textContainer}>
                                     <Text style={styles.textInfo}>Periode promo</Text>
-                                    <Text style={styles.textInfo}>{voucher.created_at} - {voucher.expired_at}</Text>
+                                    <Text style={styles.textValue}>{voucher.created_at} - {voucher.expired_at}</Text>
                                 </View>
                             </View>
                            
@@ -167,23 +201,22 @@ const PromoDetailScreen = () => {
                     <View style={styles.subSecondContainer}>
                         <Icon name="wallet" size={24} color= "#fb9b1a"/>
                         <View style= {styles.subsubSecondContainer}>
-                            <Text style={{fontSize: 12, color: "#d6d6d6"}}>Metode Pembayaran</Text>
+                            <Text style={{fontSize: 12, color: "#bfbfbf"}}>Metode Pembayaran</Text>
                             <Text>Saldo DANAIN, Kartu Debit/Kartu Kredit</Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.thirdContainer}>
                     <FlatList
-                        style={{padding:10, height: height * 0.8}}
+                        style={{padding:10}}
                         data={procedure} 
                         renderItem={renderProcedure}
                         keyExtractor={(item, index)=>index.toString()}/>
                 </View>
-                <Text>PROMO DETAIL SCREEN</Text>
             </ScrollView>
-            <View>
+            <View style={styles.bottom}>
                 <TouchableOpacity style={styles.lihatButton}>
-                    <Text>LIHAT DATA MERCHANT</Text>
+                    <Text style={styles.bottomTitle}>LIHAT DATA MERCHANT</Text>
                 </TouchableOpacity>
             </View>
         </View>
