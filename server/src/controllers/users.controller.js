@@ -52,8 +52,16 @@ exports.createUsers = async (req, res) => {
         fields: ['name', 'image', 'refferal', 'pin', 'phone', 'balance', 'email', 'type_user']
       });
 
+      
       //Success Insert Users
       if (newUsers) {
+        //GET DATA
+        const userInserted = await Users.findOne({
+          where: {
+            phone
+          }
+        });
+
         // Create and assign token
         const token = jwt.sign({
           pin:pin,
@@ -65,7 +73,7 @@ exports.createUsers = async (req, res) => {
         return res.json({
           status:'success',
           message: 'Users was created successfully',
-          data: newUsers,
+          data: userInserted,
           token:token
         });
       } else {
@@ -100,7 +108,7 @@ exports.usersLogin = async (req, res) => {
 
   console.log(req.body)
 
-  try {
+  // try {
     const usersLogin = await Users.findOne({
       where: {
         phone
@@ -110,6 +118,14 @@ exports.usersLogin = async (req, res) => {
     // check hashed pin
     const validPin = bcrypt.compareSync(pin, usersLogin.dataValues.pin)
 
+    //Validation Data
+    if (pin === "" || pin === null || pin === undefined) {
+      return res.json({
+        status: "error",
+        response: "Pin can't be empty"
+      });
+    }
+
     //Validation Pin Check
     if (!validPin) {
       return res.json({
@@ -117,6 +133,13 @@ exports.usersLogin = async (req, res) => {
         message: 'Wrong PIN!'
       })
     } else {
+      //GET DATA
+      const userInserted = await Users.findOne({
+        where: {
+          phone
+        }
+      });
+
       // Create and assign token
       const token = jwt.sign({
         pin: pin,
@@ -128,19 +151,19 @@ exports.usersLogin = async (req, res) => {
       res.json({
         status:'success',
         message: 'Succes Login',
-        data: usersLogin,
+        data: userInserted,
         token: token
       })
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {
-        error
-      }
-    })
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {
+  //       error
+  //     }
+  //   })
+  // }
 };
 
 //OTP REGISTER
@@ -254,6 +277,15 @@ exports.checkNumber = async (req, res) => {
   const phone = req.body.phone
 
   try {
+
+    //Validation Number
+    if (phone === "" || phone === null || phone === undefined) {
+      return res.json({
+        status: "error",
+        response: "Phone Number can't be empty"
+      });
+    }
+
     const usersStatus = await Users.findOne({
       where: {
         phone
@@ -286,6 +318,14 @@ exports.otpVerify = async (req, res) => {
   try {
     phone = req.body.phone
     otp = req.body.otp
+
+    //Validation Data
+    if (otp === "" || otp === null || otp === undefined) {
+      return res.json({
+        status: "error",
+        response: "Pin can't be empty"
+      });
+    }
 
     //Find Users With Number Register
     const findOtp = await modelOtp.findOne({
@@ -352,9 +392,23 @@ exports.getAllUsers = async (req, res) => {
 //RESET PIN
 exports.resetPin = async (req, res) => {
   try {
+
     const pin = req.body.pin
     const phone = req.body.phone
     const newPinEncrypt = bcrypt.hashSync(pin, salt)
+
+    //Validation Data
+    if (phone === "" || phone === null || phone === undefined) {
+      return res.json({
+        status: "error",
+        response: "Phone Number can't be empty"
+      });
+    }else if (pin === "" || pin === null || pin === undefined) {
+      return res.json({
+        status: "error",
+        response: "Pin Number can't be empty"
+      });
+    }
 
     //Upadate Pin
     const updatePin = await Users.update({
@@ -445,4 +499,11 @@ exports.updateProfile = async (req, res) => {
       data: {}
     })
   }
+}
+
+//GET BY ID
+exports.getUsersbyId=async(req,res)=>{
+  const{
+    id
+  }=req.params
 }
