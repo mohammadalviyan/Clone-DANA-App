@@ -33,7 +33,11 @@ const SettingScreen = (props) => {
           console.log(response.uri, "response image")
           const newUser = {
             ...user.resultUser,
-            image: response.path
+            image: {
+              uri: response.uri,
+              name: response.fileName,
+              type: response.type
+            }
           }   
           dispatch(updateUser("image", user.resultUser.id, newUser))
           console.log(user.resultUser, "after updating")

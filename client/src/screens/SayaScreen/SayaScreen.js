@@ -3,15 +3,21 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
+  Text, ImageBackground,
   View, TouchableOpacity, Dimensions
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
-
+import Icon from 'react-native-vector-icons/FontAwesome'
 import {getUser} from '../../Redux/Actions/user'
 
-
+const UserIcon = () => {
+  return (
+    <View style={styles.customIcon}>
+      <Icon name="user" size={35} color="#F5F5F5"/>
+    </View>
+  )
+}
 
 
 
@@ -29,33 +35,33 @@ const SayaScreen = (props) => {
 
   let list = [
     {
-      title: 'Balance',
+      title: 'Saldo',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: `Rp ${user.resultUser.balance}`,
       screen: 'Balance'
     },
     {
-      title: 'Saved Card',
+      title: 'Kartu Tersimpan',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: '0 Cards',
       screen: 'Cards'
     },
     {
-      title: 'My Bills',
+      title: 'Tagihanku',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
       screen: 'Bills'
     },]
     let list2 = [
     {
-      title: 'Apply DANAIN Bisnis Now!',
+      title: 'Daftar DANAIN Bisnis Sekarang!',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers',
+      subtitle: 'Punya bisnis? Pakai DANAIN Bisnis untuk menjangkau lebih banyak pelanggan',
       screen: 'Apply'
     },
     {
-      title: 'Referral Code',
+      title: 'Kode Undangan',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
       subtitle: null,
@@ -80,28 +86,28 @@ const SayaScreen = (props) => {
       screen: 'Faq'
     },
     {
-      title: 'Terms & Condition',
+      title: 'Syarat & Kondisi',
       rightTitle: null,
       screen: 'Terms',
     },
     {
-      title: 'Privacy Policy',
+      title: 'Kebijakan Privasi',
       rightTitle: null,
       screen: 'Privacy'
     },]
     let list4 = [
     {
-      title: 'Settings',
+      title: 'Pengaturan',
       rightTitle: null,
       screen: 'Setting'
     },
     {
-      title: 'App Version',
+      title: 'Versi App',
       rightTitle: '1.5.1',
-      screen: null
+      screen: 'Version'
     },
     {
-      title: 'Logout',
+      title: 'Keluar',
       rightTitle: null,
       screen: 'Logout'
     },
@@ -116,18 +122,28 @@ const SayaScreen = (props) => {
     }
   }
 
+
+
   const renderContactHeader = () => {
-    // const { avatar, name, phoneNum } = props
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
-            <View style={styles.avatarContainer}>          
-                <Image
-            style={styles.userImage}
-            source={{
-              uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`, 
-            }}
-          /></View>
+            <View style={styles.avatarContainer}>
+              <ImageBackground 
+              source={{uri: "http://pngimg.com/uploads/qr_code/qr_code_PNG2.png"}} 
+              imageStyle={styles.qrcodeBackground} 
+              style={{width: '100%', height: '100%'}}>
+                  {!user.isFulfilled ? <UserIcon /> :
+                  user.resultUser.image === "/images/avatar.png" ?
+                  <UserIcon /> : 
+                  <Image
+                    style={styles.userImage}
+                    source={{
+                      uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`, 
+                    }}
+                  />}
+              </ImageBackground>          
+          </View>
 
           <View style={styles.userNameRow}>
             <Text style={styles.userNameText}>{user.resultUser.name}</Text>
@@ -144,7 +160,7 @@ const SayaScreen = (props) => {
     return (
       <View>
       <View style={styles.mainHeader}>
-        <Text style={styles.textHeader}>My Account</Text>
+        <Text style={styles.textHeader}>Akun Saya</Text>
       </View>
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
@@ -153,12 +169,10 @@ const SayaScreen = (props) => {
           </View>
           <View style ={styles.verifyContainer}>
             <TouchableOpacity style={styles.buttonContainer}>
-              <Text style={{color:'#FFF'}}>VERIFY YOUR ACCOUNT</Text>
+              <Text style={{color:'#FFF', marginRight: 40, fontSize: 15}}>VERIFIKASI AKUN KAMU</Text>
+              <Icon name="shield" size={25} color="white"/>
             </TouchableOpacity>
           </View>
-        </View>
-        <View style={{position:"absolute", right: "10%", top: "15%"}}>
-            <Text style={{color:'#FFF'}}>X</Text>
         </View>
          {/* ---------- */}
         <View >
@@ -168,7 +182,7 @@ const SayaScreen = (props) => {
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
-              rightTitleStyle={{ fontSize: 15 }}
+              rightTitleStyle={{ fontSize: 15, color:  "#78b9e3"}}
               chevron={{size:24}}
               onPress={(e) => onPressOptions(e, l.screen)}
               containerStyle={styles.listItemContainer}
@@ -284,7 +298,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
     backgroundColor: '#0E8EE7',
-    marginBottom: 10
+    marginBottom: 10,
+    paddingTop: 10
   },
   avatarContainer:{
     marginBottom: 5,
@@ -294,6 +309,21 @@ const styles = StyleSheet.create({
     width: 120,
     backgroundColor:'#FFF', 
     alignItems: 'center',
+    justifyContent: "center"
+  },
+  customIcon :{
+    borderRadius: 50,
+    height: 40,
+    width: 40,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 40,
+
+  },
+  qrcodeBackground : {
+    opacity: 0.8,
+    alignItems: "center"
   },
   scroll: {
     backgroundColor: '#F5F5F5',
@@ -331,16 +361,21 @@ const styles = StyleSheet.create({
   },
   verifyContainer: {
     height: 50,
-    padding: 15,
     marginHorizontal: 15,
     backgroundColor: '#0E8EE7',
     borderRadius: 3,
+    justifyContent: "center",
     alignItems:'center',
     marginBottom: 10
     
   },
   buttonContainer: {
-    justifyContent: 'center',
+    flexDirection: "row",
+    paddingHorizontal: 60,
+    justifyContent: 'space-evenly',
+    alignItems: "center",
+    // backgroundColor: "red",
+    flex: 1
   },
   listItemContainer: {
     height:70,

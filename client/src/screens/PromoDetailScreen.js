@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderBottomWidth: 1,
         borderColor: "#F5F5F5",
-        // backgroundColor :"pink",
         height: 100,
         justifyContent: "space-between"
     },

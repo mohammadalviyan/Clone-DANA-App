@@ -28,9 +28,9 @@ const EditPhoneScreen = (props) => {
         console.log("dontHaveOldNumber")
     }
 
-    useEffect( () => {
-        //
-    }, [save])
+    // useEffect( () => {
+    //     //
+    // }, [save])
 
     return (
         <View style={styles.container}>
