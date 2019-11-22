@@ -8,8 +8,9 @@ import Beranda from './BerandaScreen';
 import Riwayat from './RiwayatScreen';
 import Pay from './PayScreen';
 import Pocket from './PocketScreen';
-import Saya from './SayaScreen';
-import ButtonPay from './ButtonPay'
+import Saya from '../SayaScreen'
+import ButtonPay from './ButtonPay';
+
 
 const BottomNavigator = createBottomTabNavigator({
     Beranda: {
@@ -47,6 +48,13 @@ const BottomNavigator = createBottomTabNavigator({
             tabBarLabel: 'Pocket',
         }
     },
+    // Saya: {
+    //     screen: Saya,
+    //     navigationOptions: {
+    //         tabBarLabel: 'Profile',
+            
+    //     }
+    // },
     Saya: {
         screen: Saya,
         navigationOptions: {
