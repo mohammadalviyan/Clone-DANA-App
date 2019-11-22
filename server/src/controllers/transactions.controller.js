@@ -241,14 +241,6 @@ exports.createTransactionsTopUp = async (req, res) => {
           id: id_user
         }
       });
-      //Update Current Users
-      await Users.update({
-        balance: balanceCurrent
-      }, {
-        where: {
-          id: id_user
-        }
-      });
 
       return res.json({
         status:'success',
@@ -283,6 +275,8 @@ exports.createTransactionsPPOB = async (req, res) => {
   } = req.body;
 
 
+  
+
   // try {
   // Get id current user
   const currentUser = await Users.findOne({
@@ -290,6 +284,14 @@ exports.createTransactionsPPOB = async (req, res) => {
       id: id_user
     }
   })
+
+  if (currentUser) {
+    return res.json({
+      message: currentUser
+    })
+    console.log("Hellooooo")
+  }
+  
 
   // get vouchers
   const voucher = await Vouchers.findOne({
@@ -348,15 +350,6 @@ exports.createTransactionsPPOB = async (req, res) => {
     fields: ['invoice', 'customer', 'id_user', 'amount', 'id_services', 'id_vouchers', 'status', 'description', 'payment_method']
   });
   if (newTransactions) {
-    //Update Current Users
-    await Users.update({
-      balance: balanceCurrent
-    }, {
-      where: {
-        id: id_user
-      }
-    });
-
     //Update Current Users
     await Users.update({
       balance: balanceCurrent
