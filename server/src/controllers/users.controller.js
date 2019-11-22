@@ -118,13 +118,13 @@ exports.usersLogin = async (req, res) => {
     // check hashed pin
     const validPin = bcrypt.compareSync(pin, usersLogin.dataValues.pin)
 
-    //Validation Data
-    if (pin === "" || pin === null || pin === undefined) {
-      return res.json({
-        status: "error",
-        response: "Pin can't be empty"
-      });
-    }
+    // //Validation Data
+    // if (pin === "" || pin === null || pin === undefined) {
+    //   return res.json({
+    //     status: "error",
+    //     response: "Pin can't be empty"
+    //   });
+    // }
 
     //Validation Pin Check
     if (!validPin) {
