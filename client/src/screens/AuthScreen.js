@@ -15,16 +15,14 @@ import Modal, {ModalContent} from 'react-native-modals';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {check, otpreq} from '../Redux/Actions/auth';
-import setLoading from '../Redux/Actions/loading';
-import user from '../Redux/Actions/user';
-
+import {check, otpreq, login} from '../Redux/Actions/auth';
 
 const AuthScreen = (props) => {
   const [bottomModal, setBottomModal] = useState(false);
   const [user, setUser] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [input, setInput] = useState('');
+  const [pin, setPin] = useState('');
   const dispatch = useDispatch();
   
   const handleCheck = () => {
@@ -49,7 +47,6 @@ const AuthScreen = (props) => {
       .catch(error => alert(error));
   }
 
-  // console.log('code', input);
   const handleOtp = (code) => {
     dispatch(otpreq(code, input))
       .then(response => { 
@@ -62,8 +59,23 @@ const AuthScreen = (props) => {
       })
       .catch(error => alert(error));
   } 
+  
 
+  const handleLogin = (pin) => {
+    setBottomModal(false);
+    dispatch(login(pin, input))
+    .then(response => { 
+      if (response.value.data.status === 'success') {
+        props.navigation.navigate('TabScreen');
+      } else {
+        ToastAndroid.show(response.value.data.response, ToastAndroid.SHORT);
+      }
+      })
+      .catch(error => alert(error));
+    }
 
+    
+    // console.log('modal', bottomModal);
 
   return (
     <>
@@ -76,15 +88,46 @@ const AuthScreen = (props) => {
           }}>
           {user === 'old' ? (
             <View style={{alignItems: 'center'}}>
+              <Text>Anda telah terdaftar di DANAIN</Text>
+              <Text>Masukkan PIN yang terdaftar pada nomor ini</Text>
               <TextInput
-                maxLength={16}
-                placeholder="Phone Number"
+                maxLength={6}
                 placeholderTextColor="#84c8f9"
                 underlineColorAndroid="transparent"
                 keyboardType={'numeric'}
                 autoFocus={true}
-                onChangeText={Auth => setInput(Auth)}
+                selectionColor={'#FFF'}
+                secureTextEntry={true}
+                onChangeText={Pin => setPin(Pin)}
+                style={{
+                  fontSize: 56,
+                  height: 150,
+                  width: '80%',
+                  textAlign: 'center',
+                  letterSpacing: 30,
+                }}
               />
+              <TouchableOpacity
+                onPress={() => handleLogin(pin)}
+                style={{
+                  backgroundColor: '#118eea',
+                  width: 100,
+                  height: 40,
+                  borderRadius: 4,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: '#FFF'}}>SUBMIT</Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  color: '#118eea',
+                  marginTop: 20,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}>
+                Lupa Pin
+              </Text>
             </View>
           ) : (
             <>

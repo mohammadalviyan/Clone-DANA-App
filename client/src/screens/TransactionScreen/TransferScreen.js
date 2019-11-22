@@ -65,6 +65,21 @@ const TransferScreen = (props) => {
                 paddingHorizontal: 15,
               }}
             />
+            <View style={{marginTop: 10}}>
+              <TextInput
+                placeholder="Masukkan nominal yang ingin dikirm"
+                keyboardType={'numeric'}
+                maxLength={16}
+                autoFocus={true}
+                style={{
+                  height: 37,
+                  borderColor: '#e3e3e3',
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  paddingHorizontal: 15,
+                }}
+              />
+            </View>
           </View>
 
           {/* COMPONENT BANK */}
@@ -150,7 +165,7 @@ const TransferScreen = (props) => {
               </View>
             </View>
           </View>
-          <View style={{marginHorizontal: 15, marginTop:10}}>
+          <View style={{marginHorizontal: 15, marginTop: 10}}>
             <Image
               style={{width: 373, height: 577}}
               source={require('../../assets/kontak-card.png')}
