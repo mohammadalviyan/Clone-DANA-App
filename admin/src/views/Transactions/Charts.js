@@ -24,7 +24,7 @@ class Charts extends Component {
   }
 
   getTransactions () {
-    axios.get('https://clonedana.herokuapp.com/api/transactions', {headers: {"x-access-token": this.state.token}})
+    axios.get('https://clonedana.herokuapp.com/api/transactions')
         .then(res => {
           this.setState({
             transactionsData: res.data.data
