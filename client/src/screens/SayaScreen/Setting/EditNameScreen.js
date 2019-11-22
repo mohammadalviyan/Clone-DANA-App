@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../../../Redux/Actions/user';
 
 
-const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const EditNameScreen = (props) => {
     const user =  useSelector (state => state.user)
@@ -16,8 +16,7 @@ const EditNameScreen = (props) => {
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
     const [disable, setDisable] = useState(true)
-
-    
+   
 
     const modalPop = async (e)  => {
         if(name === user.resultUser.name) {
@@ -40,8 +39,8 @@ const EditNameScreen = (props) => {
     const emptyWarning = () => {
         return (
             <View style={styles.warning}>
-                <Text>Nama Akun harus diisi</Text>
-                <Icon name="warning" color="red" size={20} />
+                <Text style={styles.warningText}>Nama Akun harus diisi</Text>
+                <Icon name="warning" color="red" size={16} />
             </View>
         )
     }
@@ -74,14 +73,14 @@ const EditNameScreen = (props) => {
                 {/* label need floating lable */}
                 <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
                 <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
-                    <TextInput value={name} style={{color: 'black'}} onChangeText={name=> handleChangeName(name)} />
+                    <TextInput value={name} style={styles.textInput} onChangeText={name=> handleChangeName(name)} />
                     {isEmpty ? null : 
-                    <TouchableOpacity onPress={e => emptyName(e)}>
-                        <Icon  name="cancel" />
+                    <TouchableOpacity onPress={e => emptyName(e)} style={styles.cancel}>
+                        <Icon  name="cancel" size={16} color={isFill ? '#a0a0a0': 'red'} />
                     </TouchableOpacity>
                     }
-                    {isEmpty ? emptyWarning() : null}
                 </View>
+                {isEmpty ? emptyWarning() : null}
             </View>
             <TouchableOpacity style={disable? styles.buttonDeactivate : styles.button} onPress={e => modalPop(e)} disabled={disable}>
                 <Text style={styles.butTitle}>SIMPAN</Text>
@@ -98,43 +97,64 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         flex: 1,
         margin: 20,
-        backgroundColor: 'red'
+        // backgroundColor: 'red'
     },
     editForm: {
         marginHorizontal: 10,
-        backgroundColor: "green"
+        // backgroundColor: "green"
+    },
+    cancel: {
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 8
     },
     input: {
         flexDirection: "row",
         borderBottomWidth: 1,
-        borderColor: "#ababab"
+        borderColor: "#ababab",
+        // backgroundColor: "blue",
+        justifyContent: "space-between", 
     },
     inputActivate: {
         flexDirection: "row",
         borderBottomWidth: 1,
-        borderColor: "#fb9b1a"
+        borderColor: "#fb9b1a",
     },
     inputWarning : {
         flexDirection: "row",
         borderBottomWidth: 1,
         borderColor: "red"
     },
+    textInput: {
+        width: screenWidth - 90,
+        color: '#4a4a4a',
+        // backgroundColor: "purple"
+    },
     warning: {
         flexDirection: "row",
         justifyContent: "space-between"
     },
+    warningText: {
+        color: "red",
+        fontSize: 12
+    },
     button: {
         backgroundColor: "#0e8ee7",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        height: 45,
+        borderRadius: 4
     },
     buttonDeactivate: {
         backgroundColor: "#a0a0a0",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        height: 45,
+        borderRadius: 4
     },
     butTitle: {
-        color: "#fff"
+        color: "#fff", 
+        fontSize: 18
     },
     modalContainer: {
         justifyContent: 'center',
