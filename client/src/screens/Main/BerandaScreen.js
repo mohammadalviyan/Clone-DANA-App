@@ -1,8 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux'
 import { Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const BerandaScreen = (props) => {
 
+  const [data, setData] = useState()
+  const {resultLogin} = useSelector((state) => state.auth)
+  
+  // useEffect(() => {
+  //   async function getData() {
+      
+  //     // const token = await AsyncStorage.getItem('xaccess-token');
+  //     // const id = await AsyncStorage.getItem('id');
+  //     // const name = await AsyncStorage.getItem('name');
+  //     // const image = await AsyncStorage.getItem('image');
+  //     // const phone = await AsyncStorage.getItem('phone');
+  //     // const balance = await AsyncStorage.getItem('balance');
+  //     // const type_user = await AsyncStorage.getItem('type_user');
+  //     // setData({token: token, id: id, name: name, image: image, phone: phone, balance: balance, type_user:type_user});
+  //   }
+  //   getData()
+  // }, [])
+
+  console.log('ASYCN',data);
     return (
       <View style={styles.container}>
         {/* COMPONENT HEADER */}
@@ -14,7 +35,7 @@ const BerandaScreen = (props) => {
                 source={require('../../assets/top-icon/iconapp-icon-01.png')}
               />
               <Text style={styles.textRp}>Rp</Text>
-              <Text style={styles.textNominal}>4.000</Text>
+              <Text style={styles.textNominal}>{resultLogin.balance}</Text>
             </View>
             <View>
               <Image

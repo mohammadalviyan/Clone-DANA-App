@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const check = input => {
   return {
@@ -11,7 +11,7 @@ export const check = input => {
 };
 
 export const register = (input) => {
-  console.log('REGIST',input)
+  // console.log('REGIST',input)
   // console.log('PIN',pin);
   return {
     type: 'REGISTER',
@@ -31,5 +31,25 @@ export const otpreq = (otp, input) => {
         phone: input
       }
     ),
+  };
+};
+
+export const login = (pin, phone) => {
+  // console.log('ASD', pin, phone);
+  return {
+    type: 'LOGIN',
+    payload: axios.post(
+      'https://clonedana.herokuapp.com/api/users/login/', {
+        pin: pin,
+        phone: phone,
+      },
+    ),
+  };
+};
+
+export const getToken = () => {
+  return {
+    type: 'GET_TOKEN',
+    payload: AsyncStorage.getItem('user')
   };
 };

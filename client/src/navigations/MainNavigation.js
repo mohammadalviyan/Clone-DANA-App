@@ -14,6 +14,7 @@ import MethodScreen from '../screens/Saldo/MethodScreen';
 import TransaksiScreen from '../screens/TransactionScreen/TransaksiScreen';
 import PulsaScreen from '../screens/TransactionScreen/PulsaScreen';
 import TransferScreen from '../screens/TransactionScreen/TransferScreen';
+import HistoryNavigation from '../navigations/HistoryNavigation'
 
 const StackLoading = createStackNavigator(
   {
@@ -47,7 +48,8 @@ const StackApp = createStackNavigator(
     MethodScreen,
     TransaksiScreen,
     PulsaScreen,
-    TransferScreen
+    TransferScreen,
+    HistoryNavigation
   },
   {
     initialRouteName: 'TabScreen',
@@ -62,7 +64,7 @@ const Router = createSwitchNavigator(
     StackApp,
   },
   {
-    initialRouteName: 'StackApp',
+    initialRouteName: 'StackLoading',
     headerMode: 'none',
   },
 );
