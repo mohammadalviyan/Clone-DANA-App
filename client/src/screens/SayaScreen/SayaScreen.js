@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {useEffect} from 'react'
 import {
   Image,
   ScrollView,
@@ -7,96 +7,117 @@ import {
   View, TouchableOpacity, Dimensions
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
-import PropTypes from 'prop-types'
+import {useSelector, useDispatch} from 'react-redux';
+
+import {getUser} from '../../Redux/Actions/user'
 
 
-class ProfileScreen extends Component {
-  static propTypes = {
-    avatar: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    phoneNum: PropTypes.number.isRequired,
-    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-    navigation: PropTypes.object.isRequired,
-  }
 
-  static defaultProps = {
-    containerStyle: {},
-  }
 
-  list = [
+
+
+const SayaScreen = (props) => {
+  const user =  useSelector (state => state.user)
+  const dispatch = useDispatch()
+  useEffect( () => {
+    const getData = async () => {
+        await dispatch( getUser())
+        console.log(user.resultUser)
+    }
+    getData();
+  }, [])
+
+  let list = [
     {
       title: 'Balance',
       icon: require('../../../asset/icons/dana-icon-set.png'),
-      rightTitle: 'Rp.1840'
+      rightTitle: `Rp ${user.resultUser.balance}`,
+      screen: 'Balance'
     },
     {
       title: 'Saved Card',
       icon: require('../../../asset/icons/dana-icon-set.png'),
-      rightTitle: '0 Cards'
+      rightTitle: '0 Cards',
+      screen: 'Cards'
     },
     {
       title: 'My Bills',
       icon: require('../../../asset/icons/dana-icon-set.png'),
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Bills'
     },]
-    list2 = [
+    let list2 = [
     {
       title: 'Apply DANAIN Bisnis Now!',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers'
+      subtitle: 'Have a business? Use DANAIN Bisnis to engange more customers',
+      screen: 'Apply'
     },
     {
       title: 'Referral Code',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: null
+      subtitle: null,
+      screen: 'Referral'
     },
     {
       title: 'Promo Quest',
       icon: require('../../../asset/icons/dana-icon-set.png'),
       rightTitle: null,
-      subtitle: null
+      subtitle: null,
+      screen: 'Promo'
     },]
-    list3 = [
+    let list3 = [
     {
       title: 'Tutorial',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Tutorial'
     },
     {
       title: 'FAQ',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Faq'
     },
     {
       title: 'Terms & Condition',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Terms',
     },
     {
       title: 'Privacy Policy',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Privacy'
     },]
-    list4 = [
+    let list4 = [
     {
       title: 'Settings',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Setting'
     },
     {
       title: 'App Version',
-      rightTitle: '1.5.1'
+      rightTitle: '1.5.1',
+      screen: null
     },
     {
       title: 'Logout',
-      rightTitle: null
+      rightTitle: null,
+      screen: 'Logout'
     },
   ]
 
-  onPressOptions = () => {
-    //navigate
-    console.log('option is pressed')
+  const onPressOptions = (e, screen) => {
+    if (screen === "Setting" || "Promo") {
+      console.log(`Navigate to ${screen}`)
+      props.navigation.navigate(screen)
+    } else {
+      console.log(`Command to ${screen}`)
+    }
   }
 
-  renderContactHeader = () => {
-    const { avatar, name, phoneNum } = this.props
+  const renderContactHeader = () => {
+    // const { avatar, name, phoneNum } = props
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
@@ -104,31 +125,31 @@ class ProfileScreen extends Component {
                 <Image
             style={styles.userImage}
             source={{
-              uri: avatar,
+              uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`, 
             }}
           /></View>
 
           <View style={styles.userNameRow}>
-            <Text style={styles.userNameText}>{name}</Text>
+            <Text style={styles.userNameText}>{user.resultUser.name}</Text>
           </View>
           <View style={styles.userBioRow}>
-            <Text style={styles.userBioText}>{phoneNum}</Text>
+            <Text style={styles.userBioText}>{user.resultUser.phone}</Text>
           </View>
         </View>
       </View>
     )
   }
 
-  render() {
+
     return (
       <View>
       <View style={styles.mainHeader}>
         <Text style={styles.textHeader}>My Account</Text>
       </View>
       <ScrollView style={styles.scroll}>
-        <View style={[styles.container, this.props.containerStyle]}>
+        <View style={styles.container}>
           <View style={styles.cardContainer}>
-            {this.renderContactHeader()}
+            {renderContactHeader()}
           </View>
           <View style ={styles.verifyContainer}>
             <TouchableOpacity style={styles.buttonContainer}>
@@ -142,14 +163,14 @@ class ProfileScreen extends Component {
          {/* ---------- */}
         <View >
         {
-          this.list.map((l) => (
+          list.map((l) => (
             <ListItem
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
               rightTitleStyle={{ fontSize: 15 }}
               chevron={{size:24}}
-              onPress={() => this.onPressOptions()}
+              onPress={(e) => onPressOptions(e, l.screen)}
               containerStyle={styles.listItemContainer}
               leftIcon={
                 <Image
@@ -162,13 +183,13 @@ class ProfileScreen extends Component {
         }
         <InfoText text="FEATURE" />
         {
-          this.list2.map((l) => (
+          list2.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             subtitleStyle={{fontSize: 12}}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             subtitle={l.subtitle}
             chevron={{size:24}}
@@ -183,28 +204,28 @@ class ProfileScreen extends Component {
         }
         <InfoText text="GENERAL INFO" />
         {
-          this.list3.map((l) => (
+          list3.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             chevron={{size:24}}
             rightTitleStyle={{ fontSize: 15 }}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             />
           ))
         }
         <InfoText text="ACCOUNT" />
         {
-          this.list4.map((l) => (
+          list4.map((l) => (
             <ListItem
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
             rightTitleStyle={{ fontSize: 15 }}
             chevron={{size:24}}
-            onPress={() => this.onPressOptions()}
+            onPress={(e) => onPressOptions(e, l.screen)}
             containerStyle={styles.listItemContainer}
             />
           ))
@@ -216,10 +237,10 @@ class ProfileScreen extends Component {
       </ScrollView>
       </View>
     )
-  }
+
 }
 
-export default ProfileScreen
+export default SayaScreen
 
 
 const InfoText = ({ text }) => (
