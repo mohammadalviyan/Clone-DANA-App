@@ -52,14 +52,14 @@ exports.createTransactions = async (req, res) => {
 exports.createTransactionsTransfer = async (req, res) => {
   const status = 'success';
   let invoice = "inv";
+  const payment_method="DANA";
   const {
     customer,
     id_user,
     amount,
     id_services,
     id_vouchers,
-    description,
-    payment_method
+    description
   } = req.body;
 
   try {
@@ -98,20 +98,27 @@ exports.createTransactionsTransfer = async (req, res) => {
       }
     })
 
-    let r = Math.random().toString(36).substring(7);
-    invoice = invoice + r;
+    //If Users Number Not Found
+    if (!customerData) {
+      return res.json({
+        status:'error',
+        message: 'Users Not Found'
+      });
+    }
 
-    // Random invoice
+    // Random invoice Check Database
     const invoiceData = await Transactions.findAll({
       where: {
         invoice: invoice
       }
     });
 
-    while (invoiceData) {
+    // If invoice Same Make Random Again
+    do {
       let r = Math.random().toString(36).substring(7);
       invoice = invoice + r;
     }
+    while (invoiceData===invoice);
 
     //Check balance current user
     if (currentUser.dataValues.balance < amount) {
@@ -176,26 +183,23 @@ exports.createTransactionsTransfer = async (req, res) => {
 exports.createTransactionsTopUp = async (req, res) => {
   const status = 'pending';
   let invoice = 'inv'
+  const payment_method='BANK'
   const {
     customer,
     id_user,
     amount,
     id_services,
     id_vouchers,
-    description,
-    payment_method
+    description
   } = req.body;
 
-  try {
+  // try {
     // Get id current user
     const currentUser = await Users.findOne({
       where: {
         id: id_user
       }
     })
-
-    let r = Math.random().toString(36).substring(7);
-    invoice = invoice + r;
 
     // Random invoice
     const invoiceData = await Transactions.findAll({
@@ -204,10 +208,12 @@ exports.createTransactionsTopUp = async (req, res) => {
       }
     });
 
-    while (invoiceData) {
+    // If invoice Same Make Random Again
+    do {
       let r = Math.random().toString(36).substring(7);
       invoice = invoice + r;
     }
+    while (invoiceData===invoice);
 
     //Check balance current user
     const balanceCurrent = currentUser.dataValues.balance + amount;
@@ -250,13 +256,13 @@ exports.createTransactionsTopUp = async (req, res) => {
         data: newTransactions
       });
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {}
-    });
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {}
+  //   });
+  // }
 };
 
 // Create transaction PPOB
@@ -264,8 +270,8 @@ exports.createTransactionsPPOB = async (req, res) => {
   let status = 'pending';
   let currentAmount = '';
   let invoice = 'inv';
+  
   const {
-    customer,
     id_user,
     id_services,
     id_vouchers,
@@ -309,9 +315,6 @@ exports.createTransactionsPPOB = async (req, res) => {
     })
   }
 
-  let r = Math.random().toString(36).substring(7);
-  invoice = invoice + r;
-
   // Random invoice
   const invoiceData = await Transactions.findAll({
     where: {
@@ -319,10 +322,13 @@ exports.createTransactionsPPOB = async (req, res) => {
     }
   });
 
-  while(invoiceData){
+  // If invoice Same Make Random Again
+  do {
     let r = Math.random().toString(36).substring(7);
     invoice = invoice + r;
   }
+  while (invoiceData===invoice);
+
   //Check balance current user
   const balanceCurrent = currentUser.dataValues.balance - currentAmount;
 
