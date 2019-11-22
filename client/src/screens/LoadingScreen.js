@@ -14,15 +14,11 @@ import AsyncStorage from '@react-native-community/async-storage';
     const LoadingScreen = (props) => {
     const {resultLogin} = useSelector(state => state.auth);
     const dispatch = useDispatch()
-    
-    // const [data, setData] = useState();
 
     useEffect(() => {
         const getLoading = async () => {
            const disLoading = await dispatch(getToken())
-            //  console.log('loading',disLoading)
             if(disLoading.value){
-                // console.log(disLoading.value)
                 props.navigation.navigate('TabScreen')
             } else {
                 props.navigation.navigate('SwiperScreen')
@@ -34,8 +30,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
     return (
         <>
-             {/* {console.log('OPO',resultLogin)} */}
-        
             <View style={styles.container}>
                 <Image source={require('../assets/danain-text.png')} style={styles.image} />
             </View>
