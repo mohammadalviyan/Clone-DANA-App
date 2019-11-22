@@ -6,44 +6,76 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 
 import Modal, {ModalContent} from 'react-native-modals';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {check} from '../Redux/Actions/auth';
+import {check, otpreq, login} from '../Redux/Actions/auth';
 
 const AuthScreen = (props) => {
   const [bottomModal, setBottomModal] = useState(false);
   const [user, setUser] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [input, setInput] = useState({phone: ''});
+  const [input, setInput] = useState('');
+  const [pin, setPin] = useState('');
   const dispatch = useDispatch();
   
   const handleCheck = () => {
     setIsLoading(true)
     dispatch(check(input))
       .then(response => {
-      if (response.value.data.Users === 'new'){
-        setIsLoading(false)
-        setTimeout(() => {
-          setUser(response.value.data.Users)
-          props.navigation.navigate('ReferalScreen',{input});
-        }, 500);
-      } else {
-        setIsLoading(false)
-        setTimeout(() => {
-          setUser(response.value.data.Users)
-          setBottomModal(true)
-        }, 500);
-      }
-    })
-    .catch(error => alert(error))
+        if (response.value.data.message === 'new') {
+          setIsLoading(false);
+          setTimeout(() => {
+            setUser(response.value.data.message);
+            setBottomModal(true);
+            // props.navigation.navigate('ReferalScreen',{input});
+          }, 500);
+        } else {
+          setIsLoading(false);
+          setTimeout(() => {
+            setUser(response.value.data.message);
+            setBottomModal(true);
+          }, 500);
+        }
+      })
+      .catch(error => alert(error));
   }
 
-  // console.log('user',isLoading)
+  const handleOtp = (code) => {
+    dispatch(otpreq(code, input))
+      .then(response => { 
+        if (response.value.data.status === 'success') {
+          props.navigation.navigate('ReferalScreen', {input});
+        } else {
+          ToastAndroid.show(response.value.data.response, ToastAndroid.SHORT);
+        }
+        setBottomModal(false);
+      })
+      .catch(error => alert(error));
+  } 
+  
+
+  const handleLogin = (pin) => {
+    setBottomModal(false);
+    dispatch(login(pin, input))
+    .then(response => { 
+      if (response.value.data.status === 'success') {
+        props.navigation.navigate('TabScreen');
+      } else {
+        ToastAndroid.show(response.value.data.response, ToastAndroid.SHORT);
+      }
+      })
+      .catch(error => alert(error));
+    }
+
+    
+    // console.log('modal', bottomModal);
 
   return (
     <>
@@ -54,47 +86,81 @@ const AuthScreen = (props) => {
           style={{
             height: 300,
           }}>
-            {user === 'old' ? (
-              <View style={{ alignItems: 'center' }}>
-              <ActivityIndicator
-                animating={true}
-                color="blue"
-                size="small"
+          {user === 'old' ? (
+            <View style={{alignItems: 'center'}}>
+              <Text>Anda telah terdaftar di DANAIN</Text>
+              <Text>Masukkan PIN yang terdaftar pada nomor ini</Text>
+              <TextInput
+                maxLength={6}
+                placeholderTextColor="#84c8f9"
+                underlineColorAndroid="transparent"
+                keyboardType={'numeric'}
+                autoFocus={true}
+                selectionColor={'#FFF'}
+                secureTextEntry={true}
+                onChangeText={Pin => setPin(Pin)}
+                style={{
+                  fontSize: 56,
+                  height: 150,
+                  width: '80%',
+                  textAlign: 'center',
+                  letterSpacing: 30,
+                }}
               />
-              </View>
-            ) : (
-              <>
+              <TouchableOpacity
+                onPress={() => handleLogin(pin)}
+                style={{
+                  backgroundColor: '#118eea',
+                  width: 100,
+                  height: 40,
+                  borderRadius: 4,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: '#FFF'}}>SUBMIT</Text>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  color: '#118eea',
+                  marginTop: 20,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}>
+                Lupa Pin
+              </Text>
+            </View>
+          ) : (
+            <>
               <View style={{alignItems: 'center'}}>
-                <Text style={{ paddingTop: 25, fontWeight: 'bold', fontSize: 25 }}>
+                <Text
+                  style={{paddingTop: 25, fontWeight: 'bold', fontSize: 25}}>
                   Enter OTP
                 </Text>
-                <Text style={{ fontSize: 18 }}>
+                <Text style={{fontSize: 18}}>
                   The OTP has been sent to your number
-                 </Text>
+                </Text>
                 <OTPInputView
-                  style={{ width: '80%', height: 150 }}
-                  pinCount={4}
+                  style={{width: '100%', height: 150}}
+                  pinCount={6}
                   autoFocusOnLoad
                   codeInputFieldStyle={styles.underlineStyleBase}
                   codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                  onCodeFilled={code => {
-                    console.log(`Code is ${code}, you are good to go!`);
-                  }}
+                  onCodeFilled={code => handleOtp(code)}
                 />
-                </View>
-                <Text
-                  style={{
-                    paddingTop: 20,
-                    fontWeight: 'bold',
-                    fontSize: 19,
-                    textAlign: 'right',
-                    paddingRight: 25,
-                    color: 'grey',
-                  }}>
-                  RESEND(48S)
-                </Text>
-                </>
-              )}
+              </View>
+              <Text
+                style={{
+                  paddingTop: 20,
+                  fontWeight: 'bold',
+                  fontSize: 19,
+                  textAlign: 'right',
+                  paddingRight: 25,
+                  color: 'grey',
+                }}>
+                RESEND(48S)
+              </Text>
+            </>
+          )}
         </ModalContent>
       </Modal.BottomModal>
 
@@ -107,13 +173,17 @@ const AuthScreen = (props) => {
             />
           </View>
           <View style={{width: 60}}>
-            {input.phone.length >= 10 ? (
+            {input.length >= 10 ? (
               isLoading ? (
                 <ActivityIndicator
                   animating={true}
                   color="white"
                   size="small"
-                  style={{paddingTop:20, paddingRight:25, justifyContent:'center'}}
+                  style={{
+                    paddingTop: 20,
+                    paddingRight: 25,
+                    justifyContent: 'center',
+                  }}
                 />
               ) : (
                 <TouchableOpacity onPress={() => handleCheck()}>
@@ -129,15 +199,15 @@ const AuthScreen = (props) => {
                 </TouchableOpacity>
               )
             ) : (
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#84c8f9',
-                    paddingTop: 20,
-                    textAlign: 'left',
-                  }}>
-                  Next
-                </Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: '#84c8f9',
+                  paddingTop: 20,
+                  textAlign: 'left',
+                }}>
+                Next
+              </Text>
             )}
           </View>
         </View>
@@ -157,7 +227,7 @@ const AuthScreen = (props) => {
             underlineColorAndroid="transparent"
             keyboardType={'numeric'}
             autoFocus={true}
-            onChangeText={Auth => setInput({...input, phone: Auth})}
+            onChangeText={Auth => setInput(Auth)}
           />
         </View>
 
@@ -244,6 +314,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     color: '#FFF',
     fontWeight: '100',
+    paddingHorizontal: 15,
   },
   iconCon: {
     width: 40,
@@ -258,6 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F7F7',
     borderColor: '#FFF',
     borderRadius: 8,
+    marginHorizontal: 5,
   },
   underlineStyleHighLighted: {
     borderColor: '#FFF',

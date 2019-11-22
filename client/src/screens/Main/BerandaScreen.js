@@ -1,225 +1,402 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux'
 import { Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const BerandaScreen = (props) => {
 
-    return(
-        <View style={styles.container}>
-            {/* COMPONENT HEADER */}
-            <View style={styles.containerHeader}>
-                <View style={styles.containerTop}>
-                    <View style={styles.containerFlexTop}>
-                        <Image style={styles.iconDana} source={require('../../assets/top-icon/iconapp-icon-01.png')}/>
-                        <Text style={styles.textRp}>Rp</Text>
-                        <Text style={styles.textNominal}>4.000</Text>
-                    </View>
-                    <View>
-                        <Image style={styles.iconChart} source={require('../../assets/top-icon/chart-icon.png')} />
-                    </View>
-                </View>
-                <View style={styles.containerIconTop}>
-                    <View style={styles.containerImageTop}>
-                        <Image style={styles.iconTop} source={require('../../assets/top-icon/pindai-icon.png')} />
-                        <Text style={styles.textIcon}>Pindai</Text>
-                    </View>
+  const [data, setData] = useState()
+  const {resultLogin} = useSelector((state) => state.auth)
+  
+  // useEffect(() => {
+  //   async function getData() {
+      
+  //     // const token = await AsyncStorage.getItem('xaccess-token');
+  //     // const id = await AsyncStorage.getItem('id');
+  //     // const name = await AsyncStorage.getItem('name');
+  //     // const image = await AsyncStorage.getItem('image');
+  //     // const phone = await AsyncStorage.getItem('phone');
+  //     // const balance = await AsyncStorage.getItem('balance');
+  //     // const type_user = await AsyncStorage.getItem('type_user');
+  //     // setData({token: token, id: id, name: name, image: image, phone: phone, balance: balance, type_user:type_user});
+  //   }
+  //   getData()
+  // }, [])
 
-                    <View style={styles.containerImageTop}>
-                        <TouchableOpacity onPress={() => props.navigation.navigate('SaldoScreen')}>
-                            <Image style={styles.iconTop} source={require('../../assets/top-icon/saldo-icon.png')} />
-                        </TouchableOpacity>
-                        <Text style={styles.textIcon}>Isi Saldo</Text>
-                    </View>
-
-                    <View style={styles.containerImageTop}>
-                        <Image style={styles.iconTop} source={require('../../assets/top-icon/kirim-icon.png')} />
-                        <Text style={styles.textIcon}>Kirim</Text>
-                    </View>
-                    <View style={styles.containerImageTop}>
-                        <Image style={styles.iconTop} source={require('../../assets/top-icon/minta-icon.png')} />
-                        <Text style={styles.textIcon}>Minta</Text>
-                    </View>
-                </View>
+  console.log('ASYCN',data);
+    return (
+      <View style={styles.container}>
+        {/* COMPONENT HEADER */}
+        <View style={styles.containerHeader}>
+          <View style={styles.containerTop}>
+            <View style={styles.containerFlexTop}>
+              <Image
+                style={styles.iconDana}
+                source={require('../../assets/top-icon/iconapp-icon-01.png')}
+              />
+              <Text style={styles.textRp}>Rp</Text>
+              <Text style={styles.textNominal}>{resultLogin.balance}</Text>
+            </View>
+            <View>
+              <Image
+                style={styles.iconChart}
+                source={require('../../assets/top-icon/chart-icon.png')}
+              />
+            </View>
+          </View>
+          <View style={styles.containerIconTop}>
+            <View style={styles.containerImageTop}>
+              <Image
+                style={styles.iconTop}
+                source={require('../../assets/top-icon/pindai-icon.png')}
+              />
+              <Text style={styles.textIcon}>Pindai</Text>
             </View>
 
-            <ScrollView>
-            {/* COMPONENT PULSA */}
-                <View style={styles.containerPulsa}>
-                    <View style={styles.topCard}>
-                        <View style={styles.containerFlexPulsa}>
-                            <View style={styles.containerImagePulsa}>
-                                <Image style={styles.imagePulsa} source={require('../../assets/mid-icon/pulsa-icon2.png')} />
-                            </View>
-                            <View style={styles.containerTextPulsa}>
-                                <Text style={styles.textPulsa}>Pulsa</Text>
-                                <Text style={styles.textBeliPulsa}>Beli Pulsa Yuk!</Text>
-                            </View>
-                            <View style={styles.containerButtonBeli}>
-                                <TouchableHighlight style={styles.buttonBeli}>
-                                    <Text style={styles.textBeli}>BELI</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.bottomCard}>
-                    <View style={styles.containerImageService}>
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/games-icon.png')} />
-                            <Text style={styles.textMid}>Games</Text>
-                        </View>
+            <View style={styles.containerImageTop}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('SaldoScreen')}>
+                <Image
+                  style={styles.iconTop}
+                  source={require('../../assets/top-icon/saldo-icon.png')}
+                />
+              </TouchableOpacity>
+              <Text style={styles.textIcon}>Isi Saldo</Text>
+            </View>
 
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/listrik-icon.png')} />
-                            <Text style={styles.textMid}>Listrik</Text>
-                        </View>
-
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/bpjs-icon.png')} />
-                            <Text style={styles.textMid}>BPJS</Text>
-                        </View>
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/telepon-icon.png')} />
-                            <Text style={styles.textMid}>Telepon</Text>
-                        </View>
-                    </View>
-                    <View style={styles.containerImageService2}>
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/pascabayar-icon.png')} />
-                            <Text style={styles.textMid}>Pascabayar</Text>
-                        </View>
-
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/tariksaldo-icon.png')} />
-                            <Text style={styles.textMid}>Tarik Saldo</Text>
-                        </View>
-
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/danakaget-icon.png')} />
-                            <Text style={styles.textMid}>DANAIN Kaget</Text>
-                        </View>
-                        <View style={styles.containerImageTop}>
-                            <Image style={styles.iconMid} source={require('../../assets/mid-icon/lihatsemua-icon.png')} />
-                            <Text style={styles.textMid}>Lihat Semua</Text>
-                        </View>
-                    </View>
-                </View>
-
-            {/* COMPONENT PROMO BANNER */}
-                <View style={styles.cardPromo}>
-                    <View style={styles.containerPromo}>
-                        <View style={styles.containerTextPromo}>
-                            <Text style={styles.textAdaPromo}>Ada Promo Apa?</Text>
-                            <Text style={styles.textHidupLebih}>Hidup lebih indah dengan promo!</Text>
-                        </View>
-                        <View>
-                            <TouchableOpacity style={styles.buttonLihatSemua}>
-                                <Text style={styles.textLihatSemua}>LIHAT SEMUA</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-            {/* COMPONENT IMAGEBANNER */}
-                <View style={styles.bannerPromo}>
-                    <Image style={styles.imagePromo} source={require('../../assets/promo-icon/promo1.png')} />
-                </View>
-
-            {/* COMPONENT HOTBANNER */}
-                <View style={styles.containerHotPromo}>
-                    <Image style={styles.imageHotPromo} source={require('../../assets/promo-icon/promo4.png')} />
-                </View>
-
-            {/* COMPONENT NEARBY */}
-                <View style={styles.cardNearby}>
-                    <View style={styles.containerPromo}>
-                        <View style={styles.containerTextPromo}>
-                            <Text style={styles.textNearby}>Nearby Me</Text>
-                            <Text style={styles.textHidupLebih}>Temukan merchant DANAIN didekat kamu!</Text>
-                        </View>
-                        <View>
-                            <TouchableOpacity style={styles.buttonLihatSemua}>
-                                <Text style={styles.textLihatSemua}>LIHAT SEMUA</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.containerNearby}>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-                        <View>
-                            <Image style={styles.imageNear} source={require('../../assets/near-icon/yoshi-icon.png')} />
-                            <Text style={styles.textNear}>0,3 Km</Text>
-                        </View>
-                        <View>
-                            <Image style={styles.imageNear} source={require('../../assets/near-icon/hokben-icon.png')} />
-                            <Text style={styles.textNear}>0,4 Km</Text>
-                        </View>
-                        <View>
-                            <Image style={styles.imageNear} source={require('../../assets/near-icon/indo-icon.png')} />
-                            <Text style={styles.textNear}>1,2 Km</Text>
-                        </View>
-                        <View>
-                            <Image style={styles.imageNear} source={require('../../assets/near-icon/kfc-icon.png')} />
-                            <Text style={styles.textNear}>1,0 Km</Text>
-                        </View>
-                        <View>
-                            <Image style={styles.imageNear} source={require('../../assets/near-icon/danas-icon.png')} />
-                            <Text style={styles.textNear}>2,0 Km</Text>
-                        </View>
-                    </View>
-                </View>
-            
-                <View style={{marginHorizontal:15, paddingTop: 10}}>
-                    <Text style={{ fontSize: 12, color:'#b6b6b6'}}>BERITA DANA</Text>
-                </View>
-
-                <View style={{marginBottom:3, justifyContent:'center', alignItems:'center', backgroundColor: '#FFF',height: 78, marginTop:5, marginHorizontal: 15, borderRadius: 6, borderWidth: 1, borderColor: '#e3e3e3'}}>
-                    <View style={{flexDirection:'row', marginHorizontal: 15, alignItems:'center'}}>
-                        <View style={{flex: 1}}>
-                            <Image style={{width: 57, height: 50}} source={require('../../assets/news-icon/ajakteman-icon.png')} />
-                        </View>
-                        <View style={{width: 265}}>
-                            <Text style={{fontSize:16, fontWeight: '900'}}>Bayar Bluebird</Text>
-                            <Text style={{fontSize: 13}}>Gampang, ini caranya!</Text>
-                        </View>
-                        <View style={{width: 20 }}>
-                            <Image style={{ width: 10, height: 10 }} source={require('../../assets/arrow.png')} />
-                        </View>
-                    </View>
-                </View>
-
-                <View style={{ marginBottom: 5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', height: 78, marginTop: 5, marginHorizontal: 15, borderRadius: 6, borderWidth: 1, borderColor: '#e3e3e3' }}>
-                    <View style={{ flexDirection: 'row', marginHorizontal: 15, alignItems: 'center' }}>
-                        <View style={{ flex: 1 }}>
-                            <Image style={{ width: 57, height: 50 }} source={require('../../assets/news-icon/danaloyalty-icon.png')} />
-                        </View>
-                        <View style={{ width: 265 }}>
-                            <Text style={{ fontSize: 16, fontWeight: '900' }}>Dana Loyalty Card</Text>
-                            <Text style={{fontSize: 13}}>Ini cara bikinnya</Text>
-                        </View>
-                        <View style={{ width: 20 }}>
-                            <Image style={{ width: 10, height: 10 }} source={require('../../assets/arrow.png')} />
-                        </View>
-                    </View>
-                </View>
-
-                <View style={{ marginBottom: 5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', height: 78, marginTop: 5, marginHorizontal: 15, borderRadius: 6, borderWidth: 1, borderColor: '#e3e3e3' }}>
-                    <View style={{ flexDirection: 'row', marginHorizontal: 15, alignItems: 'center' }}>
-                        <View style={{ flex: 1 }}>
-                            <Image style={{ width: 57, height: 50 }} source={require('../../assets/news-icon/lazada-icon.png')} />
-                        </View>
-                        <View style={{ width: 265 }}>
-                            <Text style={{ fontSize: 16, fontWeight: '900' }}>Danain di Lazada</Text>
-                            <Text style={{fontSize: 13}}>Parkir di Centre Park</Text>
-                        </View>
-                        <View style={{ width: 20 }}>
-                            <Image style={{ width: 10, height: 10 }} source={require('../../assets/arrow.png')} />
-                        </View>
-                    </View>
-                </View>
-
-            </ScrollView>
+            <View style={styles.containerImageTop}>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('TransferScreen')}>
+                <Image
+                  style={styles.iconTop}
+                  source={require('../../assets/top-icon/kirim-icon.png')}
+                />
+              </TouchableOpacity>
+                <Text style={styles.textIcon}>Kirim</Text>
+            </View>
+            <View style={styles.containerImageTop}>
+              <Image
+                style={styles.iconTop}
+                source={require('../../assets/top-icon/minta-icon.png')}
+              />
+              <Text style={styles.textIcon}>Minta</Text>
+            </View>
+          </View>
         </View>
-    )
+
+        <ScrollView>
+          {/* COMPONENT PULSA */}
+          <View style={styles.containerPulsa}>
+            <View style={styles.topCard}>
+              <View style={styles.containerFlexPulsa}>
+                <View style={styles.containerImagePulsa}>
+                  <Image
+                    style={styles.imagePulsa}
+                    source={require('../../assets/mid-icon/pulsa-icon2.png')}
+                  />
+                </View>
+                <View style={styles.containerTextPulsa}>
+                  <Text style={styles.textPulsa}>Pulsa</Text>
+                  <Text style={styles.textBeliPulsa}>Beli Pulsa Yuk!</Text>
+                </View>
+                <View style={styles.containerButtonBeli}>
+                  <TouchableHighlight
+                    onPress={() => props.navigation.navigate('TransaksiScreen')}
+                    style={styles.buttonBeli}>
+                    <Text style={styles.textBeli}>BELI</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.bottomCard}>
+            <View style={styles.containerImageService}>
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/games-icon.png')}
+                />
+                <Text style={styles.textMid}>Games</Text>
+              </View>
+
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/listrik-icon.png')}
+                />
+                <Text style={styles.textMid}>Listrik</Text>
+              </View>
+
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/bpjs-icon.png')}
+                />
+                <Text style={styles.textMid}>BPJS</Text>
+              </View>
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/telepon-icon.png')}
+                />
+                <Text style={styles.textMid}>Telepon</Text>
+              </View>
+            </View>
+            <View style={styles.containerImageService2}>
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/pascabayar-icon.png')}
+                />
+                <Text style={styles.textMid}>Pascabayar</Text>
+              </View>
+
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/tariksaldo-icon.png')}
+                />
+                <Text style={styles.textMid}>Tarik Saldo</Text>
+              </View>
+
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/danakaget-icon.png')}
+                />
+                <Text style={styles.textMid}>DANAIN Kaget</Text>
+              </View>
+              <View style={styles.containerImageTop}>
+                <Image
+                  style={styles.iconMid}
+                  source={require('../../assets/mid-icon/lihatsemua-icon.png')}
+                />
+                <Text style={styles.textMid}>Lihat Semua</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* COMPONENT PROMO BANNER */}
+          <View style={styles.cardPromo}>
+            <View style={styles.containerPromo}>
+              <View style={styles.containerTextPromo}>
+                <Text style={styles.textAdaPromo}>Ada Promo Apa?</Text>
+                <Text style={styles.textHidupLebih}>
+                  Hidup lebih indah dengan promo!
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.buttonLihatSemua}>
+                  <Text style={styles.textLihatSemua}>LIHAT SEMUA</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* COMPONENT IMAGEBANNER */}
+          <View style={styles.bannerPromo}>
+            <Image
+              style={styles.imagePromo}
+              source={require('../../assets/promo-icon/promo1.png')}
+            />
+          </View>
+
+          {/* COMPONENT HOTBANNER */}
+          <View style={styles.containerHotPromo}>
+            <Image
+              style={styles.imageHotPromo}
+              source={require('../../assets/promo-icon/promo4.png')}
+            />
+          </View>
+
+          {/* COMPONENT NEARBY */}
+          <View style={styles.cardNearby}>
+            <View style={styles.containerPromo}>
+              <View style={styles.containerTextPromo}>
+                <Text style={styles.textNearby}>Nearby Me</Text>
+                <Text style={styles.textHidupLebih}>
+                  Temukan merchant DANAIN didekat kamu!
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.buttonLihatSemua}>
+                  <Text style={styles.textLihatSemua}>LIHAT SEMUA</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.containerNearby}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View>
+                <Image
+                  style={styles.imageNear}
+                  source={require('../../assets/near-icon/yoshi-icon.png')}
+                />
+                <Text style={styles.textNear}>0,3 Km</Text>
+              </View>
+              <View>
+                <Image
+                  style={styles.imageNear}
+                  source={require('../../assets/near-icon/hokben-icon.png')}
+                />
+                <Text style={styles.textNear}>0,4 Km</Text>
+              </View>
+              <View>
+                <Image
+                  style={styles.imageNear}
+                  source={require('../../assets/near-icon/indo-icon.png')}
+                />
+                <Text style={styles.textNear}>1,2 Km</Text>
+              </View>
+              <View>
+                <Image
+                  style={styles.imageNear}
+                  source={require('../../assets/near-icon/kfc-icon.png')}
+                />
+                <Text style={styles.textNear}>1,0 Km</Text>
+              </View>
+              <View>
+                <Image
+                  style={styles.imageNear}
+                  source={require('../../assets/near-icon/danas-icon.png')}
+                />
+                <Text style={styles.textNear}>2,0 Km</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={{marginHorizontal: 15, paddingTop: 10}}>
+            <Text style={{fontSize: 12, color: '#b6b6b6'}}>BERITA DANA</Text>
+          </View>
+
+          {/* COMPONENT NEWS */}
+          <View
+            style={{
+              marginBottom: 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              height: 78,
+              marginTop: 5,
+              marginHorizontal: 15,
+              borderRadius: 6,
+              borderWidth: 1,
+              borderColor: '#e3e3e3',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 15,
+                alignItems: 'center',
+              }}>
+              <View style={{flex: 1}}>
+                <Image
+                  style={{width: 57, height: 50}}
+                  source={require('../../assets/news-icon/ajakteman-icon.png')}
+                />
+              </View>
+              <View style={{width: 265}}>
+                <Text style={{fontSize: 16, fontWeight: '900'}}>
+                  Bayar Bluebird
+                </Text>
+                <Text style={{fontSize: 13}}>Gampang, ini caranya!</Text>
+              </View>
+              <View style={{width: 20}}>
+                <Image
+                  style={{width: 10, height: 10}}
+                  source={require('../../assets/arrow.png')}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View
+            style={{
+              marginBottom: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              height: 78,
+              marginTop: 5,
+              marginHorizontal: 15,
+              borderRadius: 6,
+              borderWidth: 1,
+              borderColor: '#e3e3e3',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 15,
+                alignItems: 'center',
+              }}>
+              <View style={{flex: 1}}>
+                <Image
+                  style={{width: 57, height: 50}}
+                  source={require('../../assets/news-icon/danaloyalty-icon.png')}
+                />
+              </View>
+              <View style={{width: 265}}>
+                <Text style={{fontSize: 16, fontWeight: '900'}}>
+                  Dana Loyalty Card
+                </Text>
+                <Text style={{fontSize: 13}}>Ini cara bikinnya</Text>
+              </View>
+              <View style={{width: 20}}>
+                <Image
+                  style={{width: 10, height: 10}}
+                  source={require('../../assets/arrow.png')}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View
+            style={{
+              marginBottom: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              height: 78,
+              marginTop: 5,
+              marginHorizontal: 15,
+              borderRadius: 6,
+              borderWidth: 1,
+              borderColor: '#e3e3e3',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 15,
+                alignItems: 'center',
+              }}>
+              <View style={{flex: 1}}>
+                <Image
+                  style={{width: 57, height: 50}}
+                  source={require('../../assets/news-icon/lazada-icon.png')}
+                />
+              </View>
+              <View style={{width: 265}}>
+                <Text style={{fontSize: 16, fontWeight: '900'}}>
+                  Danain di Lazada
+                </Text>
+                <Text style={{fontSize: 13}}>Parkir di Centre Park</Text>
+              </View>
+              <View style={{width: 20}}>
+                <Image
+                  style={{width: 10, height: 10}}
+                  source={require('../../assets/arrow.png')}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    );
 };
 
 const styles = StyleSheet.create({
