@@ -5,7 +5,7 @@ const EditTypeScreen = () => {
 
     return (
         <>
-            <Text>PROMO QUEST SCREEN</Text>
+            <Text>EDIT TYPE SCREEN</Text>
         </>
     )
 

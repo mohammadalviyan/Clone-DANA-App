@@ -5,13 +5,14 @@ import {
   StyleSheet,
   Text,
   View, 
+  ToastAndroid
 } from 'react-native'
 import {ListItem} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ImagePicker from 'react-native-image-picker'
 import {TextMask} from 'react-native-masked-text'
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser} from '../../../Redux/Actions/user';
+import {getUser, updateUser} from '../../../Redux/Actions/user';
 
 
 const SettingScreen = (props) => {
@@ -28,24 +29,22 @@ const SettingScreen = (props) => {
           console.log('ImagePicker Error: ', response.error);
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
-        } else {   
-         // call update user from global axios
-        //   setState({
-        //     ...state,
-        //     image: response.uri,
-        //   });
+        } else {
+          console.log(response.uri, "response image")
+          const newUser = {
+            ...user.resultUser,
+            image: response.path
+          }   
+          dispatch(updateUser("image", user.resultUser.id, newUser))
+          console.log(user.resultUser, "after updating")
+          if (user.isFulfilled) {
+            ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
+          }  
         }
       });
   }
 
   useEffect( () => {
-    const getData = async () => {
-        await dispatch( getUser())
-        // console.log(user.resultUser.image)
-        // console.log(user.resultUser, "typeapp")
-
-    }
-    getData();
   }, [])
 
 
@@ -57,8 +56,8 @@ const SettingScreen = (props) => {
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: user.isFulfilled ?
-      <Image source ={{uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`}} style={styles.profileImage}/>  : <Icon name="user"/>,
+      rightTitle: !user.isFulfilled ?  <Icon name="user"/> : user.resultUser.image === "/images/avatar.png" ?
+      <Icon name="user"/> : <Image source ={{uri: `https://clonedana.herokuapp.com${user.resultUser.image}`}} style={styles.profileImage}/>,
       screen: "Picture"
     },
     {

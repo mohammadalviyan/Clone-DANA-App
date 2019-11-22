@@ -1,15 +1,67 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import {useSelector, useDispatch} from 'react-redux';
+import {updateUser} from '../../../Redux/Actions/user';
 
-const name = "811989593"
+
+const screenHeight = Dimensions.get('window').height;
 
 const EditNameScreen = (props) => {
-    const [save, setSave] = useState(false)
+    const user =  useSelector (state => state.user)
+    const dispatch = useDispatch()
 
-    const modalPop = (e)  => {
-        setSave(true)
-        //show 
+    const [save, setSave] = useState(false)
+    const [name, setName] = useState (user.resultUser.name) //get from database
+    const [isFill, setFill] =useState(false)
+    const [isEmpty, empty] = useState(false)
+    const [disable, setDisable] = useState(true)
+
+    
+
+    const modalPop = async (e)  => {
+        if(name === user.resultUser.name) {
+            props.navigation.navigate("Settings")
+        }
+        console.log("userid", user.resultUser.id)
+        const newUser = {
+            ...user.resultUser,
+            name
+        }
+        dispatch(updateUser("name", user.resultUser.id, newUser))
+        console.log("name updated", user.resultUser)
+        if (user.isFulfilled) {
+            ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
+            props.navigation.navigate("Settings")
+        }
+    }
+
+
+    const emptyWarning = () => {
+        return (
+            <View style={styles.warning}>
+                <Text>Nama Akun harus diisi</Text>
+                <Icon name="warning" color="red" size={20} />
+            </View>
+        )
+    }
+    
+    const handleChangeName = (name) => {
+        setFill(true)
+        if (name.length <= 0) {
+            empty(true)
+        } else{
+            empty(false)
+            setName(name)
+            setDisable(false)
+        }
+        
+    } 
+
+    const emptyName = (e) => {
+        setName("")
+        empty(true)
+        setDisable(true)
     }
 
     useEffect( () => {
@@ -19,12 +71,20 @@ const EditNameScreen = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.editForm}>
-                <Text>Change User Account Name</Text>
-                <TextInput value={name}></TextInput>
-
+                {/* label need floating lable */}
+                <Text style= {{color: isEmpty? 'red':'#a0a0a0'}}>Ganti Nama Akun</Text> 
+                <View style={isFill ? styles.inputActivate : isEmpty? styles.inputWarning : styles.input}>
+                    <TextInput value={name} style={{color: 'black'}} onChangeText={name=> handleChangeName(name)} />
+                    {isEmpty ? null : 
+                    <TouchableOpacity onPress={e => emptyName(e)}>
+                        <Icon  name="cancel" />
+                    </TouchableOpacity>
+                    }
+                    {isEmpty ? emptyWarning() : null}
+                </View>
             </View>
-            <TouchableOpacity style={styles.button} onPress={e => modalPop(e)}>
-                <Text style={styles.butTitle}>SAVE</Text>
+            <TouchableOpacity style={disable? styles.buttonDeactivate : styles.button} onPress={e => modalPop(e)} disabled={disable}>
+                <Text style={styles.butTitle}>SIMPAN</Text>
             </TouchableOpacity>
         </View>
     )
@@ -35,19 +95,51 @@ export default EditNameScreen
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "space-around",
-        alignItems: "center"
+        justifyContent: "space-between",
+        flex: 1,
+        margin: 20,
+        backgroundColor: 'red'
     },
     editForm: {
         marginHorizontal: 10,
+        backgroundColor: "green"
+    },
+    input: {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "#ababab"
+    },
+    inputActivate: {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "#fb9b1a"
+    },
+    inputWarning : {
+        flexDirection: "row",
+        borderBottomWidth: 1,
+        borderColor: "red"
+    },
+    warning: {
+        flexDirection: "row",
+        justifyContent: "space-between"
     },
     button: {
-        backgroundColor: "black",
+        backgroundColor: "#0e8ee7",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    buttonDeactivate: {
+        backgroundColor: "#a0a0a0",
         alignItems: "center",
         justifyContent: "center"
     },
     butTitle: {
         color: "#fff"
+    },
+    modalContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 300
     }
 
 })
