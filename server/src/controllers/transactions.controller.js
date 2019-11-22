@@ -264,6 +264,7 @@ exports.createTransactionsPPOB = async (req, res) => {
   let invoice = 'inv';
 
   const {
+    customer,
     id_user,
     id_services,
     id_vouchers,
@@ -274,9 +275,6 @@ exports.createTransactionsPPOB = async (req, res) => {
     amount
   } = req.body;
 
-
-  
-
   // try {
   // Get id current user
   const currentUser = await Users.findOne({
@@ -285,31 +283,12 @@ exports.createTransactionsPPOB = async (req, res) => {
     }
   })
 
-  if (currentUser) {
-    return res.json({
-      message: currentUser
-    })
-    console.log("Hellooooo")
-  }
-  
-
-  // get vouchers
-  const voucher = await Vouchers.findOne({
-    where: {
-      id: id_vouchers
-    }
-  })
-
-  if (voucher) {
-    currentAmount = amount - voucher.dataValues.amount;
-    amount = currentAmount;
-    if (payment_method === "BANK") {
-      currentAmount = 0;
-    } else {
-      status = "success"
-    }
+  currentAmount = amount
+  amount = currentAmount;
+  if (payment_method === "BANK") {
+    currentAmount = 0;
   } else {
-    currentAmount = amount;
+    status = "success"
   }
 
   if (currentUser.dataValues.balance <= currentAmount) {
