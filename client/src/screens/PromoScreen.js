@@ -48,7 +48,7 @@ const PromoScreen = (props) => {
 
     useEffect(()=> {
         dispatch(getVoucher())
-        console.log(coupon.VoucherList)
+        // console.log(coupon.VoucherList)
     }, [])
 
 

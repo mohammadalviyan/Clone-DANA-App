@@ -16,8 +16,8 @@ export const updateUser = (field, id, data) => {
     // payload: axios.put(`https://clonedana.herokuapp.com/api/users/${id}`, data
     payload: axios.put(`https://clonedana.herokuapp.com/api/users/${id}`, data, {
       headers: {
-        // 'Content-Type': 'application/json'
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'multipart/form-data'
       }}
     ),
   };

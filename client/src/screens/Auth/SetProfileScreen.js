@@ -30,7 +30,7 @@ const ReferalScreen = (props) => {
     }, 5000)
   }
 
-  console.log('PROFILE',name)
+  // console.log('PROFILE',name)
   return (
     <>
       <View style={styles.container}>

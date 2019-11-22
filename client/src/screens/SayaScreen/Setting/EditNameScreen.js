@@ -22,13 +22,13 @@ const EditNameScreen = (props) => {
         if(name === user.resultUser.name) {
             props.navigation.navigate("Settings")
         }
-        console.log("userid", user.resultUser.id)
+        // console.log("userid", user.resultUser.id)
         const newUser = {
             ...user.resultUser,
             name
         }
         dispatch(updateUser("name", user.resultUser.id, newUser))
-        console.log("name updated", user.resultUser)
+        // console.log("name updated", user.resultUser)
         if (user.isFulfilled) {
             ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
             props.navigation.navigate("Settings")

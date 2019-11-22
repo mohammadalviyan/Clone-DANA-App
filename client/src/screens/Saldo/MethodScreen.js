@@ -1,18 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
-
-
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native';
+import {useSelector} from 'react-redux';
+import {topUp} from '../../Redux/Actions/topUp';
+import {useDispatch} from 'react-redux';
 
 const MethodScreen = (props) => {
     const [isLoading, setIsloading] = useState(false)
-    
+    const {resultLogin} = useSelector(state => state.auth);
+    const [input, setInput] = useState({id_user: resultLogin.id, amount:0, id_services:2, description:'', payment_method:'BANK' });
+    const dispatch = useDispatch();
+
+
     const handleSubmit = () => {
         setIsloading(true)
-        setTimeout(() => {
-            props.navigation.navigate('TabScreen')
-            setIsloading(false)
-        }, 5000);
+        dispatch(topUp(input))
+          .then(response => {
+            if (response.value.data.status === 'success') {
+              setIsloading(false);
+              setTimeout(() => {
+                props.navigation.navigate('TabScreen');
+              }, 5000);
+            } else {
+              ToastAndroid.show(
+                response.value.data.message,
+                ToastAndroid.SHORT,
+              );
+            }
+          })
+          .catch(error => alert(error));
     } 
+
     return (
     <View style={{ backgroundColor: '#FFF', flex: 1 }}>
         {/* COMPONENT HEADER */}
@@ -72,7 +89,7 @@ const MethodScreen = (props) => {
                         </TouchableOpacity>
                     )}
                 </View>
-                <Text style={{fontSize:18, color:'#676767', marginBottom:15}}>Nama Akun Rian</Text>
+                    <Text style={{fontSize:18, color:'#676767', marginBottom:15}}>Nama Akun {resultLogin.name}</Text>
             </View>
             <View style={{ alignItems: 'center', marginTop: 10}}>
                 <Text style={{color:'#bfbfbf'}}>Saldo maksimum Anda adalah Rp.2.000.000.</Text>

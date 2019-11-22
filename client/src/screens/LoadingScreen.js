@@ -20,9 +20,9 @@ import AsyncStorage from '@react-native-community/async-storage';
     useEffect(() => {
         const getLoading = async () => {
            const disLoading = await dispatch(getToken())
-             console.log('loading',disLoading)
+            //  console.log('loading',disLoading)
             if(disLoading.value){
-                console.log(disLoading.value)
+                // console.log(disLoading.value)
                 props.navigation.navigate('TabScreen')
             } else {
                 props.navigation.navigate('SwiperScreen')
@@ -31,15 +31,10 @@ import AsyncStorage from '@react-native-community/async-storage';
         getLoading()
     }, []);
     
-    // console.log();
-    
-    // setTimeout(() => {
-    //     props.navigation.navigate('SwiperScreen')
-    // }, 3000);
 
     return (
         <>
-             {console.log('OPO',resultLogin)}
+             {/* {console.log('OPO',resultLogin)} */}
         
             <View style={styles.container}>
                 <Image source={require('../assets/danain-text.png')} style={styles.image} />

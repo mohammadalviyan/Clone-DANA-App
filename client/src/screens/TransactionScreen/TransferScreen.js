@@ -1,7 +1,40 @@
-import React from 'react';
-import {Text, View, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import React, { useState } from 'react';
+import {Text, View, Image, TextInput, TouchableOpacity, ScrollView, ToastAndroid} from 'react-native';
+
+import {useSelector} from 'react-redux';
+import {transfer} from '../../Redux/Actions/transfer';
+import {useDispatch} from 'react-redux';
+
 
 const TransferScreen = (props) => {
+  const {resultLogin} = useSelector((state) => state.auth)
+  const [input, setInput] = useState({
+    customer: '',
+    id_user: resultLogin.id,
+    amount: '',
+    id_services: '1',
+    description: '',
+  });
+  
+  const dispatch = useDispatch();
+
+  const handleSubmit = () => {
+    dispatch(transfer(input))
+    .then(response => {
+      if(response.value.data.status === 'success') {
+          props.navigation.navigate('TabScreen');
+      } else {
+        ToastAndroid.show (
+          response.value.data.message,
+          ToastAndroid.SHORT,
+        );
+      }
+    })
+    .catch(error => alert(error));
+  }
+
+  console.log('CUST', input);
+
     return (
       <View>
         <View
@@ -53,6 +86,9 @@ const TransferScreen = (props) => {
           />
           <View style={{marginHorizontal: 15, marginTop: 5}}>
             <TextInput
+              onChangeText={Customer =>
+                setInput({...input, customer: Customer})
+              }
               placeholder="Ketik nomor telepon atau nama"
               keyboardType={'numeric'}
               maxLength={16}
@@ -67,10 +103,10 @@ const TransferScreen = (props) => {
             />
             <View style={{marginTop: 10}}>
               <TextInput
+                onChangeText={Amount => setInput({...input, amount: parseInt(Amount)})}
                 placeholder="Masukkan nominal yang ingin dikirm"
                 keyboardType={'numeric'}
                 maxLength={16}
-                autoFocus={true}
                 style={{
                   height: 37,
                   borderColor: '#e3e3e3',
@@ -147,14 +183,16 @@ const TransferScreen = (props) => {
                     style={{width: 25, height: 25}}
                     source={require('../../assets/plus-icon.png')}
                   />
-                  <Text
-                    style={{
-                      paddingLeft: 10,
-                      color: '#118eea',
-                      fontWeight: 'bold',
-                    }}>
-                    Kirim ke Nomor Telepon
-                  </Text>
+                  <TouchableOpacity onPress={() => handleSubmit()}>
+                    <Text
+                      style={{
+                        paddingLeft: 10,
+                        color: '#118eea',
+                        fontWeight: 'bold',
+                      }}>
+                      Kirim ke Nomor Telepon
+                    </Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center'}}>
                   <Image

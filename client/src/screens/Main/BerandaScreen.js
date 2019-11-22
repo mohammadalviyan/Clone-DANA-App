@@ -2,28 +2,26 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux'
 import { Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {mount} from '../../Redux/Actions/mount';
+import {useDispatch} from 'react-redux';
 
 const BerandaScreen = (props) => {
 
   const [data, setData] = useState()
   const {resultLogin} = useSelector((state) => state.auth)
-  
-  // useEffect(() => {
-  //   async function getData() {
-      
-  //     // const token = await AsyncStorage.getItem('xaccess-token');
-  //     // const id = await AsyncStorage.getItem('id');
-  //     // const name = await AsyncStorage.getItem('name');
-  //     // const image = await AsyncStorage.getItem('image');
-  //     // const phone = await AsyncStorage.getItem('phone');
-  //     // const balance = await AsyncStorage.getItem('balance');
-  //     // const type_user = await AsyncStorage.getItem('type_user');
-  //     // setData({token: token, id: id, name: name, image: image, phone: phone, balance: balance, type_user:type_user});
-  //   }
-  //   getData()
-  // }, [])
+  const {resultMount} = useSelector(state => state.mount);
+  const dispatch = useDispatch();
 
-  console.log('ASYCN',data);
+  const getID = async() => {
+    dispatch(mount(resultLogin.id))
+  }
+
+  useEffect(() => {
+    getID()
+  },[])
+
+  // console.log('ASD', resultMount);
+
     return (
       <View style={styles.container}>
         {/* COMPONENT HEADER */}
@@ -35,13 +33,15 @@ const BerandaScreen = (props) => {
                 source={require('../../assets/top-icon/iconapp-icon-01.png')}
               />
               <Text style={styles.textRp}>Rp</Text>
-              <Text style={styles.textNominal}>{resultLogin.balance}</Text>
+              <Text style={styles.textNominal}>{resultMount}</Text>
             </View>
             <View>
-              <Image
-                style={styles.iconChart}
-                source={require('../../assets/top-icon/chart-icon.png')}
-              />
+              <TouchableOpacity onPress={() => getID()}>
+                <Image
+                  style={styles.iconChart}
+                  source={require('../../assets/top-icon/chart-icon.png')}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.containerIconTop}>
@@ -72,7 +72,7 @@ const BerandaScreen = (props) => {
                   source={require('../../assets/top-icon/kirim-icon.png')}
                 />
               </TouchableOpacity>
-                <Text style={styles.textIcon}>Kirim</Text>
+              <Text style={styles.textIcon}>Kirim</Text>
             </View>
             <View style={styles.containerImageTop}>
               <Image

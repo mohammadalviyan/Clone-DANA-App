@@ -1,7 +1,39 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import { Text, View, TouchableOpacity, Image, ScrollView, ToastAndroid } from 'react-native';
+import {useSelector} from 'react-redux';
+import {PPOB} from '../../Redux/Actions/transfer';
+import {useDispatch} from 'react-redux';
 
 const PulsaScreen = (props) => {
+
+  const {resultLogin} = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
+
+  const [input, setInput] = useState({
+    amount: props.navigation.getParam('amount'),
+    customer: props.navigation.getParam('customer'),
+    id_user: resultLogin.id,
+    id_services: 3,
+    description:'',
+    payment_method:'DANA'
+  });
+
+  const handleSubmit = () => {
+    dispatch(PPOB(input))
+      .then(response => {
+        if (response.value.data.status === 'success') {
+            props.navigation.navigate('TabScreen');
+        } else {
+          ToastAndroid.show(response.value.data.message, ToastAndroid.SHORT);
+        }
+      })
+      .catch(error => alert(error));
+  }; 
+
+
+  console.log('RES', input);
+
     return (
       <View style={{backgroundColor: '#f5f5f5', flex: 1}}>
         <View style={{backgroundColor: '#118eea', height: 150}}>
@@ -95,8 +127,11 @@ const PulsaScreen = (props) => {
                 />
 
                 <View style={{marginLeft: 15}}>
-                  <Text style={{fontSize: 16}}>Saldo DANAIN (Rp.4000)</Text>
-                  <Text style={{color: '#ea6661'}}>Saldo anda tidak cukup</Text>
+                  <TouchableOpacity onPress={() => handleSubmit()}>
+                    <Text style={{fontSize: 16}}>
+                      Pembayaran Melalui Danain
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style={{justifyContent: 'center', marginRight: 15}}>

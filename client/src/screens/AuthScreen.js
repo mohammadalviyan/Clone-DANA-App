@@ -7,14 +7,13 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
   ToastAndroid,
 } from 'react-native';
 
 import Modal, {ModalContent} from 'react-native-modals';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {check, otpreq, login} from '../Redux/Actions/auth';
 
 const AuthScreen = (props) => {
@@ -73,9 +72,6 @@ const AuthScreen = (props) => {
       })
       .catch(error => alert(error));
     }
-
-    
-    // console.log('modal', bottomModal);
 
   return (
     <>
