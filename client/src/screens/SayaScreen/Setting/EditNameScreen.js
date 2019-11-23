@@ -2,20 +2,28 @@ import React, {useEffect, useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
-import {updateUser} from '../../../Redux/Actions/user';
+import {getUser, updateUser} from '../../../Redux/Actions/user';
 
 
 const screenWidth = Dimensions.get('window').width;
 
 const EditNameScreen = (props) => {
     const user =  useSelector (state => state.user)
+    const {resultLogin} = useSelector(state => state.auth);
     const dispatch = useDispatch()
 
     const [save, setSave] = useState(false)
-    const [name, setName] = useState (user.resultUser.name) //get from database
+    const [name, setName] = useState(resultLogin.name); //get from database
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
     const [disable, setDisable] = useState(true)
+
+    useEffect(async () => {
+        const id = resultLogin.id;
+        await dispatch(getUser(id));
+        console.log(user.resultUser, "userrr")
+
+    }, []);
    
 
     const modalPop = async (e)  => {
@@ -63,9 +71,6 @@ const EditNameScreen = (props) => {
         setDisable(true)
     }
 
-    useEffect( () => {
-
-    }, [save])
 
     return (
         <View style={styles.container}>

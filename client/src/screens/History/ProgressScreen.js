@@ -8,10 +8,10 @@ const ProgressScreen = (props) => {
     
     const {resultLogin} = useSelector(state => state.auth);
 
-    const deleteToken = async () => {
+    const deleteToken = () => {
       try {
-        await AsyncStorage.removeItem('user');
-        props.navigation.navigate('AuthScreen');
+        AsyncStorage.removeItem('user');
+        props.navigation.navigate('LoadingScreen');
       } catch (err) {
         console.log(`The error is: ${err}`);
       }
