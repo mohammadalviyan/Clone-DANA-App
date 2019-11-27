@@ -22,7 +22,7 @@ exports.getTransactions = async (req, res) => {
 
 // Transaction parrent
 exports.createTransactions = async (req, res) => {
-  try {
+  // try {
     const {
       id_services
     } = req.body;
@@ -39,13 +39,13 @@ exports.createTransactions = async (req, res) => {
     } else if (service.dataValues.type === "PPOB") {
       this.createTransactionsPPOB(req, res)
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {error}
-    });
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {error}
+  //   });
+  // }
 }
 
 // Create transactions transfer
@@ -62,7 +62,7 @@ exports.createTransactionsTransfer = async (req, res) => {
     description
   } = req.body;
 
-  try {
+  // try {
     //check and handle null
     if (customer === "" || customer === null) {
       return res.json({
@@ -170,13 +170,13 @@ exports.createTransactionsTransfer = async (req, res) => {
         });
       }
     }
-  } catch (error) {
-    res.status(500).json({
-      status:'error',
-      message: 'Something goes wrong',
-      data: {error}
-    });
-  }
+  // } catch (error) {
+  //   res.status(500).json({
+  //     status:'error',
+  //     message: 'Something goes wrong',
+  //     data: {error}
+  //   });
+  // }
 };
 
 // Create transaction TopUp
@@ -241,14 +241,6 @@ exports.createTransactionsTopUp = async (req, res) => {
           id: id_user
         }
       });
-      //Update Current Users
-      await Users.update({
-        balance: balanceCurrent
-      }, {
-        where: {
-          id: id_user
-        }
-      });
 
       return res.json({
         status:'success',
@@ -272,6 +264,7 @@ exports.createTransactionsPPOB = async (req, res) => {
   let invoice = 'inv';
 
   const {
+    customer,
     id_user,
     id_services,
     id_vouchers,
@@ -282,8 +275,7 @@ exports.createTransactionsPPOB = async (req, res) => {
     amount
   } = req.body;
 
-
-  try {
+  // try {
   // Get id current user
   const currentUser = await Users.findOne({
     where: {
@@ -291,23 +283,12 @@ exports.createTransactionsPPOB = async (req, res) => {
     }
   })
 
-  // get vouchers
-  const voucher = await Vouchers.findOne({
-    where: {
-      id: id_vouchers
-    }
-  })
-
-  if (voucher) {
-    currentAmount = amount - voucher.dataValues.amount;
-    amount = currentAmount;
-    if (payment_method === "BANK") {
-      currentAmount = 0;
-    } else {
-      status = "success"
-    }
+  currentAmount = amount
+  amount = currentAmount;
+  if (payment_method === "BANK") {
+    currentAmount = 0;
   } else {
-    currentAmount = amount;
+    status = "success"
   }
 
   if (currentUser.dataValues.balance <= currentAmount) {
@@ -357,26 +338,17 @@ exports.createTransactionsPPOB = async (req, res) => {
       }
     });
 
-    //Update Current Users
-    await Users.update({
-      balance: balanceCurrent
-    }, {
-      where: {
-        id: id_user
-      }
-    });
-
     return res.json({
       message: 'Transactions was created succesfully',
       data: newTransactions
     });
   }
-  } catch (error) {
-  res.status(500).json({
-    message: 'Something goes wrong',
-    data: {}
-  });
-  }
+  // } catch (error) {
+  // res.status(500).json({
+  //   message: 'Something goes wrong',
+  //   data: {}
+  // });
+  // }
 };
 
 // Get one transactions
