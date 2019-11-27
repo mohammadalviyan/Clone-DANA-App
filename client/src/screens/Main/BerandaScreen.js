@@ -20,7 +20,14 @@ const BerandaScreen = (props) => {
     getID()
   },[])
 
-  // console.log('ASD', resultMount);
+    const deleteToken = () => {
+      try {
+        AsyncStorage.removeItem('user');
+        props.navigation.navigate('LoadingScreen');
+      } catch (err) {
+        console.log(`The error is: ${err}`);
+      }
+    };
 
     return (
       <View style={styles.container}>
@@ -33,7 +40,15 @@ const BerandaScreen = (props) => {
                 source={require('../../assets/top-icon/iconapp-icon-01.png')}
               />
               <Text style={styles.textRp}>Rp</Text>
-              <Text style={styles.textNominal}>{resultMount}</Text>
+                {resultMount === null ? (
+                  <Text style={styles.textNominal}>
+                    0
+                  </Text>
+                ) : (
+                  <Text style={styles.textNominal}>
+                    {resultMount}
+                  </Text>
+                )}
             </View>
             <View>
               <TouchableOpacity onPress={() => getID()}>
@@ -393,6 +408,21 @@ const BerandaScreen = (props) => {
                 />
               </View>
             </View>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 10,
+              height: 60,
+            }}>
+            <TouchableOpacity
+              onPress={() => deleteToken()}
+              style={{backgroundColor: '#118eea', justifyContent:'center', width: 120, height: 40, borderRadius:6}}>
+              <Text style={{textAlign:'center', color:'#FFF'}}>LOGOUT</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>

@@ -20,21 +20,23 @@ const UserIcon = () => {
 }
 
 const SayaScreen = (props) => {
-  const user =  useSelector (state => state.user)
+  // const user =  useSelector (state => state.user)
+  const {resultLogin, isFulfilled} = useSelector((state) => state.auth)
+
   const dispatch = useDispatch()
-  useEffect( () => {
-    const getData = async () => {
-        await dispatch( getUser())
-        // console.log(user.resultUser)
-    }
-    getData();
-  }, [])
+  // useEffect( () => {
+  //   const getData = async () => {
+  //       await dispatch( getUser())
+  //       // console.log(user.resultUser)
+  //   }
+  //   getData();
+  // }, [])
 
   let list = [
     {
       title: 'Saldo',
       icon: require('../../../asset/icons/dana-icon-set.png'),
-      rightTitle: `Rp ${user.resultUser.balance}`,
+      rightTitle: `Rp ${resultLogin.balance}`,
       screen: 'Balance'
     },
     {
@@ -110,10 +112,22 @@ const SayaScreen = (props) => {
     },
   ]
 
+  const deleteToken = () => {
+    try {
+      AsyncStorage.removeItem('user');
+      props.navigation.navigate('LoadingScreen');
+    } catch (err) {
+      console.log(`The error is: ${err}`);
+    }
+  };
+
   const onPressOptions = (e, screen) => {
     if (screen === "Setting" || "Promo") {
       // console.log(`Navigate to ${screen}`)
       props.navigation.navigate(screen)
+    } else if (screen === 'Logout') {
+      deleteToken()
+      props.navigation.navigate('AuthScreen');
     } else {
       // console.log(`Command to ${screen}`)
     }
@@ -123,32 +137,37 @@ const SayaScreen = (props) => {
     return (
       <View style={styles.headerContainer}>
         <View style={styles.userRow}>
-            <View style={styles.avatarContainer}>
-              <ImageBackground 
-              source={{uri: "http://pngimg.com/uploads/qr_code/qr_code_PNG2.png"}} 
-              imageStyle={styles.qrcodeBackground} 
+          <View style={styles.avatarContainer}>
+            <ImageBackground
+              source={{
+                uri: 'http://pngimg.com/uploads/qr_code/qr_code_PNG2.png',
+              }}
+              imageStyle={styles.qrcodeBackground}
               style={{width: '100%', height: '100%'}}>
-                  {!user.isFulfilled ? <UserIcon /> :
-                  user.resultUser.image === "/images/avatar.png" ?
-                  <UserIcon /> : 
-                  <Image
-                    style={styles.userImage}
-                    source={{
-                      uri: `https://clonedana.herokuapp.com/${user.resultUser.image}`, 
-                    }}
-                  />}
-              </ImageBackground>          
+              {!isFulfilled ? (
+                <UserIcon />
+              ) : resultLogin.image === '/images/avatar.png' ? (
+                <UserIcon />
+              ) : (
+                <Image
+                  style={styles.userImage}
+                  source={{
+                    uri: `https://clonedana.herokuapp.com/${resultLogin.image}`,
+                  }}
+                />
+              )}
+            </ImageBackground>
           </View>
 
           <View style={styles.userNameRow}>
-            <Text style={styles.userNameText}>{user.resultUser.name}</Text>
+            <Text style={styles.userNameText}>{resultLogin.name}</Text>
           </View>
           <View style={styles.userBioRow}>
-            <Text style={styles.userBioText}>{user.resultUser.phone}</Text>
+            <Text style={styles.userBioText}>{resultLogin.phone}</Text>
           </View>
         </View>
       </View>
-    )
+    );
   }
 
 

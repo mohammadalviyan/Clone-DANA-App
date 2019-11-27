@@ -17,8 +17,8 @@ const App = () => {
     <>
       <Provider store={store}>
         <StatusBar backgroundColor="#118eea" barStyle="light-content" />
-        <EditEmailScreen/>
-        {/* <MainNavigation /> */}
+        {/* <EditEmailScreen/> */}
+        <MainNavigation />
         {/* <PromoScreen/> */}
         {/* <PromoDetailScreen/> */}
 

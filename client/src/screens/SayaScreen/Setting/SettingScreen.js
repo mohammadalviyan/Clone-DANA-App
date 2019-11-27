@@ -17,7 +17,11 @@ import {getUser, updateUser} from '../../../Redux/Actions/user';
 
 const SettingScreen = (props) => {
   const user =  useSelector (state => state.user)
+  const {resultLogin, isFulfilled} = useSelector((state) => state.auth)
+
   const dispatch = useDispatch()
+
+
 
   const selectImage = async (e) => {
     ImagePicker.showImagePicker({noData:true, mediaType:'photo'}, (response) => {
@@ -32,16 +36,16 @@ const SettingScreen = (props) => {
         } else {
           // console.log(response.uri, "response image")
           const newUser = {
-            ...user.resultUser,
+            ...resultLogin,
             image: {
               uri: response.uri,
               name: response.fileName,
               type: response.type
             }
           }   
-          dispatch(updateUser("image", user.resultUser.id, newUser))
+          dispatch(updateUser("image", resultLogin.id, newUser))
           // console.log(user.resultUser, "after updating")
-          if (user.isFulfilled) {
+          if (isFulfilled) {
             ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
           }  
         }
@@ -55,25 +59,25 @@ const SettingScreen = (props) => {
   let list = [
     {
       title: 'Account Type',
-      rightTitle: user.isFulfilled ? user.resultUser.type_user : null,
+      rightTitle: isFulfilled ? resultLogin.type_user : null,
       screen: "UserType"
     },
     {
       title: 'Change Profile Picture',
-      rightTitle: !user.isFulfilled ?  <Icon name="user"/> : user.resultUser.image === "/images/avatar.png" ?
-      <Icon name="user"/> : <Image source ={{uri: `https://clonedana.herokuapp.com${user.resultUser.image}`}} style={styles.profileImage}/>,
+      rightTitle: !isFulfilled ?  <Icon name="user"/> : resultLogin.image === "/images/avatar.png" ?
+      <Icon name="user"/> : <Image source ={{uri: `https://clonedana.herokuapp.com${resultLogin.image}`}} style={styles.profileImage}/>,
       screen: "Picture"
     },
     {
       title: 'Change Name',
-      rightTitle: user.isFulfilled ? user.resultUser.name : null,
+      rightTitle: isFulfilled ? resultLogin.name : null,
       screen: "Name"
     },]
 
     let list2 = [
     {
       title: 'Mobile No.',
-      rightTitle: user.isFulfilled ? <TextMask value={user.resultUser.phone}
+      rightTitle: isFulfilled ? <TextMask value={resultLogin.phone}
         type={'cel-phone'}
         options= {{withDDD: true, dddMask: "(+62)"}}
       /> : null,
@@ -81,8 +85,8 @@ const SettingScreen = (props) => {
     },
     {
       title: 'Email Address',
-      rightTitle: user.isFulfilled ? 
-      <Text>{user.resultUser.email}</Text>
+      rightTitle: isFulfilled ? 
+      <Text>{resultLogin.email}</Text>
       : "Unset",
       screen: "Email"
     },

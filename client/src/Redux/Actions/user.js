@@ -1,10 +1,11 @@
 import axios from 'axios';
 // import AsyncStorage from '@react-native-community/async-storage';
 
-export const getUser = () => {
+export const getUser = (id) => {
   return {
     type: 'GET_USER',
-    payload: axios.get('https://clonedana.herokuapp.com/api/users/'),
+    id,
+    payload: axios.get(`https://clonedana.herokuapp.com/api/users/${id}`),
   };
 };
 
