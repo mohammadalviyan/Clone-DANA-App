@@ -7,7 +7,7 @@
 <br/><br/>
 
 <a href="#">
-  <img src="https://img.shields.io/badge/ReactJS-16.10-blue.svg?style=flat-square" alt="npm version">
+  <img src="https://img.shields.io/badge/ReactNative-0.61-blue.svg?style=flat-square" alt="npm version">
 </a>
 
 
