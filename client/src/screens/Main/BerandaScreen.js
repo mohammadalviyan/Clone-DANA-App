@@ -133,7 +133,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Games</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -141,7 +140,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Listrik</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -165,7 +163,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Pascabayar</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -173,7 +170,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Tarik Saldo</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -455,40 +451,65 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1
     },
-    containerImageTop: {
-        alignItems: 'center'
-    },
     containerPulsa: {
-        backgroundColor:'#118eea',
-        height: 90
+      backgroundColor:'#118eea',
+      height: 90
     },
     containerFlexPulsa: {
-        flexDirection: 'row',
-        height: 92,
-        paddingBottom: 20
+      flexDirection: 'row',
+      height: 92,
+      paddingBottom: 20
     },
     containerImagePulsa: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     containerTextPulsa: {
-        width: 170,
-        justifyContent: 'center'
+      width: 170,
+      justifyContent: 'center'
     },
     containerButtonBeli: {
-        width: 125,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 2
+      width: 125,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 2
+    },
+    bottomCard:{
+        backgroundColor: '#FFF',
+        justifyContent: 'space-around',
+        flex: 1,
+        flexDirection: 'column',
+        marginHorizontal: 15,
+        height: 184,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderBottomLeftRadius: 6,
+        borderBottomRightRadius: 6,
+        borderColor: '#e3e3e3'
     },
     containerImageService: {
-        flexDirection: 'row',
-        height: '55%'
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      height: '55%'
     },
     containerImageService2: {
         flexDirection: 'row',
-        flex: 1
+        justifyContent: 'space-around',
+    },
+    containerImageTop: {
+        alignItems: 'center',
+    },
+    iconMid: {
+        width: 38,
+        height: 38,
+        marginHorizontal: 28,
+        marginBottom: 10
+    },
+    textMid: {
+          color: '#313131',
+          fontSize: 12
     },
     containerPromo: {
         flexDirection: 'row',
@@ -533,17 +554,6 @@ const styles = StyleSheet.create({
         borderColor: '#e3e3e3',
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6    
-    },
-    bottomCard:{
-        backgroundColor: '#FFF',
-        marginHorizontal: 15,
-        height: 184,
-        borderBottomWidth: 1,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderBottomLeftRadius: 6,
-        borderBottomRightRadius: 6,
-        borderColor: '#e3e3e3'
     },
     cardPromo: {
         backgroundColor: '#FFF',
@@ -596,12 +606,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 28,
         marginBottom: 3
     },
-    iconMid: {
-        width: 38,
-        height: 38,
-        marginHorizontal: 28,
-        marginBottom: 10
-    },
     imagePromo: {
         height: 97,
         width: 378,
@@ -633,10 +637,6 @@ const styles = StyleSheet.create({
     textIcon: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 12
-    },
-    textMid: {
-        color: '#313131',
         fontSize: 12
     },
     textRp: {
