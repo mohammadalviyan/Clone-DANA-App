@@ -1,5 +1,5 @@
 const initialState = {
-    resultUser: [],
+    activeUser: {},
     isLoading: false,
     isRejected: false,
     isFulfilled: false,
@@ -26,7 +26,7 @@ const initialState = {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultUser: action.payload.data.data[0],
+          activeUser: action.payload.data.data,
         };
 
       //UPDATE
@@ -44,19 +44,17 @@ const initialState = {
           isRejected: true,
         };
       case 'UPDATE_USER_FULFILLED':
-        // console.log(state.resultUser, "userresult")
-        const { field } = action;
-        const newUser = action.payload.data.data[0];
+        const newUser = action.payload.data.data;
         // if (typeof user[field] !== 'undefined' && typeof action.payload.data.data[field] !== 'undefined') {
-        // const user = state.resultUser.hasOwnProperty(field) && newUser.hasOwnProperty(field) ? {
-        //   ...state.resultUser,
+        // const user = state.activeUser.hasOwnProperty(field) && newUser.hasOwnProperty(field) ? {
+        //   ...state.activeUser,
         //   [field]: newUser[field]
-        // } : state.resultUser;
+        // } : state.activeUser;
         return {
           ...state,
           isLoading: false,
           isFulfilled: true,
-          resultUser: newUser,
+          activeUser: newUser,
         };
       /////////////////////////////////////////
  
