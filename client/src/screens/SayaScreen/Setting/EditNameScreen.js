@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser} from '../../../Redux/Actions/user';
 import {updateUser} from '../../../Redux/Actions/auth'
 
 const screenWidth = Dimensions.get('window').width;
@@ -10,43 +9,28 @@ const screenWidth = Dimensions.get('window').width;
 const EditNameScreen = (props) => {
     const {resultLogin} = useSelector(state => state.auth);
     const dispatch = useDispatch()
-    
-    const [save, setSave] = useState(false)
-    const [user, setUser] =  useState({})
+
     const [name, setName] = useState(resultLogin.name); //get from database
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
     const [disable, setDisable] = useState(true)
 
-    useEffect(async () => {
-        const id = resultLogin.id;
-        await dispatch(getUser(id))
-        .then(result => {
-            console.log(result, "result dr user id")
-            setUser(result.value.data.data)
-
-        })
-        console.log(resultLogin, "userrr")
-
-    }, []);
-   
-
+ 
     const modalPop = async (e)  => {
-        if(name === user.name) {
+        if(name === resultLogin.name) {
             props.navigation.navigate("Settings")
         }
         else {
             // console.log("userid", user.activeUser.id)
-            const newUser = {
-                ...user,
+            const newName = {
                 name
             }
-            await dispatch(updateUser(user.id, newUser))
+            await dispatch(updateUser(resultLogin.id, newName))
             .then( result => {
                 console.log(resultLogin, 'resultlogiggi')
                 if (result.value.data.status === "success"){
                     ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
-                    // props.navigation.navigate("Settings")
+                    props.navigation.navigate('SayaScreen', {screen: "Settings"})
                     
                   } else {
                     ToastAndroid.show('Gagal mengubah nama!', ToastAndroid.LONG);
