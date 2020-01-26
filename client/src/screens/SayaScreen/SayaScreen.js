@@ -29,40 +29,40 @@ const SayaScreen = (props) => {
   let list = [
     {
       title: 'Saldo',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/balance.png'),
       rightTitle: `Rp ${resultLogin.balance}`,
       screen: 'Balance'
     },
     {
       title: 'Kartu Tersimpan',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/savecard.png'),
       rightTitle: '0 Cards',
       screen: 'Cards'
     },
     {
       title: 'Tagihanku',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/bills.png'),
       rightTitle: null,
       screen: 'Bills'
     },]
     let list2 = [
     {
       title: 'Daftar DANAIN Bisnis Sekarang!',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/apply.png'),
       rightTitle: null,
       subtitle: 'Punya bisnis? Pakai DANAIN Bisnis untuk menjangkau lebih banyak pelanggan',
       screen: 'Apply'
     },
     {
       title: 'Kode Undangan',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/code.png'),
       rightTitle: null,
       subtitle: null,
       screen: 'Referral'
     },
     {
       title: 'Promo Quest',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/promo.png'),
       rightTitle: null,
       subtitle: null,
       screen: 'Promo'
@@ -287,7 +287,6 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 const styles = StyleSheet.create({
   imgconContainer:{
       alignItems: 'center',
-      backgroundColor: '#0E8EE7',
       borderColor: 'transparent',
       height: 30,
       justifyContent: 'center',
