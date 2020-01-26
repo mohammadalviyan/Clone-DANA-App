@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux'
-import { Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { Dimensions, Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {mount} from '../../Redux/Actions/mount';
 import {useDispatch} from 'react-redux';
+
+
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 const BerandaScreen = (props) => {
 
@@ -23,6 +26,7 @@ const BerandaScreen = (props) => {
     const deleteToken = () => {
       try {
         AsyncStorage.removeItem('user');
+        console.log("deleeet")
         props.navigation.navigate('LoadingScreen');
       } catch (err) {
         console.log(`The error is: ${err}`);
@@ -240,7 +244,7 @@ const BerandaScreen = (props) => {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'center',
+                justifyContent: 'space-around',
                 alignItems: 'center',
               }}>
               <View>
@@ -456,9 +460,11 @@ const styles = StyleSheet.create({
       height: 90
     },
     containerFlexPulsa: {
+      paddingLeft: 40,
       flexDirection: 'row',
       height: 92,
-      paddingBottom: 20
+      paddingBottom: 20,
+      alignItems: 'center',
     },
     containerImagePulsa: {
       flex: 1,
@@ -467,7 +473,8 @@ const styles = StyleSheet.create({
     },
     containerTextPulsa: {
       width: 170,
-      justifyContent: 'center'
+      justifyContent: 'center',
+      paddingLeft:40,
     },
     containerButtonBeli: {
       width: 125,
@@ -608,7 +615,7 @@ const styles = StyleSheet.create({
     },
     imagePromo: {
         height: 97,
-        width: 378,
+        width: screenWidth *0.9,
         alignSelf: 'center',
         borderBottomLeftRadius: 6,
         borderBottomRightRadius: 6
@@ -619,7 +626,7 @@ const styles = StyleSheet.create({
     },
     imageHotPromo: {
         height: 86,
-        width: 378,
+        width: screenWidth*0.9,
         alignSelf: 'center',
         borderRadius: 6
     },
