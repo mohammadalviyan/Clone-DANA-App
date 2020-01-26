@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux'
-import { Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { Dimensions, Text, View, Image, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {mount} from '../../Redux/Actions/mount';
 import {useDispatch} from 'react-redux';
+
+
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 const BerandaScreen = (props) => {
 
@@ -23,6 +26,7 @@ const BerandaScreen = (props) => {
     const deleteToken = () => {
       try {
         AsyncStorage.removeItem('user');
+        console.log("deleeet")
         props.navigation.navigate('LoadingScreen');
       } catch (err) {
         console.log(`The error is: ${err}`);
@@ -133,7 +137,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Games</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -141,7 +144,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Listrik</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -165,7 +167,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Pascabayar</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -173,7 +174,6 @@ const BerandaScreen = (props) => {
                 />
                 <Text style={styles.textMid}>Tarik Saldo</Text>
               </View>
-
               <View style={styles.containerImageTop}>
                 <Image
                   style={styles.iconMid}
@@ -244,7 +244,7 @@ const BerandaScreen = (props) => {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'center',
+                justifyContent: 'space-around',
                 alignItems: 'center',
               }}>
               <View>
@@ -455,40 +455,68 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1
     },
-    containerImageTop: {
-        alignItems: 'center'
-    },
     containerPulsa: {
-        backgroundColor:'#118eea',
-        height: 90
+      backgroundColor:'#118eea',
+      height: 90
     },
     containerFlexPulsa: {
-        flexDirection: 'row',
-        height: 92,
-        paddingBottom: 20
+      paddingLeft: 40,
+      flexDirection: 'row',
+      height: 92,
+      paddingBottom: 20,
+      alignItems: 'center',
     },
     containerImagePulsa: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     containerTextPulsa: {
-        width: 170,
-        justifyContent: 'center'
+      width: 170,
+      justifyContent: 'center',
+      paddingLeft:40,
     },
     containerButtonBeli: {
-        width: 125,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 2
+      width: 125,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 2
+    },
+    bottomCard:{
+        backgroundColor: '#FFF',
+        justifyContent: 'space-around',
+        flex: 1,
+        flexDirection: 'column',
+        marginHorizontal: 15,
+        height: 184,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderBottomLeftRadius: 6,
+        borderBottomRightRadius: 6,
+        borderColor: '#e3e3e3'
     },
     containerImageService: {
-        flexDirection: 'row',
-        height: '55%'
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      height: '55%'
     },
     containerImageService2: {
         flexDirection: 'row',
-        flex: 1
+        justifyContent: 'space-around',
+    },
+    containerImageTop: {
+        alignItems: 'center',
+    },
+    iconMid: {
+        width: 38,
+        height: 38,
+        marginHorizontal: 28,
+        marginBottom: 10
+    },
+    textMid: {
+          color: '#313131',
+          fontSize: 12
     },
     containerPromo: {
         flexDirection: 'row',
@@ -533,17 +561,6 @@ const styles = StyleSheet.create({
         borderColor: '#e3e3e3',
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6    
-    },
-    bottomCard:{
-        backgroundColor: '#FFF',
-        marginHorizontal: 15,
-        height: 184,
-        borderBottomWidth: 1,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderBottomLeftRadius: 6,
-        borderBottomRightRadius: 6,
-        borderColor: '#e3e3e3'
     },
     cardPromo: {
         backgroundColor: '#FFF',
@@ -596,15 +613,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 28,
         marginBottom: 3
     },
-    iconMid: {
-        width: 38,
-        height: 38,
-        marginHorizontal: 28,
-        marginBottom: 10
-    },
     imagePromo: {
         height: 97,
-        width: 378,
+        width: screenWidth *0.9,
         alignSelf: 'center',
         borderBottomLeftRadius: 6,
         borderBottomRightRadius: 6
@@ -615,7 +626,7 @@ const styles = StyleSheet.create({
     },
     imageHotPromo: {
         height: 86,
-        width: 378,
+        width: screenWidth*0.9,
         alignSelf: 'center',
         borderRadius: 6
     },
@@ -633,10 +644,6 @@ const styles = StyleSheet.create({
     textIcon: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 12
-    },
-    textMid: {
-        color: '#313131',
         fontSize: 12
     },
     textRp: {

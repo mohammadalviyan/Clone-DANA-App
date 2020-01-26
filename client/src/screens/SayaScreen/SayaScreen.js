@@ -9,7 +9,7 @@ import {
 import {ListItem} from 'react-native-elements'
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {getUser} from '../../Redux/Actions/user'
+
 
 const UserIcon = () => {
   return (
@@ -20,55 +20,49 @@ const UserIcon = () => {
 }
 
 const SayaScreen = (props) => {
-  // const user =  useSelector (state => state.user)
+
   const {resultLogin, isFulfilled} = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
-  // useEffect( () => {
-  //   const getData = async () => {
-  //       await dispatch( getUser())
-  //       // console.log(user.resultUser)
-  //   }
-  //   getData();
-  // }, [])
+
 
   let list = [
     {
       title: 'Saldo',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/balance.png'),
       rightTitle: `Rp ${resultLogin.balance}`,
       screen: 'Balance'
     },
     {
       title: 'Kartu Tersimpan',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/savecard.png'),
       rightTitle: '0 Cards',
       screen: 'Cards'
     },
     {
       title: 'Tagihanku',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/bills.png'),
       rightTitle: null,
       screen: 'Bills'
     },]
     let list2 = [
     {
       title: 'Daftar DANAIN Bisnis Sekarang!',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/apply.png'),
       rightTitle: null,
       subtitle: 'Punya bisnis? Pakai DANAIN Bisnis untuk menjangkau lebih banyak pelanggan',
       screen: 'Apply'
     },
     {
       title: 'Kode Undangan',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/code.png'),
       rightTitle: null,
       subtitle: null,
       screen: 'Referral'
     },
     {
       title: 'Promo Quest',
-      icon: require('../../../asset/icons/dana-icon-set.png'),
+      icon: require('../../assets/prof-icon/promo.png'),
       rightTitle: null,
       subtitle: null,
       screen: 'Promo'
@@ -115,7 +109,8 @@ const SayaScreen = (props) => {
   const deleteToken = () => {
     try {
       AsyncStorage.removeItem('user');
-      props.navigation.navigate('LoadingScreen');
+      console.log("berhasil delete")
+      props.navigation.navigate('StackLoading', {screen: StackAuth});
     } catch (err) {
       console.log(`The error is: ${err}`);
     }
@@ -123,11 +118,16 @@ const SayaScreen = (props) => {
 
   const onPressOptions = (e, screen) => {
     if (screen === "Setting" || "Promo") {
-      // console.log(`Navigate to ${screen}`)
       props.navigation.navigate(screen)
     } else if (screen === 'Logout') {
-      deleteToken()
-      props.navigation.navigate('AuthScreen');
+      // deleteToken()
+          try {
+      AsyncStorage.removeItem('user');
+      console.log("berhasil delete")
+      props.navigation.navigate('StackLoading', {screen: StackAuth});
+    } catch (err) {
+      console.log(`The error is: ${err}`);
+    }
     } else {
       // console.log(`Command to ${screen}`)
     }
@@ -191,8 +191,9 @@ const SayaScreen = (props) => {
          {/* ---------- */}
         <View >
         {
-          list.map((l) => (
+          list.map((l, index) => (
             <ListItem
+              key={index}
               title={l.title}
               titleStyle={styles.listFont}
               rightTitle={l.rightTitle}
@@ -211,8 +212,9 @@ const SayaScreen = (props) => {
         }
         <InfoText text="FEATURE" />
         {
-          list2.map((l) => (
+          list2.map((l, index) => (
             <ListItem
+            key={index}
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
@@ -232,8 +234,9 @@ const SayaScreen = (props) => {
         }
         <InfoText text="GENERAL INFO" />
         {
-          list3.map((l) => (
+          list3.map((l, index) => (
             <ListItem
+            key={index}
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
@@ -246,8 +249,9 @@ const SayaScreen = (props) => {
         }
         <InfoText text="ACCOUNT" />
         {
-          list4.map((l) => (
+          list4.map((l, index) => (
             <ListItem
+            key={index}
             title={l.title}
             titleStyle={styles.listFont}
             rightTitle={l.rightTitle}
@@ -283,7 +287,6 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 const styles = StyleSheet.create({
   imgconContainer:{
       alignItems: 'center',
-      backgroundColor: '#0E8EE7',
       borderColor: 'transparent',
       height: 30,
       justifyContent: 'center',

@@ -2,44 +2,42 @@ import React, {useEffect, useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity, TextInput, Dimensions, ToastAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser, updateUser} from '../../../Redux/Actions/user';
-
+import {updateUser} from '../../../Redux/Actions/auth'
 
 const screenWidth = Dimensions.get('window').width;
 
 const EditNameScreen = (props) => {
-    const user =  useSelector (state => state.user)
     const {resultLogin} = useSelector(state => state.auth);
     const dispatch = useDispatch()
 
-    const [save, setSave] = useState(false)
     const [name, setName] = useState(resultLogin.name); //get from database
     const [isFill, setFill] =useState(false)
     const [isEmpty, empty] = useState(false)
     const [disable, setDisable] = useState(true)
 
-    useEffect(async () => {
-        const id = resultLogin.id;
-        await dispatch(getUser(id));
-        console.log(user.resultUser, "userrr")
-
-    }, []);
-   
-
+ 
     const modalPop = async (e)  => {
-        if(name === user.resultUser.name) {
+        if(name === resultLogin.name) {
             props.navigation.navigate("Settings")
         }
-        // console.log("userid", user.resultUser.id)
-        const newUser = {
-            ...user.resultUser,
-            name
-        }
-        dispatch(updateUser("name", user.resultUser.id, newUser))
-        // console.log("name updated", user.resultUser)
-        if (user.isFulfilled) {
-            ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
-            props.navigation.navigate("Settings")
+        else {
+            // console.log("userid", user.activeUser.id)
+            const newName = {
+                name
+            }
+            await dispatch(updateUser(resultLogin.id, newName))
+            .then( result => {
+                console.log(resultLogin, 'resultlogiggi')
+                if (result.value.data.status === "success"){
+                    ToastAndroid.show('Berhasil Disimpan!', ToastAndroid.LONG);
+                    props.navigation.navigate('SayaScreen', {screen: "Settings"})
+                    
+                  } else {
+                    ToastAndroid.show('Gagal mengubah nama!', ToastAndroid.LONG);
+                  }
+            })
+            .catch( err => ToastAndroid.show('Gagal Mengupdate!', ToastAndroid.LONG))
+
         }
     }
 

@@ -16,6 +16,8 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {useDispatch} from 'react-redux';
 import {check, otpreq, login} from '../Redux/Actions/auth';
 
+// test fork
+
 const AuthScreen = (props) => {
   const [bottomModal, setBottomModal] = useState(false);
   const [user, setUser] = useState('')
